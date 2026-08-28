@@ -5,22 +5,17 @@
     "next": "Next",
     "skip": "Skip the guide",
     "continue": "Continue",
-    "cancel": "Cancel",
     "start": "Start assessment",
-    "chooseFile": "Choose the recording",
     "changeFile": "Choose a different file",
     "analyse": "Analyse this recording",
     "keepAnyway": "Keep this recording without analysing it",
     "recordAgain": "Record again",
-    "saveAndContinue": "Save and choose the next position",
-    "submit": "Finish and send for review",
-    "done": "Done"
+    "submit": "Finish and send for review"
   },
   "patient": {
     "title": "Patient",
     "subtitle": "Check that you have the right person before you start.",
     "idLabel": "Patient ID",
-    "nameLabel": "Name",
     "missingTitle": "No patient chosen",
     "missingBody": "Go back and choose a patient before starting an assessment.",
     "loading": "Opening the patient record…"
@@ -74,7 +69,6 @@
     "hint": "Copy the files off the memory card first — that is step 8 of the device guide.",
     "fileLabel": "Recording file",
     "selected": "Chosen file: {{name}}",
-    "noFile": "Choose a recording file to continue.",
     "checking": "Reading the recording…",
     "errorTitle": "That file cannot be used"
   },
@@ -147,16 +141,6 @@
   "result": {
     "title": "Result",
     "locationHeading": "Position {{number}} — {{name}}",
-    "status": {
-      "suggestive": "Possible finding",
-      "noAbnormality": "Nothing abnormal heard",
-      "uncertain": "Uncertain",
-      "insufficientQuality": "Not usable",
-      "modelNotConnected": "Not analysed"
-    },
-    "confidenceLabel": "Model confidence",
-    "confidenceValue": "{{percent}}%",
-    "confidenceExplain": "How strongly the model matched this pattern, averaged over the whole recording. It is not a probability that the patient has the condition.",
     "noAbnormalityCaveat": "This does not rule out illness.",
     "uncertainHelp": "Record this position again in a quieter moment, holding the chestpiece flat against bare skin.",
     "insufficientHelp": "Nothing reached the model, so there is no result to show.",
@@ -168,8 +152,7 @@
     "modelNone": "No model ran",
     "audioHeading": "The recording",
     "audioUnsupported": "This device cannot play the recording back.",
-    "reviewNote": "A practitioner reviews every recording. Nothing here is a conclusion on its own.",
-    "disclaimer": "Research prototype — not a medical device. Ausculta gives an early warning for a practitioner to check, never a diagnosis."
+    "reviewNote": "A practitioner reviews every recording. Nothing here is a conclusion on its own."
   },
   "next": {
     "title": "Position saved",
@@ -186,7 +169,6 @@
   "error": {
     "saveFailed": "The recording could not be saved on this device. Try again.",
     "submitFailed": "The assessment could not be sent for review. Try again.",
-    "loadFailed": "This assessment could not be opened.",
     "notFound": "That assessment is no longer on this device."
   }
 }
