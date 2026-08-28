@@ -10,7 +10,9 @@ import {
   type AuthErrorCode,
   type AuthService,
 } from './authService'
+import { PBKDF2_ITERATIONS } from './crypto'
 import { SESSION_META_KEY } from './session'
+import { TEST_PASSWORD_ITERATIONS, createTestAuthService } from './testing'
 
 let db: AuscultaDB
 let auth: AuthService
@@ -20,7 +22,7 @@ const PASSWORD = 'clinic-pass-1'
 
 beforeEach(() => {
   db = new AuscultaDB(`ausculta-auth-test-${crypto.randomUUID()}`)
-  auth = createAuthService(db)
+  auth = createTestAuthService(db)
 })
 
 /** Asserts a promise rejects with a specific AuthError code. */
@@ -77,8 +79,25 @@ describe('register', () => {
     expect(row?.passwordHash).not.toContain(PASSWORD)
     expect(row?.passwordHash).toMatch(/^[0-9a-f]{64}$/)
     expect(row?.passwordSalt).toMatch(/^[0-9a-f]{32}$/)
-    expect(row?.iterations).toBe(210_000)
+    expect(row?.iterations).toBe(TEST_PASSWORD_ITERATIONS)
     expect(JSON.stringify(row)).not.toContain(PASSWORD)
+  })
+
+  it('hashes at the full production work factor unless one is injected', async () => {
+    // The rest of this suite runs a deliberately cheap factor. This is the
+    // guard that the *default* — what the app actually ships — stays at the
+    // OWASP floor, so the test seam cannot quietly weaken production.
+    const production = createAuthService(db)
+
+    const patient = await production.register({
+      username: 'costcheck',
+      password: PASSWORD,
+      role: ROLES.PATIENT,
+      name: 'Cost Check',
+    })
+
+    expect(PBKDF2_ITERATIONS).toBe(210_000)
+    expect((await db.users.get(patient.id))?.iterations).toBe(210_000)
   })
 
   it('normalises the username to lower case', async () => {
@@ -577,7 +596,7 @@ describe('getCurrentUser', () => {
 
   it('drops a session that has been idle past the timeout, and audits it', async () => {
     let clock = Date.parse('2026-08-29T08:00:00.000Z')
-    const shortLived = createAuthService(db, { idleTimeoutMs: 60_000, now: () => clock })
+    const shortLived = createTestAuthService(db, { idleTimeoutMs: 60_000, now: () => clock })
     await shortLived.register({
       username: 'juan',
       password: PASSWORD,

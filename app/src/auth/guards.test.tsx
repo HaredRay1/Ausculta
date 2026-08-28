@@ -6,9 +6,10 @@ import { AuscultaDB } from '../db/db'
 import { ROLES, type Role } from '../db/codes'
 import { i18n as appI18n } from '../i18n'
 import { AuthProvider } from './AuthContext'
-import { createAuthService, type AuthService } from './authService'
+import type { AuthService } from './authService'
 import { RequireAuth, RequireRole, ROLE_HOME_PATHS, roleHomePath } from './guards'
 import { registerAuthResources } from './i18n'
+import { createTestAuthService } from './testing'
 
 registerAuthResources(appI18n)
 
@@ -19,7 +20,7 @@ let auth: AuthService
 
 beforeEach(() => {
   db = new AuscultaDB(`ausculta-guards-test-${crypto.randomUUID()}`)
-  auth = createAuthService(db)
+  auth = createTestAuthService(db)
 })
 
 // This project's vitest config does not enable `globals`, so Testing Library's

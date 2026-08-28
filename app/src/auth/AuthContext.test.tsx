@@ -6,8 +6,9 @@ import { ROLES } from '../db/codes'
 import { AUDIT_ACTIONS } from '../audit/audit'
 import { i18n as appI18n } from '../i18n'
 import { AuthProvider, useAuth } from './AuthContext'
-import { AUTH_ERRORS, createAuthService, type AuthService } from './authService'
+import { AUTH_ERRORS, type AuthService } from './authService'
 import { registerAuthResources } from './i18n'
+import { createTestAuthService } from './testing'
 
 registerAuthResources(appI18n)
 
@@ -18,7 +19,7 @@ let auth: AuthService
 
 beforeEach(() => {
   db = new AuscultaDB(`ausculta-context-test-${crypto.randomUUID()}`)
-  auth = createAuthService(db)
+  auth = createTestAuthService(db)
 })
 
 // See the note in guards.test.tsx: `globals` is off, so Testing Library's
@@ -128,7 +129,7 @@ describe('AuthProvider', () => {
   })
 
   it('signs a user out once the idle window has passed, and audits it', async () => {
-    const shortLived = createAuthService(db, { idleTimeoutMs: 200 })
+    const shortLived = createTestAuthService(db, { idleTimeoutMs: 200 })
     await seedPatient()
     await shortLived.login('juan', PASSWORD)
 

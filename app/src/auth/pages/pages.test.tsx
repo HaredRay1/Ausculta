@@ -6,8 +6,9 @@ import { AuscultaDB } from '../../db/db'
 import { ROLES, USER_STATUSES } from '../../db/codes'
 import { i18n as appI18n } from '../../i18n'
 import { AuthProvider } from '../AuthContext'
-import { createAuthService, type AuthService } from '../authService'
+import type { AuthService } from '../authService'
 import { registerAuthResources } from '../i18n'
+import { createTestAuthService } from '../testing'
 import { authRoutes } from '../routes'
 
 registerAuthResources(appI18n)
@@ -20,7 +21,7 @@ let auth: AuthService
 
 beforeEach(() => {
   db = new AuscultaDB(`ausculta-pages-test-${crypto.randomUUID()}`)
-  auth = createAuthService(db)
+  auth = createTestAuthService(db)
 })
 
 afterEach(cleanup)

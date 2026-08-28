@@ -2,7 +2,7 @@ import { db as defaultDb, type AuscultaDB } from '../db/db'
 import { ROLES, USER_STATUSES, type Role, type UserStatus } from '../db/codes'
 import type { User } from '../db/types'
 import { ANONYMOUS_ACTOR, AUDIT_ACTIONS, createAuditLogger } from '../audit/audit'
-import { hashPassword, simulateVerifyDelay, verifyPassword } from './crypto'
+import { PBKDF2_ITERATIONS, hashPassword, simulateVerifyDelay, verifyPassword } from './crypto'
 import {
   DEFAULT_IDLE_TIMEOUT_MS,
   createSessionStore,
@@ -133,6 +133,20 @@ export interface AuthServiceOptions {
   idleTimeoutMs?: number
   /** Overridable so tests can drive the clock. */
   now?: () => number
+  /**
+   * PBKDF2 work factor for passwords hashed by this service.
+   *
+   * Defaults to the production PBKDF2_ITERATIONS and should stay there in the
+   * app — the cost *is* the protection. It is injectable purely so test suites
+   * can run a cheap factor: a suite that hashes dozens of passwords at full
+   * cost spends seconds on deliberate slowness and turns UI assertions into a
+   * race against their own timeout.
+   *
+   * Lowering this only affects passwords hashed from now on. Verification
+   * always uses the factor recorded on the row it is checking, so accounts
+   * created at one cost keep working after the default changes.
+   */
+  passwordIterations?: number
 }
 
 export function createAuthService(
@@ -141,6 +155,7 @@ export function createAuthService(
 ) {
   const idleTimeoutMs = options.idleTimeoutMs ?? DEFAULT_IDLE_TIMEOUT_MS
   const now = options.now ?? (() => Date.now())
+  const passwordIterations = options.passwordIterations ?? PBKDF2_ITERATIONS
   const sessions: SessionStore = createSessionStore(database)
   const audit = createAuditLogger(database)
 
@@ -197,7 +212,7 @@ export function createAuthService(
     if (name.length === 0) throw new AuthError(AUTH_ERRORS.NAME_REQUIRED)
     if (await isAdminBootstrapped()) throw new AuthError(AUTH_ERRORS.ADMIN_ALREADY_BOOTSTRAPPED)
 
-    const credentials = await hashPassword(input.password)
+    const credentials = await hashPassword(input.password, passwordIterations)
     const admin: User = {
       id: crypto.randomUUID(),
       username: ADMIN_USERNAME,
@@ -272,7 +287,7 @@ export function createAuthService(
       throw new AuthError(AUTH_ERRORS.USERNAME_TAKEN)
     }
 
-    const credentials = await hashPassword(input.password)
+    const credentials = await hashPassword(input.password, passwordIterations)
     const user: User = {
       id: crypto.randomUUID(),
       username,
@@ -325,7 +340,7 @@ export function createAuthService(
     if (user === undefined) {
       // Burn a comparable amount of work so a bad username and a bad password
       // are indistinguishable by response time.
-      await simulateVerifyDelay()
+      await simulateVerifyDelay(passwordIterations)
       await audit({
         userId: ANONYMOUS_ACTOR,
         actionCode: AUDIT_ACTIONS.LOGIN_FAILED,
@@ -430,7 +445,7 @@ export function createAuthService(
     }
     validatePassword(newPassword)
 
-    const credentials = await hashPassword(newPassword)
+    const credentials = await hashPassword(newPassword, passwordIterations)
     await database.users.update(userId, credentials)
     await audit({
       userId,
@@ -452,7 +467,7 @@ export function createAuthService(
     const target = await getUserOrThrow(input.targetUserId)
     validatePassword(input.newPassword)
 
-    const credentials = await hashPassword(input.newPassword)
+    const credentials = await hashPassword(input.newPassword, passwordIterations)
     await database.users.update(target.id, credentials)
     await audit({
       userId: actor.id,
