@@ -86,7 +86,7 @@ export function RegisterPage() {
         </Banner>
         <Link
           to="/login"
-          className="flex min-h-14 w-full items-center justify-center rounded-xl bg-teal-700 px-6 py-4 text-lg font-semibold text-white"
+          className="flex min-h-14 w-full items-center justify-center rounded-xl bg-primary-strong px-6 py-4 text-lg font-semibold text-on-primary"
         >
           {t('action.signIn')}
         </Link>
@@ -99,9 +99,9 @@ export function RegisterPage() {
       title={t('register.title')}
       subtitle={t('register.subtitle')}
       footer={
-        <p className="text-base text-slate-700">
+        <p className="text-base text-muted">
           {t('register.haveAccount')}{' '}
-          <Link to="/login" className="font-semibold text-teal-700 underline">
+          <Link to="/login" className="font-semibold text-primary underline">
             {t('register.loginLink')}
           </Link>
         </p>
@@ -111,8 +111,8 @@ export function RegisterPage() {
         {errorKey !== null && <Banner tone="error">{t(errorKey)}</Banner>}
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="pb-1 text-base font-medium text-slate-900">{t('field.role')}</legend>
-          <p className="pb-1 text-sm text-slate-600">{t('register.roleHelp')}</p>
+          <legend className="pb-1 text-base font-medium text-on-surface">{t('field.role')}</legend>
+          <p className="pb-1 text-sm text-muted">{t('register.roleHelp')}</p>
 
           {SELF_REGISTRABLE_ROLES.map((option) => {
             const selected = option === role
@@ -121,8 +121,8 @@ export function RegisterPage() {
                 key={option}
                 className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-3 ${
                   selected
-                    ? 'border-teal-700 bg-teal-50 text-teal-900'
-                    : 'border-slate-300 bg-white text-slate-900'
+                    ? 'border-primary-strong bg-accent text-on-accent'
+                    : 'border-border-strong bg-surface-raised text-on-surface'
                 }`}
               >
                 <input
@@ -132,12 +132,12 @@ export function RegisterPage() {
                   checked={selected}
                   onChange={() => setRole(option)}
                   disabled={isSubmitting}
-                  className="size-6 accent-teal-700"
+                  className="size-6 accent-[var(--color-primary-strong)]"
                 />
                 <RoleIcon role={option} />
                 <span className="flex flex-col">
                   <span className="text-lg font-semibold">{t(`codes:role.${option}`)}</span>
-                  <span className="text-sm text-slate-600">
+                  <span className="text-sm text-muted">
                     {t(`register.roleDescription.${option}`)}
                   </span>
                 </span>

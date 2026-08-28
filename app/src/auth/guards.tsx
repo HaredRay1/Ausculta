@@ -32,10 +32,10 @@ function CheckingSession() {
   const { t } = useAuthTranslation()
   return (
     <main
-      className="flex min-h-dvh items-center justify-center bg-white px-6 text-center"
+      className="flex min-h-dvh items-center justify-center bg-surface-raised px-6 text-center"
       aria-busy="true"
     >
-      <p className="text-lg text-slate-700">{t('guard.checking')}</p>
+      <p className="text-lg text-muted">{t('guard.checking')}</p>
     </main>
   )
 }
@@ -43,8 +43,8 @@ function CheckingSession() {
 function NotAuthorised() {
   const { t } = useAuthTranslation()
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-white px-6 text-center">
-      <p className="text-lg font-medium text-slate-900">{t('error.NOT_AUTHORISED')}</p>
+    <main className="flex min-h-dvh items-center justify-center bg-surface-raised px-6 text-center">
+      <p className="text-lg font-medium text-on-surface">{t('error.NOT_AUTHORISED')}</p>
     </main>
   )
 }

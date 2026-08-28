@@ -63,9 +63,9 @@ export function LoginPage() {
       title={t('login.title')}
       subtitle={t('login.subtitle')}
       footer={
-        <p className="text-base text-slate-700">
+        <p className="text-base text-muted">
           {t('login.noAccount')}{' '}
-          <Link to="/register" className="font-semibold text-teal-700 underline">
+          <Link to="/register" className="font-semibold text-primary underline">
             {t('login.registerLink')}
           </Link>
         </p>

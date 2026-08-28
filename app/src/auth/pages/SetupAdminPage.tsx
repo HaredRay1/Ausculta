@@ -67,7 +67,7 @@ export function SetupAdminPage() {
   if (bootstrapped === null) {
     return (
       <AuthScreen title={t('setupAdmin.title')}>
-        <p className="text-base text-slate-700">{t('login.loading')}</p>
+        <p className="text-base text-muted">{t('login.loading')}</p>
       </AuthScreen>
     )
   }
@@ -78,7 +78,7 @@ export function SetupAdminPage() {
         <Banner tone="success">{t('setupAdmin.successBody')}</Banner>
         <Link
           to="/login"
-          className="flex min-h-14 w-full items-center justify-center rounded-xl bg-teal-700 px-6 py-4 text-lg font-semibold text-white"
+          className="flex min-h-14 w-full items-center justify-center rounded-xl bg-primary-strong px-6 py-4 text-lg font-semibold text-on-primary"
         >
           {t('action.signIn')}
         </Link>

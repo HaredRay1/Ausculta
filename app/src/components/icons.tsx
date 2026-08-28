@@ -119,6 +119,24 @@ export const RefreshIcon = makeIcon(
   </>,
 )
 
+export const EyeIcon = makeIcon(
+  'EyeIcon',
+  <>
+    <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" />
+    <circle cx="12" cy="12" r="3" />
+  </>,
+)
+
+export const EyeOffIcon = makeIcon(
+  'EyeOffIcon',
+  <>
+    <path d="M3 3l18 18" />
+    <path d="M10.6 6.1A9.9 9.9 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-3.3 3.9" />
+    <path d="M6.3 7.9A16.7 16.7 0 0 0 2.5 12S6 18 12 18a9.6 9.6 0 0 0 3.7-.7" />
+    <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+  </>,
+)
+
 /* ---- Clinical ----------------------------------------------------------- */
 
 export const LungsIcon = makeIcon(
@@ -247,6 +265,8 @@ export const ALL_ICONS: Readonly<Record<string, IconComponent>> = {
   ChevronDownIcon,
   ChevronRightIcon,
   CheckIcon,
+  EyeIcon,
+  EyeOffIcon,
   RefreshIcon,
   LungsIcon,
   MicIcon,

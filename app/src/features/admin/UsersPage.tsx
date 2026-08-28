@@ -30,9 +30,9 @@ const SECTION_TITLE_KEYS: Record<UserStatus, string> = {
 }
 
 const STATUS_BADGE_CLASSES: Record<UserStatus, string> = {
-  [USER_STATUSES.PENDING_VERIFICATION]: 'bg-amber-100 text-amber-900',
-  [USER_STATUSES.ACTIVE]: 'bg-teal-100 text-teal-900',
-  [USER_STATUSES.DISABLED]: 'bg-slate-200 text-slate-800',
+  [USER_STATUSES.PENDING_VERIFICATION]: 'bg-warning-surface text-on-warning-surface',
+  [USER_STATUSES.ACTIVE]: 'bg-accent text-on-accent',
+  [USER_STATUSES.DISABLED]: 'bg-surface-sunken text-on-surface',
 }
 
 type PendingPrompt = { kind: 'disable' | 'reset'; user: User } | null
@@ -86,7 +86,7 @@ export function UsersPage() {
   if (users === null) {
     return (
       <AuthScreen title={t('users.title')}>
-        <p className="text-base text-slate-700">{t('users.loading')}</p>
+        <p className="text-base text-muted">{t('users.loading')}</p>
       </AuthScreen>
     )
   }
@@ -105,10 +105,10 @@ export function UsersPage() {
         const inSection = users.filter((candidate) => candidate.status === status)
         return (
           <section key={status} className="flex flex-col gap-3">
-            <h2 className="text-lg font-bold text-teal-900">{t(SECTION_TITLE_KEYS[status])}</h2>
+            <h2 className="text-lg font-bold text-on-surface">{t(SECTION_TITLE_KEYS[status])}</h2>
 
             {inSection.length === 0 ? (
-              <p className="text-base text-slate-600">{t('users.empty')}</p>
+              <p className="text-base text-muted">{t('users.empty')}</p>
             ) : (
               <ul className="flex flex-col gap-3">
                 {inSection.map((row) => {
@@ -117,29 +117,29 @@ export function UsersPage() {
                   return (
                     <li
                       key={row.id}
-                      className="flex flex-col gap-3 rounded-xl border-2 border-slate-300 p-4"
+                      className="flex flex-col gap-3 rounded-xl border-2 border-border-strong p-4"
                     >
                       <div className="flex flex-col gap-1">
                         <div className="flex items-baseline justify-between gap-2">
-                          <span className="text-lg font-semibold text-slate-900">{row.name}</span>
+                          <span className="text-lg font-semibold text-on-surface">{row.name}</span>
                           <span
                             className={`rounded-full px-2 py-0.5 text-sm font-medium ${STATUS_BADGE_CLASSES[row.status]}`}
                           >
                             {t(`codes:userStatus.${row.status}`)}
                           </span>
                         </div>
-                        <span className="text-base text-slate-700">
+                        <span className="text-base text-muted">
                           {t(`codes:role.${row.role}`)}
                           {isSelf ? ` · ${t('users.you')}` : ''}
                         </span>
-                        <span className="text-sm text-slate-600">{row.username}</span>
+                        <span className="text-sm text-muted">{row.username}</span>
                         {row.professionalDesignation !== undefined && (
-                          <span className="text-sm text-slate-600">
+                          <span className="text-sm text-muted">
                             {row.professionalDesignation}
                           </span>
                         )}
                         {row.organization !== undefined && (
-                          <span className="text-sm text-slate-600">{row.organization}</span>
+                          <span className="text-sm text-muted">{row.organization}</span>
                         )}
                       </div>
 
@@ -159,7 +159,7 @@ export function UsersPage() {
                                 t('users.activated', { name: row.name }),
                               )
                             }
-                            className="min-h-12 flex-1 rounded-xl bg-teal-700 px-4 py-2 text-base font-semibold text-white active:bg-teal-800 disabled:bg-slate-400"
+                            className="min-h-12 flex-1 rounded-xl bg-primary-strong px-4 py-2 text-base font-semibold text-on-primary active:opacity-90 disabled:bg-border-strong"
                           >
                             {t('action.activate')}
                           </button>
@@ -170,7 +170,7 @@ export function UsersPage() {
                             type="button"
                             disabled={isBusy}
                             onClick={() => setPrompt({ kind: 'disable', user: row })}
-                            className="min-h-12 flex-1 rounded-xl border-2 border-red-700 px-4 py-2 text-base font-semibold text-red-800 disabled:border-slate-400 disabled:text-slate-500"
+                            className="min-h-12 flex-1 rounded-xl border-2 border-destructive px-4 py-2 text-base font-semibold text-destructive disabled:border-border-strong disabled:text-muted"
                           >
                             {t('action.disable')}
                           </button>
@@ -180,7 +180,7 @@ export function UsersPage() {
                           type="button"
                           disabled={isBusy}
                           onClick={() => setPrompt({ kind: 'reset', user: row })}
-                          className="min-h-12 flex-1 rounded-xl border-2 border-teal-700 px-4 py-2 text-base font-semibold text-teal-800 disabled:border-slate-400 disabled:text-slate-500"
+                          className="min-h-12 flex-1 rounded-xl border-2 border-primary-strong px-4 py-2 text-base font-semibold text-primary disabled:border-border-strong disabled:text-muted"
                         >
                           {t('action.resetPassword')}
                         </button>
@@ -249,14 +249,14 @@ function ConfirmDisable({
 }) {
   const { t } = useAuthTranslation()
   return (
-    <div className="flex flex-col gap-3 rounded-xl bg-red-50 p-4">
-      <p className="text-base font-medium text-red-900">{t('users.confirmDisable', { name })}</p>
+    <div className="flex flex-col gap-3 rounded-xl bg-destructive-surface p-4">
+      <p className="text-base font-medium text-on-destructive-surface">{t('users.confirmDisable', { name })}</p>
       <div className="flex gap-2">
         <button
           type="button"
           onClick={onCancel}
           disabled={busy}
-          className="min-h-12 flex-1 rounded-xl border-2 border-slate-400 px-4 py-2 text-base font-semibold text-slate-800"
+          className="min-h-12 flex-1 rounded-xl border-2 border-border-strong px-4 py-2 text-base font-semibold text-on-surface"
         >
           {t('action.cancel')}
         </button>
@@ -264,7 +264,7 @@ function ConfirmDisable({
           type="button"
           onClick={onConfirm}
           disabled={busy}
-          className="min-h-12 flex-1 rounded-xl bg-red-700 px-4 py-2 text-base font-semibold text-white active:bg-red-800 disabled:bg-slate-400"
+          className="min-h-12 flex-1 rounded-xl bg-destructive px-4 py-2 text-base font-semibold text-on-primary active:opacity-90 disabled:bg-border-strong"
         >
           {t('action.confirm')}
         </button>
@@ -293,7 +293,7 @@ function ResetPasswordForm({
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl bg-slate-100 p-4" noValidate>
+    <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl bg-surface-sunken p-4" noValidate>
       <PasswordField
         label={t('users.resetPasswordFor', { name })}
         hint={t('field.passwordHint')}
@@ -307,7 +307,7 @@ function ResetPasswordForm({
           type="button"
           onClick={onCancel}
           disabled={busy}
-          className="min-h-12 flex-1 rounded-xl border-2 border-slate-400 px-4 py-2 text-base font-semibold text-slate-800"
+          className="min-h-12 flex-1 rounded-xl border-2 border-border-strong px-4 py-2 text-base font-semibold text-on-surface"
         >
           {t('action.cancel')}
         </button>

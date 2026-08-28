@@ -30,6 +30,8 @@ export {
   ChipIcon,
   CloseIcon,
   DangerIcon,
+  EyeIcon,
+  EyeOffIcon,
   FlaskIcon,
   HandIcon,
   HomeIcon,
@@ -60,6 +62,7 @@ export {
   type FieldIds,
   type FieldShellProps,
 } from './primitives/Field'
+export { PasswordField, type PasswordFieldProps } from './primitives/PasswordField'
 export { RadioGroup, type RadioGroupProps, type RadioOption } from './primitives/RadioGroup'
 export { Select, type SelectOption, type SelectProps } from './primitives/Select'
 export { Switch, type SwitchProps } from './primitives/Switch'
