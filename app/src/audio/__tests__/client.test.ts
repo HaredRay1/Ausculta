@@ -7,6 +7,13 @@ import type { WorkerRequest, WorkerResponse } from '../classifier/protocol'
  * posted (including the transfer list) and replies only when the test says so,
  * which is what makes the queueing and correlation behaviour observable.
  */
+/**
+ * A plain `Omit` over a union collapses it to the keys they share, so it is
+ * distributed here to keep each response variant's own fields.
+ */
+type DistributiveOmitId<T> = T extends unknown ? Omit<T, 'id'> : never
+type ResponseWithoutId = DistributiveOmitId<WorkerResponse>
+
 class FakeWorker {
   static instances: FakeWorker[] = []
   onmessage: ((event: MessageEvent<WorkerResponse>) => void) | null = null
@@ -32,7 +39,7 @@ class FakeWorker {
   }
 
   /** Reply to the Nth request the client sent, reusing its id. */
-  replyTo(index: number, response: Omit<WorkerResponse, 'id'>): void {
+  replyTo(index: number, response: ResponseWithoutId): void {
     this.reply({ ...response, id: this.posted[index].request.id } as WorkerResponse)
   }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DecodeError, decodeFromBuffer, decodeToPcm16k, scaleUnitFloatsToInt16Range } from '../decode/decode'
+import { decodeFromBuffer, decodeToPcm16k, scaleUnitFloatsToInt16Range } from '../decode/decode'
 import { parseWav } from '../decode/wav'
 import { encodeWav, encodeWavBuffer, toInt16 } from '../dsp/wavEncode'
 import { INT16_FULL_SCALE, TUNABLES } from '../constants'
