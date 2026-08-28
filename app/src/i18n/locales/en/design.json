@@ -62,5 +62,12 @@
   },
   "toast": {
     "region": "Notifications"
+  },
+  "audio": {
+    "play": "Play recording: {{label}}",
+    "pause": "Pause recording: {{label}}",
+    "seek": "Move through recording: {{label}}",
+    "errorTitle": "Could not play: {{label}}",
+    "errorBody": "This recording did not load, so there is nothing to listen to yet. This does not mean the recording is silent or normal. Try again, or record it again."
   }
 }

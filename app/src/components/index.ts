@@ -96,6 +96,7 @@ export {
 } from './feedback/Toast'
 
 /* ---- Clinical ----------------------------------------------------------- */
+export { AudioPlayer, type AudioPlayerProps } from './clinical/AudioPlayer'
 export { ConfidenceBar, type ConfidenceBarProps } from './clinical/ConfidenceBar'
 export {
   FictionalDataBanner,
