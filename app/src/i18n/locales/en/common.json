@@ -8,6 +8,7 @@
   "continue": "Continue",
   "settings": "Settings",
   "changeLanguage": "Change language",
+  "demoData": "Demonstration data",
   "signedInAs": "Signed in as {{name}}",
   "signOut": "Sign out",
   "dashboardComingSoon": "Your dashboard is still being built. Signing in, roles, and account approval already work."

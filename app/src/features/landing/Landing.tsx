@@ -1,34 +1,41 @@
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
-import { DisclaimerBanner } from '../../components/DisclaimerBanner'
+import { Button, DisclaimerBanner, LungsIcon } from '../../components'
 
 export function Landing() {
   const { t } = useTranslation('common')
   const navigate = useNavigate()
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-between gap-8 bg-white px-6 py-12">
+    <main className="flex min-h-dvh flex-col items-center justify-between gap-8 bg-surface px-6 py-12">
       <div className="flex flex-1 flex-col items-center justify-center gap-3 text-center">
-        <h1 className="text-4xl font-bold uppercase tracking-widest text-teal-900">
+        <LungsIcon className="h-14 w-14 text-primary" />
+        <h1 className="text-4xl font-bold uppercase tracking-widest text-on-surface">
           {t('appName')}
         </h1>
-        <p className="text-lg text-slate-600">{t('tagline')}</p>
+        <p className="text-lg text-muted">{t('tagline')}</p>
       </div>
 
       <div className="flex w-full max-w-xs flex-col gap-4">
         <DisclaimerBanner i18nKey="common:disclaimer" />
 
-        <button
-          type="button"
-          onClick={() => navigate('/login')}
-          className="w-full rounded-xl bg-teal-700 px-6 py-4 text-lg font-medium text-white shadow-sm active:bg-teal-800"
-        >
+        <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/login')}>
           {t('getStarted')}
-        </button>
+        </Button>
 
-        <Link to="/language" className="text-center text-sm text-teal-700 underline">
-          {t('changeLanguage')}
-        </Link>
+        <div className="flex flex-col items-center gap-2">
+          <Link to="/language" className="text-sm text-primary underline">
+            {t('changeLanguage')}
+          </Link>
+          {/*
+            Demo data normally seeds itself on first launch. This link is the
+            recovery path when it did not — an empty app with no visible way to
+            populate it is the worst state to hand someone evaluating it.
+          */}
+          <Link to="/demo" className="text-sm text-muted underline">
+            {t('demoData')}
+          </Link>
+        </div>
       </div>
     </main>
   )

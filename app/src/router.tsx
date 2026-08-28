@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { authRoutes } from './auth/routes'
 import { RequireAuth } from './auth/guards'
+import { demoRoutes } from './features/demo'
 import { patientRoutes } from './features/patients/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
@@ -46,6 +47,15 @@ export function AppRoutes() {
         The source array is already in that order — preserve it.
       */}
       {patientRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {/*
+        Deliberately unguarded: a device that has not finished admin setup still
+        needs to reach the seed control, and the screen only ever touches records
+        already marked fictional.
+      */}
+      {demoRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
