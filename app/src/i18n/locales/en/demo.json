@@ -35,6 +35,7 @@
     "body": "Every demonstration recording plays the same kind of synthetic test tone. Nothing here is a lung sound and nothing here should be judged clinically."
   },
   "errors": {
+    "title": "Something went wrong",
     "load": "Could not load the demonstration data.",
     "remove": "Could not remove the demonstration data."
   }

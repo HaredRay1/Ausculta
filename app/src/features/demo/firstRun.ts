@@ -1,4 +1,5 @@
 import { db as defaultDb, type AuscultaDB } from '../../db/db'
+import { syncDemoAssignments } from './assignments'
 import { setDemoMode } from './demoMode'
 import { seedDemoData } from './seed'
 import { DEMO } from './visibility'
@@ -53,6 +54,11 @@ export async function ensureFirstRunDemo(
 ): Promise<FirstRunResult> {
   const decided = await db.appMeta.get(DEMO_FIRST_RUN_META_KEY)
   if (decided !== undefined) {
+    // Runs on every launch, not just the first. Seeding happens before anyone
+    // has an account, so the accounts created afterwards have to be granted
+    // access to the fictional clinic at some later start-up or the patient
+    // list renders empty for every role but admin.
+    await syncDemoAssignments(db)
     return { outcome: 'already-decided', demoEnabled: false }
   }
 
@@ -65,6 +71,7 @@ export async function ensureFirstRunDemo(
   }
 
   await seedDemoData(db, { now })
+  await syncDemoAssignments(db)
   await setDemoMode(true, db)
   await db.appMeta.put({ key: DEMO_FIRST_RUN_META_KEY, value: 'seeded' })
   return { outcome: 'seeded', demoEnabled: true }
