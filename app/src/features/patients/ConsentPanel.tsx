@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import { Banner } from '../../components/feedback/Banner'
-import { Section } from '../../components/layout/Page'
-import { Button } from '../../components/primitives/Button'
-import { Card } from '../../components/primitives/Card'
-import { RadioGroup } from '../../components/primitives/RadioGroup'
+import { Banner, Button, Card, RadioGroup, Section } from '../../components'
 import type { ConsentStatus } from '../../db/codes'
 import {
   DRAFT_EN_CONSENT_VERSION,
@@ -62,7 +58,7 @@ export function ConsentPanel({
       </Banner>
 
       <Card className="mt-3">
-        <p className="text-sm font-medium text-on-surface-muted">{t('consent.readAloud')}</p>
+        <p className="text-sm font-medium text-muted">{t('consent.readAloud')}</p>
 
         <h3 className="mt-3 text-lg font-semibold text-on-surface">{document.title}</h3>
 
@@ -70,14 +66,14 @@ export function ConsentPanel({
           {document.sections.map((section) => (
             <div key={section.heading}>
               <h4 className="text-base font-semibold text-on-surface">{section.heading}</h4>
-              <p className="mt-1 text-base leading-relaxed text-on-surface-muted">
+              <p className="mt-1 text-base leading-relaxed text-muted">
                 {section.body}
               </p>
             </div>
           ))}
         </div>
 
-        <p className="mt-4 text-sm text-on-surface-muted">
+        <p className="mt-4 text-sm text-muted">
           {t('consent.version', { version: document.version })}
         </p>
       </Card>
@@ -95,7 +91,7 @@ export function ConsentPanel({
           </Button>
           {showOutstanding && (
             <Card className="mt-2">
-              <ul className="flex list-disc flex-col gap-2 pl-5 text-sm text-on-surface-muted">
+              <ul className="flex list-disc flex-col gap-2 pl-5 text-sm text-muted">
                 {outstanding.map((item) => (
                   <li key={item}>{item}</li>
                 ))}

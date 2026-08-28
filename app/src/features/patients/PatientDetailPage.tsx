@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Banner } from '../../components/feedback/Banner'
-import { EmptyState } from '../../components/feedback/EmptyState'
-import { Skeleton, SkeletonGroup } from '../../components/feedback/Skeleton'
-import { AppBar } from '../../components/layout/AppBar'
-import { Page, Section } from '../../components/layout/Page'
-import { Button } from '../../components/primitives/Button'
-import { Card } from '../../components/primitives/Card'
-import { InboxIcon } from '../../components/icons'
+import {
+  AppBar,
+  Banner,
+  Button,
+  Card,
+  EmptyState,
+  InboxIcon,
+  Page,
+  Section,
+  Skeleton,
+  SkeletonGroup,
+} from '../../components'
 import { useAuth } from '../../auth/AuthContext'
 import type { HistoryEntry, Patient } from '../../db/types'
 import { usePatientsTranslation } from './i18n'
@@ -200,7 +204,7 @@ function HistorySection({
     return (
       <Section title={title}>
         <Card>
-          <p className="text-base text-on-surface-muted">{emptyLabel}</p>
+          <p className="text-base text-muted">{emptyLabel}</p>
         </Card>
       </Section>
     )
@@ -219,7 +223,7 @@ function HistorySection({
                 className={
                   entry.present
                     ? 'text-base font-semibold text-on-surface'
-                    : 'text-base text-on-surface-muted'
+                    : 'text-base text-muted'
                 }
               >
                 {entry.present ? t('detail.historyPresent') : t('detail.historyAbsent')}
@@ -228,7 +232,7 @@ function HistorySection({
           ))}
         </ul>
         {/* Absent codes were never asked, which is not the same as answered no. */}
-        <p className="mt-3 text-sm text-on-surface-muted">{t('detail.notAskedNote')}</p>
+        <p className="mt-3 text-sm text-muted">{t('detail.notAskedNote')}</p>
       </Card>
     </Section>
   )
@@ -237,9 +241,9 @@ function HistorySection({
 function Row({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div>
-      <dt className="text-sm text-on-surface-muted">{label}</dt>
+      <dt className="text-sm text-muted">{label}</dt>
       <dd className="text-base text-on-surface">{value}</dd>
-      {hint !== undefined && <dd className="text-xs text-on-surface-muted">{hint}</dd>}
+      {hint !== undefined && <dd className="text-xs text-muted">{hint}</dd>}
     </div>
   )
 }

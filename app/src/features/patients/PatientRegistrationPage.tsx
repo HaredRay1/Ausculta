@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Banner } from '../../components/feedback/Banner'
-import { AppBar } from '../../components/layout/AppBar'
-import { Page, Section } from '../../components/layout/Page'
-import { Button } from '../../components/primitives/Button'
-import { Card } from '../../components/primitives/Card'
-import { Select } from '../../components/primitives/Select'
-import { TextField } from '../../components/primitives/TextField'
+import {
+  AppBar,
+  Banner,
+  Button,
+  Card,
+  Page,
+  Section,
+  Select,
+  TextField,
+} from '../../components'
 import { useAuth } from '../../auth/AuthContext'
 import {
   CONSENT_STATUSES,

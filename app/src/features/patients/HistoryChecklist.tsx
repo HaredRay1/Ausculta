@@ -1,5 +1,4 @@
-import { Checkbox } from '../../components/primitives/Checkbox'
-import { Section } from '../../components/layout/Page'
+import { Checkbox, Section } from '../../components'
 import { usePatientsTranslation } from './i18n'
 import { toggleTicked, type HistoryAnswerState } from './historyAnswers'
 

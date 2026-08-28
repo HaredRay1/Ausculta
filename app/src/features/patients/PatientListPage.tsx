@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EmptyState } from '../../components/feedback/EmptyState'
-import { SkeletonGroup, Skeleton } from '../../components/feedback/Skeleton'
-import { AppBar } from '../../components/layout/AppBar'
-import { Page } from '../../components/layout/Page'
-import { Button } from '../../components/primitives/Button'
-import { Card } from '../../components/primitives/Card'
-import { TextField } from '../../components/primitives/TextField'
-import { InboxIcon, SearchIcon } from '../../components/icons'
+import {
+  AppBar,
+  Button,
+  Card,
+  EmptyState,
+  FictionalDataBanner,
+  InboxIcon,
+  Page,
+  SearchIcon,
+  Skeleton,
+  SkeletonGroup,
+  TextField,
+} from '../../components'
 import { useAuth } from '../../auth/AuthContext'
 import { ROLES } from '../../db/codes'
 import type { Patient } from '../../db/types'
@@ -107,7 +112,7 @@ export function PatientListPage() {
       )}
 
       {patients !== null && patients.length > 0 && (
-        <p className="text-sm text-on-surface-muted">
+        <p className="text-sm text-muted">
           {t('list.count', { count: patients.length })}
         </p>
       )}
@@ -133,11 +138,11 @@ function PatientRow({ patient, onOpen }: { patient: Patient; onOpen: () => void 
         className="flex min-h-16 w-full flex-col items-start gap-1 px-4 py-3 text-left active:bg-surface-sunken"
       >
         <span className="text-lg font-semibold text-on-surface">{patient.name}</span>
-        <span className="text-sm text-on-surface-muted">
+        <span className="text-sm text-muted">
           {age === null ? t('card.ageUnknown') : t('card.age', { count: age })}
-          {' · '}
+          {' - '}
           {t(`codes:sex.${patient.sex}`)}
-          {' · '}
+          {' - '}
           {formatPatientIdForDisplay(patient.id)}
         </span>
         <span className="flex flex-wrap gap-2 pt-1">
@@ -146,9 +151,16 @@ function PatientRow({ patient, onOpen }: { patient: Patient; onOpen: () => void 
           ) : (
             <Tag tone="neutral">{t(`codes:consentStatus.${patient.consent.status}`)}</Tag>
           )}
-          {patient.isDemo === 1 && <Tag tone="neutral">{t('card.demo')}</Tag>}
         </span>
       </button>
+
+      {/* Outside the button: seeded rows must be labelled as fictional, and a
+          banner does not belong inside a control's accessible name. */}
+      {patient.isDemo === 1 && (
+        <div className="px-4 pb-3">
+          <FictionalDataBanner compact />
+        </div>
+      )}
     </Card>
   )
 }
@@ -156,9 +168,9 @@ function PatientRow({ patient, onOpen }: { patient: Patient; onOpen: () => void 
 function Tag({ tone, children }: { tone: 'neutral' | 'warning'; children: React.ReactNode }) {
   const className =
     tone === 'warning'
-      ? 'bg-warning-subtle text-on-warning-subtle'
-      : 'bg-surface-sunken text-on-surface-muted'
+      ? 'bg-warning-surface text-on-warning-surface'
+      : 'bg-surface-sunken text-muted'
   return (
-    <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${className}`}>{children}</span>
+    <span className={`rounded-pill px-2.5 py-1 text-xs font-medium ${className}`}>{children}</span>
   )
 }
