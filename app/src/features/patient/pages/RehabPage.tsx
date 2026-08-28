@@ -11,7 +11,6 @@ import {
 import { PatientScreen } from '../components/PatientScreen'
 import type { PatientRepository } from '../data/patientRepository'
 import { usePatientTranslation } from '../i18n'
-import { PATIENT_PATHS } from '../navigation'
 
 /**
  * Rehabilitation support — the shell, deliberately without content.
@@ -50,13 +49,30 @@ export function RehabPage({ repository }: RehabPageProps) {
             </Card>
           </Section>
 
+          {/*
+            The safety page comes first and is reachable whether or not a
+            practitioner has assigned anything. What to do during an attack is
+            not conditional on having a care plan, and someone who needs it is
+            not in a state to go hunting for it.
+          */}
+          <Section title={t('patient:rehab.safetyTitle')}>
+            <Card>
+              <p className="text-base text-on-surface">{t('patient:rehab.safetyBody')}</p>
+              <div className="mt-4">
+                <Button variant="primary" fullWidth onClick={() => navigate('/rehab/safety')}>
+                  {t('patient:rehab.safetyAction')}
+                </Button>
+              </div>
+            </Card>
+          </Section>
+
           <EmptyState
             title={t('patient:rehab.empty.title')}
             body={t('patient:rehab.empty.body')}
             icon={<InboxIcon className="size-10" />}
             action={
-              <Button variant="secondary" fullWidth onClick={() => navigate(PATIENT_PATHS.home)}>
-                {t('patient:rehab.empty.action')}
+              <Button variant="secondary" fullWidth onClick={() => navigate('/rehab')}>
+                {t('patient:rehab.openProgramme')}
               </Button>
             }
           />

@@ -195,7 +195,11 @@
       "body": "When a doctor or health practitioner assigns breathing exercises to you, they will appear on this page with instructions. Ausculta will not invent exercises for you — breathing exercises can be unsafe for the wrong person, so a practitioner has to choose them.",
       "action": "Back to my health"
     },
-    "askNote": "If you would like a breathing plan, ask your health worker or doctor at your next visit."
+    "askNote": "If you would like a breathing plan, ask your health worker or doctor at your next visit.",
+    "openProgramme": "See breathing exercises",
+    "safetyTitle": "If your breathing gets worse",
+    "safetyBody": "Read this before you need it. It explains the warning signs and what to do during an asthma attack.",
+    "safetyAction": "What to do in an attack"
   },
   "shared": {
     "loading": "Loading your information…",
