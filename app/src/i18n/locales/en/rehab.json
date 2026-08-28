@@ -1,0 +1,422 @@
+{
+  "_meta": {
+    "namespace": "rehab",
+    "version": 1,
+    "status": "draft",
+    "clinicalReview": "PENDING",
+    "note": "Clinical, consent and safety strings. English only by project rule — this bundle must NOT be machine-translated. A Filipino bundle may only be added after qualified-human translation plus ethics/practitioner review, and must carry its own version stamp in i18n/manifest.ts."
+  },
+
+  "nav": {
+    "home": "Rehabilitation",
+    "safety": "When to get help",
+    "plan": "My action plan",
+    "techniques": "Breathing and exercise"
+  },
+
+  "home": {
+    "title": "Rehabilitation support",
+    "lead": "Practice, safety information, and the plan your practitioner wrote for you.",
+    "safetyFirstHeading": "Read this first",
+    "safetyCardTitle": "When to stop and get help",
+    "safetyCardBody": "The warning signs of an asthma attack, and what to do about each one.",
+    "safetyCardAction": "Open safety information",
+    "planCardTitle": "My asthma action plan",
+    "planCardBody": "The green, yellow and red plan your practitioner filled in for you.",
+    "techniquesCardTitle": "Breathing and exercise",
+    "techniquesCardBody": "A short list of techniques with steps, who they suit, and where the advice comes from.",
+    "goToHeading": "Go to"
+  },
+
+  "review": {
+    "pendingTitle": "Not yet checked by a clinician",
+    "pendingBody": "This wording is taken from published guidelines but the study's practitioner has not signed it off yet. Ausculta is a prototype. It is not for diagnosis or treatment.",
+    "contentVersion": "Content version {{version}}",
+    "stepsWrittenByTeam": "The step-by-step wording below was written for this app in plain language. It is a description of the technique, not a quote from the source. A practitioner needs to check it before it is used with patients."
+  },
+
+  "provenance": {
+    "sourceHeading": "Where this comes from",
+    "sourceLabel": "Source",
+    "evidenceLabel": "Evidence",
+    "confidenceLabel": "How well confirmed",
+    "confidence": {
+      "PRIMARY": "Read directly from the source document",
+      "SECONDARY": "Confirmed through a summary of the source, not the source itself",
+      "UNVERIFIED": "Not confirmed against an original source — treat with care"
+    },
+    "verifyNote": "Needs checking against the original document before this is shown to patients."
+  },
+
+  "safety": {
+    "title": "When to stop and get help",
+    "lead": "Learn these signs. They tell you when an asthma attack needs medical care.",
+    "stopExercisesTitle": "Stop your breathing exercises",
+    "stopExercisesBody": "If any of the signs below start, stop the exercise. Breathing exercises are not a treatment for an attack. They are never a replacement for your reliever medicine.",
+
+    "emergency": {
+      "heading": "Get medical help now",
+      "description": "If any one of these is happening, do not wait to see if it passes.",
+      "action": "Call your doctor or go to the nearest clinic now.",
+      "papppAction": "Call your doctor or emergency room immediately. If you cannot reach anyone, take the patient to the nearest hospital right away."
+    },
+    "worsening": {
+      "heading": "Signs your asthma is getting worse",
+      "description": "These are the signs families are taught to watch for. They mean your asthma is worsening. Follow the plan your practitioner gave you and contact them."
+    },
+    "nonAcute": {
+      "heading": "Do not ignore this one, even though it is not an emergency",
+      "description": "This is not an asthma attack. It is a reason to get checked."
+    },
+
+    "equipment": {
+      "PULSE_OXIMETER": "Only if you have a pulse oximeter at home.",
+      "PEAK_FLOW_METER": "Only if you have a peak flow meter and someone has trained you to use it."
+    },
+
+    "flag": {
+      "RELIEVER_NOT_HELPING": {
+        "title": "Your reliever inhaler is not helping",
+        "detail": "You used your reliever the way your practitioner told you and your breathing does not ease within minutes."
+      },
+      "CANNOT_SPEAK_FULL_SENTENCE": {
+        "title": "Too breathless to walk or talk",
+        "detail": "You cannot finish a full sentence in one breath. In a child under five, watch for not being able to speak or to drink."
+      },
+      "CYANOSIS": {
+        "title": "Lips, face, tongue or nails look blue or grey",
+        "detail": "A colour change like this means the body is not getting enough oxygen."
+      },
+      "CONFUSED_OR_DROWSY": {
+        "title": "Confused, very sleepy, or hard to wake",
+        "detail": "Being drowsy or muddled during an attack is a danger sign, not tiredness."
+      },
+      "RETRACTIONS_STRUGGLING": {
+        "title": "Visibly struggling to breathe",
+        "detail": "Hunched over, using neck and chest muscles to breathe. The nostrils flare. The skin pulls in between the ribs, below the ribs, or above the collarbones."
+      },
+      "VERY_FAST_BREATHING": {
+        "title": "Breathing much faster than normal for the age",
+        "detail": "Count the breaths for one full minute at rest and compare with the table below."
+      },
+      "SILENT_CHEST": {
+        "title": "The chest has gone quiet during a bad attack",
+        "detail": "If the wheeze stops during a severe attack, that is a danger sign. It does not mean the attack is over."
+      },
+      "FAINTING_DIZZY_COLD_SWEAT": {
+        "title": "Fainting, dizziness, or a sudden cold sweat",
+        "detail": "Get help straight away."
+      },
+      "CHEST_PAIN_EXERCISE": {
+        "title": "Chest pain during or after exercise",
+        "detail": "Treat this as a possible heart emergency. Do not assume it is the asthma."
+      },
+      "RELIEF_PERIOD_SHORTENING": {
+        "title": "The reliever helps for less and less time",
+        "detail": "Each dose wears off sooner than the last one did."
+      },
+      "INFANT_REPEATED_RELIEVER": {
+        "title": "A baby under one year needs the reliever again and again",
+        "detail": "Repeated doses in a baby this young need to be seen by a clinician."
+      },
+      "CANNOT_TREAT_AT_HOME": {
+        "title": "You cannot treat the attack where you are",
+        "detail": "The medicine or the equipment is not there, or the person caring for the patient cannot manage the attack at home."
+      },
+      "OXYGEN_BELOW_92": {
+        "title": "Oxygen level below 92 percent while breathing normal air",
+        "detail": "This is the level the Philippine pediatric guideline uses as a reason to go to hospital."
+      },
+      "MORE_WHEEZE_AND_BREATHLESS": {
+        "title": "More wheezing and more shortness of breath",
+        "detail": "The wheeze and the breathlessness are worse than they usually are."
+      },
+      "FAST_BREATHING_RETRACTIONS": {
+        "title": "Fast breathing, flaring nostrils, or skin pulling in",
+        "detail": "The skin pulls in between the ribs, below the ribs, or above the collarbones with each breath."
+      },
+      "MORE_COUGHING_AT_NIGHT": {
+        "title": "More coughing, especially during sleep",
+        "detail": "Coughing that wakes the patient at night is a sign the asthma is not controlled."
+      },
+      "LESS_ACTIVE_TIRED": {
+        "title": "Less active, less energy, tires quickly",
+        "detail": "Cannot do as much as usual, or gets out of breath sooner than usual."
+      },
+      "DAILY_ACTIVITIES_AFFECTED": {
+        "title": "Everyday things are getting hard",
+        "detail": "Trouble with normal daily activities, including feeding in a small child. Being restless or irritable also counts."
+      },
+      "POOR_RESPONSE_TO_RELIEVER": {
+        "title": "The reliever medicine is not working as well as usual",
+        "detail": "It helps less than it normally does."
+      },
+      "SPO2_BELOW_94": {
+        "title": "Oxygen level below 94 percent",
+        "detail": "This is one of the signs families are taught to watch for at home."
+      },
+      "PEAK_FLOW_BELOW_80": {
+        "title": "Peak flow below 80 percent",
+        "detail": "Peak flow is a bonus check, not a requirement. It is never a replacement for a good clinical history and should not be relied on by itself."
+      },
+      "COUGH_TWO_WEEKS_TB": {
+        "title": "A cough that has lasted two weeks or more",
+        "detail": "With or without fever, weight loss, or blood in the spit. Ask about TB screening at your nearest DOTS or health centre. Do not put it down to asthma without being checked."
+      }
+    },
+
+    "respiratoryRate": {
+      "heading": "How fast is too fast?",
+      "howTo": "Count the breaths for one whole minute while the person is resting. You need no equipment for this.",
+      "tableCaption": "Resting breaths per minute — the calm range used by the Philippine national plan",
+      "ageHeader": "Age",
+      "rateHeader": "Calm range",
+      "band": {
+        "M1_12": { "age": "1 to 12 months", "rate": "50 breaths a minute or fewer" },
+        "Y1_5": { "age": "1 to 5 years", "rate": "40 breaths a minute or fewer" },
+        "Y6_10": { "age": "6 to 10 years", "rate": "30 breaths a minute or fewer" },
+        "Y11_18": { "age": "11 to 18 years", "rate": "20 breaths a minute or fewer" }
+      },
+      "discrepancy": "The same guideline gives slightly different numbers in its hospital-referral section (under 60 a minute for 0 to 2 months, under 50 for 2 to 12 months, under 40 for 1 to 5 years). The two lists do different jobs. The table above is the one written for patients and families. Your practitioner sets the number that counts for you.",
+      "notYourThreshold": "This table is general information. It is not a number set for you. Only your practitioner can set the breathing rate that means something for you."
+    },
+
+    "appBoundary": {
+      "heading": "What this app will not do",
+      "body": "Ausculta cannot judge how bad an attack is, and it will never work out a dose or a diagnosis for you. What it can do is show you the warning signs and the plan and contacts your practitioner already wrote down.",
+      "fallback": "Discuss this intervention with your healthcare professional."
+    }
+  },
+
+  "plan": {
+    "title": "My asthma action plan",
+    "lead": "A written plan tells you what to do on a good day, on a bad day, and in an emergency. Your practitioner fills it in with you.",
+    "notAssigned": {
+      "title": "Your practitioner has not assigned a plan yet",
+      "body": "Ausculta will never write an asthma action plan for you. A plan appears here only after a practitioner has filled it in and approved it. Ask your practitioner about a written asthma action plan at your next visit.",
+      "action": "See the warning signs"
+    },
+    "pendingApproval": {
+      "title": "A plan has been started but not approved yet",
+      "body": "Your practitioner has begun a plan but has not approved it. Until they do, it is not the plan to follow. Keep following whatever instructions they have already given you."
+    },
+    "notFilled": "Your practitioner has not filled this in yet.",
+    "emptyPlanTitle": "This plan has no details in it yet",
+    "emptyPlanBody": "Your practitioner approved a plan but has not written the details in yet. Ask them to complete it at your next visit.",
+    "zoneHeading": "Your zones",
+    "zone": {
+      "GREEN": {
+        "name": "Green zone",
+        "state": "Doing well",
+        "meaning": "Asthma is under control. No symptoms. Normal activity and normal sleep."
+      },
+      "YELLOW": {
+        "name": "Yellow zone",
+        "state": "Getting worse",
+        "meaning": "A mild to moderate attack. Asthma is worsening. Symptoms have started or activity and sleep are affected."
+      },
+      "RED": {
+        "name": "Red zone",
+        "state": "Danger",
+        "meaning": "A severe attack. This is dangerous. The medicine is not helping."
+      }
+    },
+    "field": {
+      "howYouFeel": "How you feel",
+      "respiratoryRate": "Breathing rate",
+      "peakFlow": "Peak flow",
+      "medicines": "Medicines",
+      "whatToDo": "What to do"
+    },
+    "peakFlowOptional": "Optional. The national plan treats peak flow as a bonus, not a requirement. Most clinics here do not have a peak flow meter.",
+    "medicinesNote": "Only a practitioner can write medicine names, doses, or puff counts. Ausculta will never fill these in.",
+    "contacts": {
+      "heading": "Who to contact",
+      "doctorName": "Doctor",
+      "doctorPhone": "Doctor's phone",
+      "emergencyName": "Emergency contact",
+      "emergencyPhone": "Emergency contact's phone",
+      "empty": "Your practitioner has not filled this in yet."
+    },
+    "redAction": {
+      "heading": "In the red zone",
+      "body": "Call your doctor or emergency room immediately. If you cannot reach anyone, take the patient to the nearest hospital right away."
+    },
+    "templateSource": "This plan follows the structure of the symptom-based Written Asthma Action Plan in the Philippine national pediatric asthma guideline. That guideline calls its own version a sample that practitioners should adapt.",
+    "filledBy": "Filled in by your practitioner on {{date}}",
+    "approvedOn": "Approved on {{date}}",
+    "reviewReminder": "A written plan should be reviewed and updated regularly. Bring it to your next visit."
+  },
+
+  "techniques": {
+    "title": "Breathing and exercise",
+    "lead": "A short list. Each one here has evidence behind it and is safe for people with asthma. We would rather show you four we can stand behind than ten we cannot.",
+    "honesty": "Be realistic about what these do. In adults, breathing exercises may help quality of life and hyperventilation symptoms, but probably not asthma symptoms themselves. In children the evidence is not strong enough to recommend them as standard care. No harm has been reported from breathing techniques in people with asthma.",
+    "universalCaution": "None of these replace your reliever medicine during an attack. If you have any of the warning signs, stop and get medical help.",
+    "practitionerSets": "Your practitioner decides whether an activity is right for you, how often to do it, and for how long. Ausculta does not set this.",
+    "stepsHeading": "How to do it",
+    "suitsHeading": "Who it suits",
+    "cautionsHeading": "Cautions",
+    "evidenceHeading": "How strong is the evidence?",
+    "openTechnique": "Open",
+    "backToList": "All techniques",
+    "evidence": {
+      "STRONG": "Strong. Backed by a strong, high-certainty recommendation in a national guideline.",
+      "MODERATE": "Moderate. One good trial supports it, with real limits on what it showed.",
+      "LIMITED": "Limited. Plausible and very low risk, but the direct asthma evidence is weak."
+    },
+    "notOffered": {
+      "heading": "One activity we have deliberately left out",
+      "body": "The Ausculta specification originally listed huff coughing as a rehabilitation activity. We removed it. Here is why, so nobody adds it back by mistake.",
+      "HUFF_COUGHING": {
+        "name": "Huff coughing",
+        "reason": "Huff coughing is the forced-breath-out part of the Active Cycle of Breathing Technique. That technique is used to clear mucus in cystic fibrosis, bronchiectasis and COPD. It has no asthma evidence at all. Physiotherapy sources list bronchospasm and twitchy, over-reactive airways as a reason not to do it — and asthma is a disease of over-reactive airways.",
+        "rule": "Ausculta will not suggest this to you. Only a practitioner can prescribe it, for a specific chest illness with mucus, and never during active wheezing. Ask your practitioner first."
+      }
+    },
+
+    "item": {
+      "PURSED_LIP_BREATHING": {
+        "name": "Pursed-lip breathing",
+        "summary": "Breathe out slowly through pursed lips, so the breath out lasts longer than the breath in.",
+        "steps": [
+          "Sit up straight and let your shoulders drop.",
+          "Breathe in gently through your nose with your mouth closed.",
+          "Purse your lips, as if you were about to whistle.",
+          "Breathe out slowly and gently through your pursed lips.",
+          "Do not force the air out. Let it flow.",
+          "Stop whenever you want to. Stop straight away if you feel worse."
+        ],
+        "suits": "Teenagers and adults. It has also been used informally with school-age children. There are no trials made just for children, so a practitioner should decide if it suits a younger child.",
+        "cautions": [
+          "This is not a treatment for an asthma attack and does not replace your reliever medicine.",
+          "Stop if your breathing gets worse instead of easier.",
+          "The direct asthma evidence is weak. Most of what is known about how it works comes from COPD, not asthma."
+        ]
+      },
+      "DIAPHRAGMATIC_BREATHING": {
+        "name": "Belly breathing",
+        "summary": "Breathe using the muscle under your lungs, so your belly moves instead of your chest.",
+        "steps": [
+          "Sit or lie down somewhere comfortable.",
+          "Put one hand on your chest and the other on your belly.",
+          "Breathe in slowly through your nose. Try to make the hand on your belly move outwards.",
+          "Keep the hand on your chest as still as you can.",
+          "Breathe out slowly and feel your belly settle back in.",
+          "Keep your neck and shoulders loose the whole time."
+        ],
+        "suits": "Teenagers and adults. It has been used with children as part of larger programmes, but it has never been tested on its own in children.",
+        "cautions": [
+          "This is not a treatment for an asthma attack and does not replace your reliever medicine.",
+          "Stop if your breathing gets worse instead of easier.",
+          "The direct asthma evidence is weak. It has not been tested on its own in the main review of breathing exercises for asthma."
+        ]
+      },
+      "BREATHING_RELAXATION_RETRAINING": {
+        "name": "Breathing and relaxation retraining",
+        "summary": "Learning a calmer, gentler way of breathing, together with relaxing your body. This replaces the vaguer 'controlled breathing' and 'deep breathing' on the original list.",
+        "steps": [
+          "Sit somewhere quiet. Let your shoulders, jaw and hands go loose.",
+          "Breathe in and out through your nose, not your mouth.",
+          "Breathe gently. Do not take big gulps of air — bigger is not better here.",
+          "Let your belly do the work, the way you did in belly breathing.",
+          "Try not to sigh or yawn between breaths.",
+          "Stay relaxed while you breathe. The relaxing is part of the exercise, not a break from it."
+        ],
+        "suits": "Teenagers from about sixteen, and adults. The trial behind it included people aged sixteen to seventy. It has never been tested in children, so it is not offered as a children's activity.",
+        "cautions": [
+          "This is not a treatment for an asthma attack and does not replace your reliever medicine.",
+          "Expect it to help how you feel, not how your lungs measure. In the trial, symptom scores and anxiety improved but lung function did not.",
+          "Stop if your breathing gets worse instead of easier."
+        ]
+      },
+      "EXERCISE_WARM_UP": {
+        "name": "Warm up before hard exercise",
+        "summary": "A proper warm-up before hard exercise makes exercise-triggered asthma less likely and less severe.",
+        "steps": [
+          "Before hard exercise or sport, warm up first. Do not start at full effort.",
+          "Build up gradually until your body is ready.",
+          "Both steady hard warm-ups and mixed-effort warm-ups have been shown to work, so use whichever your coach or practitioner prefers.",
+          "Tell your teacher or coach that you have asthma.",
+          "Follow whatever your practitioner has told you to do before exercise.",
+          "Stop exercising if your chest tightens or your breathing does not settle."
+        ],
+        "suits": "School-age children, teenagers and adults who take part in PE or sport. This is the one item here with a strong, high-certainty recommendation behind it.",
+        "cautions": [
+          "Chest pain during or after exercise should be treated as a possible heart emergency. Get medical help. Do not assume it is asthma.",
+          "A warm-up does not replace your reliever medicine or your action plan.",
+          "Stop and get help if any warning sign appears."
+        ]
+      }
+    }
+  },
+
+  "completion": {
+    "heading": "Your activities",
+    "assignedBy": "Assigned and approved by your practitioner.",
+    "frequency": "How often: {{value}}",
+    "duration": "How long: {{value}}",
+    "instructions": "Your practitioner's instructions",
+    "logAction": "I did this today",
+    "logged": "Logged. Well done.",
+    "loggedOn": "Last logged {{date}}",
+    "neverLogged": "Not logged yet.",
+    "noneAssigned": "Your practitioner has not approved any activities for you yet.",
+    "countThisWeek_one": "{{count}} time logged in the last 7 days",
+    "countThisWeek_other": "{{count}} times logged in the last 7 days"
+  },
+
+  "citation": {
+    "PAPP_2021": {
+      "label": "Philippine pediatric asthma guideline, 2021",
+      "source": "Clinical Practice Guidelines for Pediatric Asthma 2021. Philippine Academy of Pediatric Pulmonologists, with the Philippine Pediatric Society and the Philippine Society of Allergy, Asthma and Immunology. The Department of Health sits on its consensus panel."
+    },
+    "GINA_2023_POCKET": {
+      "label": "GINA 2023 Pocket Guide",
+      "source": "Global Initiative for Asthma, Pocket Guide for Asthma Management and Prevention, July 2023."
+    },
+    "GINA_2025_SUMMARY": {
+      "label": "GINA 2025 Summary Guide",
+      "source": "Global Initiative for Asthma, Summary Guide for Asthma Management and Prevention, updated June 2025."
+    },
+    "PAPWORTH_RCT": {
+      "label": "Papworth method trial",
+      "source": "Holloway and West, randomised controlled trial of integrated breathing and relaxation training, Thorax. 85 adults aged 16 to 70. Symptom scores, dysfunctional breathing and anxiety improved at 6 and 12 months; lung function did not change."
+    },
+    "STICKLAND_2012": {
+      "label": "Warm-up and exercise-induced asthma, pooled analysis",
+      "source": "Stickland and colleagues, 2012, pooled analysis of 7 controlled trials, cited in the Philippine pediatric guideline (recommendation 9a.1, adopted from GINA 2021) as strong, high-certainty evidence."
+    },
+    "NCCIH_2022": {
+      "label": "US National Center for Complementary and Integrative Health",
+      "source": "NCCIH consumer guidance on breathing exercises for asthma, reviewed March 2022."
+    },
+    "COCHRANE_BREATHING": {
+      "label": "Cochrane review of breathing exercises for asthma",
+      "source": "The current Cochrane systematic review of breathing exercises for asthma.",
+      "note": "The project research synthesis refers to this review but did not record its full reference. The exact citation must be confirmed before this is published."
+    },
+    "ASTHMA_LUNG_UK": {
+      "label": "Asthma + Lung UK",
+      "source": "Asthma + Lung UK patient guidance, reviewed 30 November 2023. States plainly that peak flow is not a substitute for a good clinical history and should not be relied on in isolation."
+    },
+    "CDC_WHO_GINA_DANGER_SIGNS": {
+      "label": "Converged danger signs, CDC, WHO and GINA",
+      "source": "Danger signs that appear consistently across CDC patient guidance, WHO adult danger signs and the IMCI framework, and GINA.",
+      "note": "GINA's exact severity table could not be read from the original document during the project research. The signs themselves converge across sources; any numeric severity cut-off must be taken from a clean copy of the current GINA guide."
+    },
+    "JOHNS_HOPKINS_CHEST_PAIN": {
+      "label": "Johns Hopkins Medicine",
+      "source": "Johns Hopkins Medicine guidance that chest pain during or after exercise should be treated as a possible cardiac emergency rather than assumed to be asthma."
+    },
+    "DOH_NTP_WHO_TB": {
+      "label": "Philippine DOH National TB Program and WHO",
+      "source": "The two-week cough criterion used by the Philippine Department of Health National TB Program and by WHO to identify people who should be screened for tuberculosis. This is a screening prompt only, never a diagnosis."
+    },
+    "ACBT_CONTRAINDICATION": {
+      "label": "Physiotherapy guidance on the Active Cycle of Breathing Technique",
+      "source": "Physiotherapy sources listing bronchospasm and hyper-reactive airways as a contraindication to the Active Cycle of Breathing Technique, of which huff coughing is the forced-expiration phase.",
+      "note": "The project research synthesis records this contraindication but did not capture a single named primary source. The exclusion decision stands on it, so a clinician should confirm the reference."
+    }
+  }
+}

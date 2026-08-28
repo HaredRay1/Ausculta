@@ -9,6 +9,7 @@ import { demoRoutes } from './features/demo'
 // patient management. Both export `patientRoutes`, hence the alias.
 import { patientRoutes as patientPortalRoutes } from './features/patient/routes'
 import { patientRoutes as patientManagementRoutes } from './features/patients/routes'
+import { reviewRoutes } from './features/review/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
@@ -64,6 +65,16 @@ export function AppRoutes() {
       ))}
 
       {assessmentRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {/*
+        Same ordering trap as /patients/new: `/review/:id/decide` must precede
+        `/review/:id`. Every review route is role-guarded rather than merely
+        authenticated — adjudicating an AI result is a clinical act, so the
+        check belongs at the door as well as in the data.
+      */}
+      {reviewRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
