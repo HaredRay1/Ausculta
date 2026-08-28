@@ -1,0 +1,12 @@
+{
+  "appName": "Ausculta",
+  "tagline": "Listen. Detect. Act.",
+  "disclaimer": "Research prototype — not a medical device. Ausculta is a decision-support research tool and does not provide medical diagnosis.",
+  "languageNameEn": "English",
+  "languageNameFil": "Filipino",
+  "getStarted": "Get started",
+  "continue": "Continue",
+  "settings": "Settings",
+  "changeLanguage": "Change language",
+  "loginPlaceholder": "Login — coming in Phase 3"
+}

@@ -1,0 +1,110 @@
+{
+  "role": {
+    "PATIENT": "Patient",
+    "PRACTITIONER": "Practitioner",
+    "HEALTH_WORKER": "Health Worker",
+    "RESEARCHER": "Researcher",
+    "ADMIN": "Administrator"
+  },
+  "location": {
+    "R_UPPER": "Right upper lung",
+    "R_MIDDLE": "Right middle lung",
+    "R_LOWER": "Right lower lung",
+    "L_UPPER": "Left upper lung",
+    "L_MIDDLE": "Left middle lung",
+    "L_LOWER": "Left lower lung"
+  },
+  "classification": {
+    "ASTHMA": "Asthma",
+    "BRONCHIOLITIS": "Bronchiolitis",
+    "HEALTHY": "Healthy",
+    "PNEUMONIA": "Pneumonia"
+  },
+  "aiStatus": {
+    "PENDING": "Pending",
+    "ANALYZED": "Analyzed",
+    "MODEL_NOT_CONNECTED": "Model not connected",
+    "INSUFFICIENT_QUALITY": "Insufficient quality",
+    "ERROR": "Error"
+  },
+  "audioSource": {
+    "DEVICE_WAV_IMPORT": "Device WAV import",
+    "MIC_TEST_MODE": "Microphone test mode",
+    "DEMO_FICTIONAL": "Demo (fictional)"
+  },
+  "measurement": {
+    "SPO2": "Oxygen saturation (SpO2)",
+    "RESP_RATE_MANUAL": "Respiratory rate (manual)",
+    "RESP_RATE_AUSC_DERIVED": "Respiratory rate (auscultation-derived)",
+    "HEART_RATE": "Heart rate",
+    "TEMP": "Temperature",
+    "BP_SYS": "Blood pressure (systolic)",
+    "BP_DIA": "Blood pressure (diastolic)"
+  },
+  "measurementSource": {
+    "MANUAL_ENTRY": "Manual entry",
+    "AUSCULTATION_DERIVED": "Auscultation-derived"
+  },
+  "symptom": {
+    "COUGH": "Cough",
+    "PHLEGM": "Phlegm",
+    "SHORTNESS_OF_BREATH": "Shortness of breath",
+    "DIFFICULTY_BREATHING": "Difficulty breathing",
+    "WHEEZING_REPORTED": "Wheezing (reported)",
+    "CHEST_DISCOMFORT": "Chest discomfort",
+    "FEVER": "Fever",
+    "FATIGUE": "Fatigue",
+    "NIGHT_SWEATS": "Night sweats",
+    "HEMOPTYSIS": "Coughing up blood",
+    "WEIGHT_LOSS": "Weight loss",
+    "OTHER": "Other"
+  },
+  "symptomSeverity": {
+    "MILD": "Mild",
+    "MODERATE": "Moderate",
+    "SEVERE": "Severe"
+  },
+  "symptomFrequency": {
+    "OCCASIONAL": "Occasional",
+    "INTERMITTENT": "Intermittent",
+    "PERSISTENT": "Persistent"
+  },
+  "severityCategory": {
+    "MINIMAL": "Minimal",
+    "MILD": "Mild",
+    "MODERATE": "Moderate",
+    "HIGH": "High",
+    "VERY_HIGH": "Very high"
+  },
+  "reviewStatus": {
+    "DRAFT": "Draft",
+    "PENDING_REVIEW": "Pending review",
+    "APPROVED": "Approved",
+    "DISAPPROVED": "Disapproved",
+    "FURTHER_REVIEW_REQUESTED": "Further review requested"
+  },
+  "interpretation": {
+    "CONFIRMED": "Confirmed",
+    "DISAGREED": "Disagreed",
+    "MODIFIED": "Modified",
+    "UNCERTAIN": "Uncertain",
+    "REPEAT_REQUESTED": "Repeat requested"
+  },
+  "userStatus": {
+    "PENDING_VERIFICATION": "Pending verification",
+    "ACTIVE": "Active",
+    "DISABLED": "Disabled"
+  },
+  "alertType": {
+    "NEW_ABNORMAL": "New abnormal finding",
+    "PERSISTENT_ABNORMAL": "Persistent abnormal finding",
+    "SIGNIFICANT_CHANGE": "Significant change",
+    "MISSED_MONITORING": "Missed monitoring",
+    "REPEATED_POOR_QUALITY": "Repeated poor recording quality"
+  },
+  "alertStatus": {
+    "NEW": "New",
+    "ACKNOWLEDGED": "Acknowledged",
+    "CLOSED": "Closed"
+  }
+}
