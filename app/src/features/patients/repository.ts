@@ -1,11 +1,14 @@
 /**
  * The patient register.
  *
- * Role scoping lives here, not in the screens. A health worker's list is built
- * from a Dexie index on the assignment array, so their query never reads
- * another worker's row in the first place — as opposed to fetching everything
- * and hiding some of it in the UI, where the next component to call
- * `db.patients.toArray()` quietly undoes the whole thing.
+ * Role scoping lives here, not in the screens. `visible()` is the only way
+ * into the table, so a screen cannot widen its own view — as opposed to
+ * fetching everything and hiding some of it in the UI, where the next
+ * component to call `db.patients.toArray()` quietly undoes the whole thing.
+ *
+ * Demo filtering is applied in the same place, through the shared
+ * `visibleRows` helper, so a seeded patient disappears everywhere at once when
+ * demo mode is switched off.
  *
  * Visibility rules:
  *   ADMIN         every patient
@@ -32,6 +35,8 @@ import {
 import { db as defaultDb, type AuscultaDB } from '../../db/db'
 import type { DemoFlag, HistoryEntry, Patient } from '../../db/types'
 import { normaliseUsername } from '../../auth/authService'
+import { readDemoMode } from '../demo/demoMode'
+import { isVisible, visibleRows } from '../demo/visibility'
 import { buildPatientConsent, type RecordConsentInput } from './consent'
 import { generatePatientId, generateStudyId, normalisePatientId } from './ids'
 import {
@@ -144,23 +149,35 @@ export function createPatientRepository(database: AuscultaDB = defaultDb) {
   const audit = createAuditLogger(database)
 
   /**
-   * The visible set, expressed as a query rather than a filter.
+   * The visible set: demo filtering first, then role scoping.
    *
-   * Each non-admin branch hits an index declared in db.ts, so out-of-scope
-   * rows are never loaded.
+   * Both filters run here rather than in the caller, so `visible()` is the one
+   * accessor and no screen can widen its own view by querying the table
+   * directly. The demo pass goes through `visibleRows` and is narrowed with
+   * `.and(...)`, never by starting a fresh query off the table — starting fresh
+   * is how demo rows leak back in when demo mode is off.
+   *
+   * That does mean role scoping is now a repository-side predicate rather than
+   * a multiEntry index lookup. The guarantee is unchanged, since this is the
+   * only way in; what changes is that the collection is walked instead of
+   * seeked. At clinic scale — hundreds of patients on one device — that is not
+   * worth reintroducing a path that bypasses demo filtering to avoid.
    */
   async function visible(actor: Actor): Promise<Patient[]> {
+    if (actor.role === ROLES.RESEARCHER) return []
+
+    const demoEnabled = await readDemoMode(database)
+    const rows = visibleRows(database.patients, demoEnabled)
+
     switch (actor.role) {
       case ROLES.ADMIN:
-        return database.patients.toArray()
+        return rows.toArray()
       case ROLES.PRACTITIONER:
-        return database.patients.where('assignedPractitionerIds').equals(actor.id).toArray()
+        return rows.and((p) => p.assignedPractitionerIds.includes(actor.id)).toArray()
       case ROLES.HEALTH_WORKER:
-        return database.patients.where('assignedHealthWorkerIds').equals(actor.id).toArray()
+        return rows.and((p) => p.assignedHealthWorkerIds.includes(actor.id)).toArray()
       case ROLES.PATIENT:
-        return database.patients.where('linkedUserId').equals(actor.id).toArray()
-      case ROLES.RESEARCHER:
-        return []
+        return rows.and((p) => p.linkedUserId === actor.id).toArray()
       default:
         return []
     }
@@ -184,7 +201,12 @@ export function createPatientRepository(database: AuscultaDB = defaultDb) {
   async function get(id: string, actor: Actor): Promise<Patient | undefined> {
     const patient = await database.patients.get(id)
     if (patient === undefined) return undefined
-    return isVisibleTo(patient, actor) ? patient : undefined
+    if (!isVisibleTo(patient, actor)) return undefined
+
+    // Demo mode is checked here too. Without it a seeded patient stays
+    // reachable by typing the URL after demo mode is switched off.
+    const demoEnabled = await readDemoMode(database)
+    return isVisible(patient, demoEnabled) ? patient : undefined
   }
 
   /** Loads for writing. Anything the actor cannot see is simply "not found". */

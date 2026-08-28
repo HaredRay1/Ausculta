@@ -18,15 +18,25 @@ import { ROLES } from '../../db/codes'
 import type { Patient } from '../../db/types'
 import { usePatientsTranslation } from './i18n'
 import { formatPatientIdForDisplay } from './ids'
-import { createPatientRepository, ROLES_THAT_CAN_REGISTER, type Actor } from './repository'
+import {
+  createPatientRepository,
+  ROLES_THAT_CAN_REGISTER,
+  type Actor,
+  type PatientRepository,
+} from './repository'
 import { ageInYears } from './validation'
 
-export function PatientListPage() {
+export interface PatientListPageProps {
+  /** Injected in tests so a page can run against an isolated database. */
+  repository?: PatientRepository
+}
+
+export function PatientListPage({ repository }: PatientListPageProps = {}) {
   const { t } = usePatientsTranslation()
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const repo = useMemo(() => createPatientRepository(), [])
+  const repo = useMemo(() => repository ?? createPatientRepository(), [repository])
   const actor: Actor | null = user === null ? null : { id: user.id, role: user.role }
 
   const [query, setQuery] = useState('')

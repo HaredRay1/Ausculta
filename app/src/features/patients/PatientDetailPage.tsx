@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   EmptyState,
+  FictionalDataBanner,
   InboxIcon,
   Page,
   Section,
@@ -16,18 +17,23 @@ import { useAuth } from '../../auth/AuthContext'
 import type { HistoryEntry, Patient } from '../../db/types'
 import { usePatientsTranslation } from './i18n'
 import { formatPatientIdForDisplay } from './ids'
-import { createPatientRepository, type Actor } from './repository'
+import { createPatientRepository, type Actor, type PatientRepository } from './repository'
 import { ageInYears } from './validation'
 
 type LoadState = 'loading' | 'found' | 'missing'
 
-export function PatientDetailPage() {
+export interface PatientDetailPageProps {
+  /** Injected in tests so a page can run against an isolated database. */
+  repository?: PatientRepository
+}
+
+export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
   const { t } = usePatientsTranslation()
   const navigate = useNavigate()
   const { patientId = '' } = useParams()
   const { user } = useAuth()
 
-  const repo = useMemo(() => createPatientRepository(), [])
+  const repo = useMemo(() => repository ?? createPatientRepository(), [repository])
   const actor: Actor | null = user === null ? null : { id: user.id, role: user.role }
 
   const [patient, setPatient] = useState<Patient | null>(null)
@@ -86,6 +92,12 @@ export function PatientDetailPage() {
         subtitle={formatPatientIdForDisplay(patient.id)}
         onBack={() => navigate('/patients')}
       />
+
+      {/* First thing on the screen, before any clinical content. A clinician
+          mistaking seeded data for a real patient is the one outcome this
+          project cannot allow, so the label goes above the record rather than
+          somewhere it can be scrolled past. */}
+      {patient.isDemo === 1 && <FictionalDataBanner />}
 
       <Section title={t('detail.demographics')}>
         <Card>

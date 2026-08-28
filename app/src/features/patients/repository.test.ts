@@ -7,6 +7,7 @@ import {
   USER_STATUSES,
 } from '../../db/codes'
 import { AuscultaDB } from '../../db/db'
+import { setDemoMode } from '../demo/demoMode'
 import type { User } from '../../db/types'
 import { DRAFT_EN_CONSENT_VERSION } from './consent'
 import { isPatientId, isStudyId } from './ids'
@@ -246,6 +247,45 @@ describe('role scoping', () => {
     await expect(
       repo.update(theirs.id, { preferredLanguage: 'fil' }, workerA),
     ).rejects.toMatchObject({ code: PATIENT_REPO_ERRORS.NOT_FOUND })
+  })
+})
+
+describe('demo filtering', () => {
+  it('hides seeded patients while demo mode is off', async () => {
+    await setDemoMode(false, db)
+    await repo.create(newPatient({ isDemo: 1 }), workerA)
+    await repo.create(newPatient(), workerA)
+
+    const list = await repo.list(workerA)
+    expect(list).toHaveLength(1)
+    expect(list[0]?.isDemo).toBe(0)
+  })
+
+  it('shows them once demo mode is on', async () => {
+    await setDemoMode(true, db)
+    await repo.create(newPatient({ isDemo: 1 }), workerA)
+    expect(await repo.list(workerA)).toHaveLength(1)
+  })
+
+  it('keeps a hidden demo patient unreachable by direct id', async () => {
+    // Otherwise switching demo mode off leaves the record one typed URL away.
+    await setDemoMode(true, db)
+    const demo = await repo.create(newPatient({ isDemo: 1 }), workerA)
+
+    await setDemoMode(false, db)
+    expect(await repo.get(demo.id, workerA)).toBeUndefined()
+  })
+
+  it('hides seeded patients from an admin too', async () => {
+    await setDemoMode(false, db)
+    await repo.create(newPatient({ isDemo: 1 }), workerA)
+    expect(await repo.list(admin)).toEqual([])
+  })
+
+  it('fails closed when demo mode has never been set', async () => {
+    // No stored value at all: a seeded record must not appear by default.
+    await repo.create(newPatient({ isDemo: 1 }), workerA)
+    expect(await repo.list(workerA)).toEqual([])
   })
 })
 

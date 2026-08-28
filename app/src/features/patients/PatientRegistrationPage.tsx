@@ -22,14 +22,19 @@ import type { Patient } from '../../db/types'
 import { ConsentPanel } from './ConsentPanel'
 import { HistoryChecklist } from './HistoryChecklist'
 import { DRAFT_EN_CONSENT_VERSION } from './consent'
-import { createDraftStore } from './draft'
+import { createDraftStore, type DraftStore } from './draft'
 import {
   EMPTY_HISTORY_ANSWERS,
   toHistoryEntries,
   type HistoryAnswerState,
 } from './historyAnswers'
 import { usePatientsTranslation } from './i18n'
-import { createPatientRepository, PatientError, type Actor } from './repository'
+import {
+  createPatientRepository,
+  PatientError,
+  type Actor,
+  type PatientRepository,
+} from './repository'
 import { formatPatientIdForDisplay } from './ids'
 import type { DemographicsErrors, DemographicsInput } from './validation'
 
@@ -47,13 +52,22 @@ const EMPTY_DEMOGRAPHICS: DemographicsInput = {
   contact: '',
 }
 
-export function PatientRegistrationPage() {
+export interface PatientRegistrationPageProps {
+  /** Injected in tests so a page can run against an isolated database. */
+  repository?: PatientRepository
+  draftStore?: DraftStore
+}
+
+export function PatientRegistrationPage({
+  repository,
+  draftStore,
+}: PatientRegistrationPageProps = {}) {
   const { t, i18n } = usePatientsTranslation()
   const navigate = useNavigate()
   const { user } = useAuth()
 
-  const repo = useMemo(() => createPatientRepository(), [])
-  const drafts = useMemo(() => createDraftStore(), [])
+  const repo = useMemo(() => repository ?? createPatientRepository(), [repository])
+  const drafts = useMemo(() => draftStore ?? createDraftStore(), [draftStore])
 
   const actor: Actor | null = user === null ? null : { id: user.id, role: user.role }
 
