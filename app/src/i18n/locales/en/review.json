@@ -1,0 +1,148 @@
+{
+  "label": {
+    "ai": "Automatic result from the app",
+    "aiNote": "Produced by software. It is not a clinical opinion.",
+    "practitioner": "Practitioner's conclusion",
+    "practitionerNote": "Recorded by a qualified reviewer.",
+    "notReviewed": "No practitioner has reviewed this yet",
+    "notReviewedNote": "Only the automatic result is available so far."
+  },
+
+  "queue": {
+    "title": "Cases to review",
+    "subtitle": "Most in need of attention first",
+    "empty": "Nothing waiting",
+    "emptyHint": "Assessments needing your review will appear here.",
+    "loading": "Loading cases",
+    "count_one": "{{count}} case",
+    "count_other": "{{count}} cases",
+    "filterLabel": "Show",
+    "open": "Review this case",
+    "locations_one": "{{count}} location recorded",
+    "locations_other": "{{count}} locations recorded",
+    "flagged_one": "{{count}} location flagged by the app",
+    "flagged_other": "{{count}} locations flagged by the app",
+    "unusable_one": "{{count}} recording could not be used",
+    "unusable_other": "{{count}} recordings could not be used",
+    "nothingFlagged": "Nothing flagged by the app",
+    "waiting_one": "Waiting {{count}} day",
+    "waiting_other": "Waiting {{count}} days",
+    "waitingToday": "Recorded today",
+    "orderNote": "Ordered by what the app flagged and how long each case has waited. This is a workload order, not a clinical priority.",
+    "notPermitted": "Reviewing is for practitioners",
+    "notPermittedHint": "This queue is not available in your role."
+  },
+
+  "case": {
+    "title": "Case review",
+    "notFound": "Case not available",
+    "notFoundHint": "It may belong to another practitioner, or the link may be out of date.",
+    "backToQueue": "Back to cases",
+    "patientContext": "About this patient",
+    "symptoms": "Reported symptoms",
+    "vitals": "Measurements",
+    "noSymptoms": "No symptoms recorded",
+    "noVitals": "No measurements recorded",
+    "respiratory": "Breathing history",
+    "family": "Family and household history",
+    "noHistory": "No history recorded",
+    "notAskedNote": "Questions not listed were not asked, which is not the same as answered no.",
+    "recordings": "Recordings",
+    "model": "Model",
+    "modelVersion": "Model version {{version}}",
+    "modelUnknown": "Model version not recorded",
+    "modelNote": "The app's classifier is a research prototype and is roughly 71% accurate. Treat every automatic result as a prompt to listen, not as a finding.",
+    "startReview": "Record your conclusion",
+    "openReport": "Printable summary",
+    "recordedOn": "Recorded {{date}}",
+    "age_one": "{{count}} year old",
+    "age_other": "{{count}} years old",
+    "ageUnknown": "Age not known",
+    "reviewedOn": "Reviewed {{date}}"
+  },
+
+  "location": {
+    "quality": "Recording quality",
+    "qualityOk": "Usable",
+    "qualityPoor": "Poor",
+    "qualityUnknown": "Not checked",
+    "confidence": "Model confidence {{percent}}%",
+    "noConfidence": "No confidence figure",
+    "listen": "Play recording: {{location}}",
+    "audioMissing": "The audio for this location is missing",
+    "audioMissingHint": "This does not mean the recording was silent or normal. Nothing can be judged from it.",
+    "previous": "Previous recording at this location",
+    "noPrevious": "No earlier recording at this location",
+    "changed": "A change in respiratory sound pattern was detected between these recordings.",
+    "unchanged": "No change in respiratory sound pattern was detected between these recordings.",
+    "comparedWith": "Compared with {{date}}"
+  },
+
+  "form": {
+    "title": "Your conclusion",
+    "intro": "Record what you conclude about this assessment. Your conclusion is stored separately from the automatic result, which is never changed.",
+    "outcomeLabel": "What is your conclusion?",
+    "notesLabel": "Notes",
+    "notesHint": "What you write here is shown to the patient alongside your conclusion.",
+    "notesRequired": "Notes",
+    "locationLabel": "Which location does this apply to?",
+    "locationHint": "The health worker sees this, so name the site you mean.",
+    "modifiedLabel": "What do you conclude instead?",
+    "addLocation": "Comment on a specific location",
+    "removeLocation": "Remove this location comment",
+    "locationOutcomeLabel": "Conclusion for {{location}}",
+    "submit": "Submit conclusion",
+    "submitting": "Saving",
+    "cancel": "Cancel",
+    "submitted": "Conclusion recorded",
+    "submittedHint": "The patient will now see your conclusion alongside the automatic result.",
+    "backToCase": "Back to the case",
+    "backToQueue": "Next case",
+    "immutabilityNote": "Submitting does not change the automatic result. It is kept exactly as the app produced it."
+  },
+
+  "outcome": {
+    "CONFIRMED": "I agree with the automatic result",
+    "CONFIRMED_DESC": "The app's result matches what you hear.",
+    "DISAGREED": "I disagree with the automatic result",
+    "DISAGREED_DESC": "You reach a different conclusion. Say why.",
+    "MODIFIED": "I would classify this differently",
+    "MODIFIED_DESC": "Record the pattern you hear instead, for a location.",
+    "UNCERTAIN": "I cannot decide from this",
+    "UNCERTAIN_DESC": "Not enough to conclude either way. Say what is missing.",
+    "REPEAT_REQUESTED": "Record this location again",
+    "REPEAT_REQUESTED_DESC": "Ask the health worker to repeat a recording, and say why."
+  },
+
+  "repeat": {
+    "title": "Repeat requested",
+    "at": "At {{location}}",
+    "reason": "Reason: {{reason}}"
+  },
+
+  "report": {
+    "title": "Assessment summary",
+    "patientReported": "What the patient reported",
+    "aiProduced": "What the app produced automatically",
+    "practitionerConcluded": "What the practitioner concluded",
+    "disclaimer": "Ausculta is a research prototype. It is a screening aid, not a diagnostic device, and it is not registered for clinical use. Every automatic result on this page was produced by software and reviewed by the named practitioner.",
+    "print": "Print",
+    "generatedOn": "Printed {{date}}"
+  },
+
+  "error": {
+    "REVIEW_NOT_FOUND": "That case is not available to you.",
+    "REVIEW_NOT_PERMITTED": "You do not have permission to review.",
+    "REVIEW_INVALID_INTERPRETATION": "Choose one of the conclusions.",
+    "REVIEW_NOTES_REQUIRED": "Please say why.",
+    "REVIEW_MODIFIED_CLASSIFICATION_REQUIRED": "Choose what you conclude instead.",
+    "REVIEW_LOCATION_REQUIRED": "Choose which location this applies to.",
+    "REVIEW_UNKNOWN_RECORDING": "That recording is not part of this assessment.",
+    "SUBMIT_FAILED": "Your conclusion could not be saved. Nothing was lost — try again."
+  },
+
+  "auditAction": {
+    "REVIEW_SUBMITTED": "Clinical review submitted",
+    "REVIEW_REPEAT_REQUESTED": "Repeat recording requested"
+  }
+}
