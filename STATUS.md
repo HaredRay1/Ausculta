@@ -33,7 +33,7 @@ view, and a decision form with five outcomes. Rehabilitation with safety guidanc
 action-plan viewer and four techniques. Demo mode. Twenty-two instructional diagrams. The
 ESP32 recorder firmware.
 
-**1615 tests passing.** Clean typecheck, clean build, installs as an app on Android and
+**1623 tests passing.** Clean typecheck, clean build, installs as an app on Android and
 works fully offline afterwards.
 
 ## What is partial
