@@ -1,6 +1,8 @@
+import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { authRoutes } from './auth/routes'
 import { RequireAuth } from './auth/guards'
+import { patientRoutes } from './features/patients/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
@@ -19,6 +21,13 @@ function Root() {
  */
 const ROLE_HOME_ROUTES = ['/patient', '/practitioner', '/health-worker', '/researcher']
 
+/**
+ * The component gallery renders every design-system component in every state.
+ * It is a development aid, not a product screen, so it is lazy-loaded — that
+ * keeps it out of the initial bundle a clinic phone downloads.
+ */
+const Gallery = lazy(async () => ({ default: (await import('./design/Gallery')).Gallery }))
+
 export function AppRoutes() {
   return (
     <Routes>
@@ -28,6 +37,15 @@ export function AppRoutes() {
 
       {/* Auth layer's own routes, carrying their own guards where needed. */}
       {authRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {/*
+        Patient management. Order is load-bearing: `/patients/new` must be
+        declared before `/patients/:patientId` or "new" is swallowed as an id.
+        The source array is already in that order — preserve it.
+      */}
+      {patientRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
@@ -42,6 +60,15 @@ export function AppRoutes() {
           }
         />
       ))}
+
+      <Route
+        path="/design-gallery"
+        element={
+          <Suspense fallback={null}>
+            <Gallery />
+          </Suspense>
+        }
+      />
     </Routes>
   )
 }

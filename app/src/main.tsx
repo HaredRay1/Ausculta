@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { I18nextProvider } from 'react-i18next'
 import { registerSW } from 'virtual:pwa-register'
 import { App } from './App'
+import { ensureFirstRunDemo } from './features/demo/firstRun'
 import { i18n } from './i18n'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import './index.css'
@@ -28,6 +29,16 @@ const updateSW = registerSW({
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   throw new Error('#root element not found')
+}
+
+// Seed fictional data on a device that has never held a real patient, so the app is
+// explorable on first launch instead of a wall of empty screens. Declines permanently
+// once any real patient exists, and never re-enables after demo mode is switched off.
+// Failing to seed must never stop the app from starting.
+try {
+  await ensureFirstRunDemo()
+} catch (error) {
+  console.error('First-run demo seeding failed; starting with an empty database.', error)
 }
 
 createRoot(rootElement).render(
