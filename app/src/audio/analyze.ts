@@ -170,6 +170,9 @@ async function runPipeline(
 
   const audio = {
     pcm16k: toInt16(decoded.pcm16k),
+    // Literal, not entry.frequencyHz: AnalysisResult pins this to 16000, and
+    // decode/resample always deliver that rate. See the report's note on what
+    // would have to change to register a model at another rate.
     sampleRate: 16000 as const,
     durationMs: decoded.durationMs,
   }

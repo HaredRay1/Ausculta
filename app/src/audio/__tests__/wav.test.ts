@@ -22,6 +22,82 @@ function expectWavError(fn: () => unknown, code: string): void {
   expect((thrown as WavParseError).code).toBe(code)
 }
 
+describe('parseWav — real ESP32 device files', () => {
+  /**
+   * The exact 44 bytes the firmware writes, transcribed from a verified
+   * device-produced 1.000 s recording. Pinned literally rather than rebuilt by
+   * the test helper so that a change in either writer or parser has to be
+   * noticed here.
+   */
+  const DEVICE_HEADER = new Uint8Array([
+    0x52, 0x49, 0x46, 0x46, 0x24, 0x7d, 0x00, 0x00, // "RIFF", riffSize 32036
+    0x57, 0x41, 0x56, 0x45, 0x66, 0x6d, 0x74, 0x20, // "WAVE", "fmt "
+    0x10, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, // fmtSize 16, PCM, 1 channel
+    0x80, 0x3e, 0x00, 0x00, 0x00, 0x7d, 0x00, 0x00, // 16000 Hz, 32000 byte/s
+    0x02, 0x00, 0x10, 0x00, 0x64, 0x61, 0x74, 0x61, // blockAlign 2, 16-bit, "data"
+    0x00, 0x7d, 0x00, 0x00, //                         dataSize 32000
+  ])
+
+  /** One second of device audio: 16000 frames, i * 16 as the firmware's gain. */
+  const deviceSamples = Int16Array.from({ length: 16000 }, (_, i) => ((i % 2048) - 1024) * 16)
+
+  function buildDeviceFile(dataSizeOverride?: number): ArrayBuffer {
+    const file = new Uint8Array(DEVICE_HEADER.length + deviceSamples.length * 2)
+    file.set(DEVICE_HEADER, 0)
+    const view = new DataView(file.buffer)
+    for (let i = 0; i < deviceSamples.length; i++) {
+      view.setInt16(DEVICE_HEADER.length + i * 2, deviceSamples[i], true)
+    }
+    if (dataSizeOverride !== undefined) view.setUint32(40, dataSizeOverride, true)
+    return file.buffer
+  }
+
+  it('reads the canonical device header exactly as written', () => {
+    const file = buildDeviceFile()
+    expect(file.byteLength).toBe(32044)
+
+    const wav = parseWav(file)
+
+    expect(wav.sampleRate).toBe(16000)
+    expect(wav.channels).toBe(1)
+    expect(wav.bitDepth).toBe(16)
+    expect(wav.pcm.length).toBe(16000)
+    expect(Array.from(wav.pcm)).toEqual(Array.from(deviceSamples))
+  })
+
+  it('is recognised as a WAVE container by the decode dispatcher', () => {
+    expect(isRiffWave(buildDeviceFile())).toBe(true)
+  })
+
+  it('honours a declared size SMALLER than the file and drops the unflushed tail', () => {
+    // Power-loss case: the firmware patches the size fields once a second, so
+    // an interrupted recording declares less data than is physically present.
+    // The declared size is the last synced, known-good point — everything past
+    // it was never flushed and must not be treated as audio.
+    const file = buildDeviceFile(8000) // 4000 frames = 0.25 s
+    expect(file.byteLength).toBe(32044)
+
+    const wav = parseWav(file)
+
+    expect(wav.pcm.length).toBe(4000)
+    expect(Array.from(wav.pcm)).toEqual(Array.from(deviceSamples.slice(0, 4000)))
+  })
+
+  it('ignores anything in the unreferenced tail that looks like another chunk', () => {
+    const file = buildDeviceFile(8000)
+    const bytes = new Uint8Array(file)
+    const view = new DataView(file)
+    // Plant a bogus second "data" chunk header exactly where the walker will
+    // look next (44 + 8000), claiming the rest of the universe.
+    bytes.set([0x64, 0x61, 0x74, 0x61], 8044) // "data"
+    view.setUint32(8048, 0xffffffff, true)
+
+    const wav = parseWav(file)
+
+    expect(wav.pcm.length).toBe(4000)
+  })
+})
+
 describe('parseWav — well-formed files', () => {
   it('reads mono 16-bit PCM as raw int16 values held in floats', () => {
     const wav = parseWav(buildWav(MONO))
