@@ -1,0 +1,299 @@
+/**
+ * Ausculta design tokens.
+ *
+ * Every colour a component uses comes from here, by semantic name. Components
+ * must never carry a raw hex or a Tailwind palette class (`bg-teal-700`) —
+ * that is what makes the dark theme a token swap rather than a rewrite, and
+ * what keeps the contrast guarantees checkable in one place (see
+ * tokens.contrast.test.ts, which parses this file and asserts every documented
+ * pair clears WCAG AA).
+ *
+ * Naming: `--color-x` is a fill or an ink; `--color-on-x` is the ink that is
+ * legible *on* `x`. `--color-x-surface` is a subtle wash of x, and
+ * `--color-on-x-surface` is its ink.
+ *
+ * `@theme static` emits every variable regardless of whether a utility used
+ * it, which the dark-mode overrides below depend on.
+ */
+
+@theme static {
+  /* ---- Typography -------------------------------------------------------
+   * Self-hosted, latin subset only (see public/fonts/README.md). Noto Sans is
+   * the body face specifically because it renders Filipino diacritics well.
+   * Both stacks fall back to system fonts, so a missing font file degrades
+   * rather than breaks. */
+  --font-sans:
+    'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-heading:
+    'Figtree', 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+
+  /* ---- Surfaces and ink (light) ---------------------------------------- */
+  --color-surface: #f8fafc;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #f1f5f9;
+  --color-on-surface: #0f172a;
+  /* Secondary text. 9.9:1 on --color-surface — AAA, not a low-contrast grey. */
+  --color-muted: #334155;
+  --color-border: #e2e8f0;
+  /* Control boundaries, not decorative dividers: WCAG 1.4.11 wants 3:1 for
+   * these, and slate-400 only manages 2.45:1 on this surface. */
+  --color-border-strong: #64748b;
+
+  /* ---- Brand -----------------------------------------------------------
+   * Teal is fixed: it is already in the PWA manifest and in all 17
+   * instructional diagrams under public/guides/.
+   *
+   * `primary` is the ink/border teal (5.3:1 on surface). `primary-strong` is
+   * the *fill* teal, darkened so white sits on it at 7.6:1 (AAA) rather than
+   * scraping past AA. Buttons fill with primary-strong; icons and links use
+   * primary. */
+  --color-primary: #0f766e;
+  --color-primary-strong: #115e59;
+  --color-on-primary: #ffffff;
+  /* A wash of the brand for selected/active states, with its own ink. */
+  --color-accent: #ccfbf1;
+  --color-on-accent: #115e59;
+
+  /* ---- Status ----------------------------------------------------------
+   * Never used alone: every status in the UI also carries an icon and a word.
+   * Colour is the third signal, never the only one. */
+  --color-info: #1d4ed8;
+  --color-on-info: #ffffff;
+  --color-info-surface: #eff6ff;
+  --color-on-info-surface: #1e3a8a;
+
+  --color-success: #15803d;
+  --color-on-success: #ffffff;
+  --color-success-surface: #f0fdf4;
+  --color-on-success-surface: #14532d;
+
+  --color-warning: #b45309;
+  --color-on-warning: #ffffff;
+  --color-warning-surface: #fffbeb;
+  --color-on-warning-surface: #78350f;
+
+  --color-destructive: #dc2626;
+  --color-on-destructive: #ffffff;
+  --color-destructive-surface: #fef2f2;
+  --color-on-destructive-surface: #7f1d1d;
+
+  /* ---- Focus and scrim ------------------------------------------------- */
+  --color-focus: #0f766e;
+  --color-scrim: rgb(15 23 42 / 0.6);
+
+  /* ---- Radius ----------------------------------------------------------
+   * Deliberately new names rather than overriding Tailwind's `--radius-*`
+   * defaults: screens already shipped by other agents use `rounded-xl`, and
+   * silently changing what that means would reshape their UI. */
+  --radius-control: 0.75rem; /* 12px — buttons, inputs, pills-with-corners */
+  --radius-card: 1rem; /* 16px — cards, banners, panels */
+  --radius-sheet: 1.5rem; /* 24px — bottom sheets, modals */
+  --radius-pill: 9999px;
+}
+
+/**
+ * Elevation.
+ *
+ * Deliberately NOT in `@theme`. Tailwind's `shadow-*` utilities resolve a
+ * theme shadow at build time and bake the literal value into `--tw-shadow`,
+ * so `.shadow-e2` would keep its light-mode value forever and the dark
+ * override below would silently do nothing. Declaring the variables here and
+ * applying them through `@utility` emits a real `var()` reference, which does
+ * follow the theme.
+ *
+ * Restrained on purpose: this is a clinical tool read in bright daylight, where
+ * heavy shadows cost legibility and buy nothing.
+ */
+@utility elevation-0 {
+  box-shadow: var(--shadow-e0);
+}
+@utility elevation-1 {
+  box-shadow: var(--shadow-e1);
+}
+@utility elevation-2 {
+  box-shadow: var(--shadow-e2);
+}
+@utility elevation-3 {
+  box-shadow: var(--shadow-e3);
+}
+
+/**
+ * Z-index scale.
+ *
+ * Not a Tailwind theme namespace, so these are plain variables consumed as
+ * `z-(--z-modal)`. Layering is fixed here so two components can never
+ * disagree about what sits on top.
+ */
+:root {
+  --shadow-e0: none;
+  --shadow-e1: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.1);
+  --shadow-e2: 0 2px 4px rgb(15 23 42 / 0.06), 0 4px 8px rgb(15 23 42 / 0.1);
+  --shadow-e3: 0 8px 16px rgb(15 23 42 / 0.12), 0 2px 4px rgb(15 23 42 / 0.08);
+
+  --z-base: 0;
+  --z-sticky: 100;
+  --z-appbar: 200;
+  --z-nav: 200;
+  --z-scrim: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+
+  /* Minimum touch target and the gap between two of them. Users may be
+   * wearing gloves; 48dp with 8dp of separation is the floor, not a target. */
+  --size-touch-min: 3rem; /* 48px */
+  --space-touch-gap: 0.5rem; /* 8px */
+
+  color-scheme: light;
+}
+
+/**
+ * Dark theme.
+ *
+ * Follows the device by default; `data-theme` on <html> overrides it in either
+ * direction. Every token below is a redefinition of one declared above — no
+ * dark-only names — so a component styled with tokens needs no `dark:` variant
+ * at all.
+ *
+ * The brand tokens invert their relationship: on a dark surface the legible
+ * teal is a light one, and the *fill* teal is the lighter of the two with dark
+ * ink on top.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --color-surface: #0f172a;
+    --color-surface-raised: #1e293b;
+    --color-surface-sunken: #020617;
+    --color-on-surface: #f1f5f9;
+    --color-muted: #cbd5e1;
+    --color-border: #334155;
+    --color-border-strong: #94a3b8;
+
+    --color-primary: #5eead4;
+    --color-primary-strong: #2dd4bf;
+    --color-on-primary: #0f172a;
+    --color-accent: #134e4a;
+    --color-on-accent: #99f6e4;
+
+    --color-info: #93c5fd;
+    --color-on-info: #0f172a;
+    --color-info-surface: #172554;
+    --color-on-info-surface: #dbeafe;
+
+    --color-success: #86efac;
+    --color-on-success: #0f172a;
+    --color-success-surface: #052e16;
+    --color-on-success-surface: #dcfce7;
+
+    --color-warning: #fcd34d;
+    --color-on-warning: #0f172a;
+    --color-warning-surface: #451a03;
+    --color-on-warning-surface: #fef3c7;
+
+    --color-destructive: #fca5a5;
+    --color-on-destructive: #0f172a;
+    --color-destructive-surface: #450a0a;
+    --color-on-destructive-surface: #fee2e2;
+
+    --color-focus: #5eead4;
+    --color-scrim: rgb(2 6 23 / 0.7);
+
+    --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.4), 0 1px 3px rgb(0 0 0 / 0.5);
+    --shadow-e2: 0 2px 4px rgb(0 0 0 / 0.4), 0 4px 8px rgb(0 0 0 / 0.5);
+    --shadow-e3: 0 8px 16px rgb(0 0 0 / 0.55), 0 2px 4px rgb(0 0 0 / 0.4);
+  }
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-surface: #0f172a;
+  --color-surface-raised: #1e293b;
+  --color-surface-sunken: #020617;
+  --color-on-surface: #f1f5f9;
+  --color-muted: #cbd5e1;
+  --color-border: #334155;
+  --color-border-strong: #94a3b8;
+
+  --color-primary: #5eead4;
+  --color-primary-strong: #2dd4bf;
+  --color-on-primary: #0f172a;
+  --color-accent: #134e4a;
+  --color-on-accent: #99f6e4;
+
+  --color-info: #93c5fd;
+  --color-on-info: #0f172a;
+  --color-info-surface: #172554;
+  --color-on-info-surface: #dbeafe;
+
+  --color-success: #86efac;
+  --color-on-success: #0f172a;
+  --color-success-surface: #052e16;
+  --color-on-success-surface: #dcfce7;
+
+  --color-warning: #fcd34d;
+  --color-on-warning: #0f172a;
+  --color-warning-surface: #451a03;
+  --color-on-warning-surface: #fef3c7;
+
+  --color-destructive: #fca5a5;
+  --color-on-destructive: #0f172a;
+  --color-destructive-surface: #450a0a;
+  --color-on-destructive-surface: #fee2e2;
+
+  --color-focus: #5eead4;
+  --color-scrim: rgb(2 6 23 / 0.7);
+
+  --shadow-e1: 0 1px 2px rgb(0 0 0 / 0.4), 0 1px 3px rgb(0 0 0 / 0.5);
+  --shadow-e2: 0 2px 4px rgb(0 0 0 / 0.4), 0 4px 8px rgb(0 0 0 / 0.5);
+  --shadow-e3: 0 8px 16px rgb(0 0 0 / 0.55), 0 2px 4px rgb(0 0 0 / 0.4);
+}
+
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: var(--font-sans);
+    /* 16px floor. Never smaller anywhere in the app. */
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+  }
+
+  /**
+   * One focus ring for the whole app.
+   *
+   * `:where()` keeps this at zero specificity, so a component can override it
+   * without an `!important` fight. 3px is thick enough to find on a phone in
+   * sunlight; the offset keeps it clear of the control's own border.
+   */
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /**
+   * Motion is decorative here, never load-bearing: nothing in this system
+   * conveys state by animation alone, so it is safe to switch all of it off.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
