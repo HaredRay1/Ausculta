@@ -15,6 +15,8 @@ python server.py
 
 Then open http://localhost:8082, paste a comma-separated list of raw feature values (an audio window matching the impulse's input frame), and click "Run inference". The port (8082) is hardcoded in `server.py`. The page must be served over HTTP — opening `index.html` via `file://` fails because the browser cannot fetch the `.wasm` module that way.
 
+`server.py` uses only the Python standard library — nothing to install. This is the entire tooling story: the repository has no build system, linter, or test suite.
+
 ## Model architecture
 
 The `model/.../browser/` folder is a WebAssembly deployment exported from Edge Impulse Studio (SIMD build, deploy version 5):
@@ -25,10 +27,17 @@ The `model/.../browser/` folder is a WebAssembly deployment exported from Edge I
 
 ## Repository layout (non-code)
 
-- `research-paper/` — the main Ausculta platform paper.
+- `docs/` — hardware wiring diagram and project prompt document.
+- `validation/` — the instruments for the evaluation phase (DepEd validation form, survey
+  approach per validator type) plus a README explaining what they demand of the build.
+  Read that README before making product decisions: it names the app's stated identity and
+  the criteria the prototype is scored against.
+- `research-paper/` — the main Ausculta platform paper. Note
+  `AuscultaSmartStethoscopePlatform_1.docx` is not a paper but the 68-section master
+  specification for the application.
 - `competition/rstf/` — the complete SEI-T-RSTF7 submission set (PDFs are the as-submitted versions).
 - `competition/final-submission/` — ISEF 2026 / PPSci 2025 / TUKLAS submission documents and approval forms.
 - `competition/drafts/` — working drafts; these are different versions from the files in `rstf/`, not copies.
-- `fieldwork/` — interview recordings (Dr. Ricardo, Macarascas Clinic) and clinic documentation backing the research.
+- `fieldwork/` — interview recordings (Dr. Ricardo, Macarascas Clinic) and clinic documentation backing the research. The audio/video files here are large (~50 MB each).
 
 Treat the files under `competition/` as records of what was submitted — do not modify them in place; new document work belongs in `competition/drafts/` or a new folder.
