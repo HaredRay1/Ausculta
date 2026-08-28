@@ -13,6 +13,7 @@ import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
 import { RoleHomePlaceholder } from './features/placeholders/RoleHomePlaceholder'
+import { SystemStatusPage } from './features/status/SystemStatusPage'
 
 /** `/` redirects to `/language` (no device language chosen yet) or `/landing`. */
 function Root() {
@@ -40,6 +41,9 @@ export function AppRoutes() {
       <Route path="/" element={<Root />} />
       <Route path="/language" element={<LanguageSelect />} />
       <Route path="/landing" element={<Landing />} />
+      {/* Unguarded on purpose: a validator must be able to see what is real
+          before signing in, and it contains no patient data. */}
+      <Route path="/status" element={<SystemStatusPage />} />
 
       {/* Each feature owns its own guards; the router only mounts them. */}
       {authRoutes.map((route) => (

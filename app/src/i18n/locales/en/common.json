@@ -11,5 +11,85 @@
   "demoData": "Demonstration data",
   "signedInAs": "Signed in as {{name}}",
   "signOut": "Sign out",
-  "dashboardComingSoon": "Your dashboard is still being built. Signing in, roles, and account approval already work."
+  "dashboardComingSoon": "Your dashboard is still being built. Signing in, roles, and account approval already work.",
+  "systemStatus": {
+    "title": "What works in this version",
+    "intro": "Ausculta is a research prototype. Some parts are finished and some are placeholders. This page says which is which, so you know what you are looking at.",
+    "modelHeading": "About the automatic analysis",
+    "modelTitle": "The analysis can be wrong",
+    "modelBody": "The model is about 71% accurate and was trained on a public collection of lung sounds, not on recordings from this device or from patients here. It never gives a diagnosis. When a recording is too quiet, too noisy or unusable, the app refuses to analyse it rather than guessing.",
+    "back": "Back",
+    "group": {
+      "built": "Working",
+      "partial": "Partly built",
+      "notConnected": "Not built yet"
+    },
+    "status": {
+      "built": "Status: working",
+      "partial": "Status: partly built",
+      "notConnected": "Status: not built yet"
+    },
+    "capability": {
+      "recordingImport": {
+        "name": "Import a recording from the device",
+        "detail": "Reads the WAV files the stethoscope writes to its memory card."
+      },
+      "qualityCheck": {
+        "name": "Recording quality check",
+        "detail": "Refuses recordings that are silent, noisy, distorted or too short, before any analysis runs."
+      },
+      "classification": {
+        "name": "Automatic lung-sound analysis",
+        "detail": "Runs on the phone itself, with no internet connection needed."
+      },
+      "accounts": {
+        "name": "Accounts and roles",
+        "detail": "Sign in, register, and administrator approval of staff accounts."
+      },
+      "patientRecords": {
+        "name": "Patient records",
+        "detail": "Register a patient, record their history, browse and search."
+      },
+      "consent": {
+        "name": "Consent",
+        "detail": "Records that consent was given, in which language, and from which version of the text."
+      },
+      "practitionerReview": {
+        "name": "Practitioner review",
+        "detail": "A qualified practitioner confirms or disagrees with every automatic result."
+      },
+      "guides": {
+        "name": "Instructional diagrams",
+        "detail": "How to use the device and where to place the stethoscope on the chest."
+      },
+      "offline": {
+        "name": "Works offline",
+        "detail": "After the first load, the whole app including the analysis works with no signal."
+      },
+      "rehabilitation": {
+        "name": "Rehabilitation support",
+        "detail": "Safety guidance and a plan viewer are being built. Exercise content still needs review by a clinician before anyone follows it."
+      },
+      "trends": {
+        "name": "Trends over time",
+        "detail": "Charts of past results. Needs more than one assessment before it can show anything meaningful."
+      },
+      "filipino": {
+        "name": "Filipino translation",
+        "detail": "Interface text is partly translated. Consent and safety wording stays in English until a qualified translator and a clinician have reviewed it — machine translation is not acceptable for clinical text."
+      },
+      "severityScore": {
+        "name": "Severity score",
+        "detail": "No model for this exists. The app shows no number rather than inventing one."
+      },
+      "cloudSync": {
+        "name": "Sync between devices",
+        "detail": "Everything stays on this phone. Nothing is uploaded anywhere."
+      },
+      "bluetooth": {
+        "name": "Bluetooth link to the stethoscope",
+        "detail": "Recordings move by memory card instead."
+      }
+    }
+  }
 }
