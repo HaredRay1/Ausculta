@@ -67,6 +67,23 @@ against the validation criteria.
    is right for a front view), but the anatomy itself needs a clinician's eye.
 5. **The consent text**, which is a clearly-marked draft pending ethics review.
 
+**Ten minutes of your own time, and it is the highest-value thing you can do:** write the
+Filipino strings. None of us are confident Filipino speakers, and a wrong Filipino string
+scores worse on "clarity of information" than an English fallback that at least reads
+correctly — so we deliberately shipped English rather than guessing. You are a Filipino
+speaker in Puerto Princesa; this is yours.
+
+Start with **one string**: the fictional-data banner's "not a real person" text, in the
+`design` namespace. That is the sentence standing between a clinician and mistaking a seeded
+record for a patient, and it is the only translation with a safety consequence. After that,
+the demo namespace is 20 strings in `app/src/i18n/locales/en/demo.json`, of which only
+`audio.body` matters much — it says every demonstration recording is a synthetic tone and
+nothing there is a lung sound. Add a `fil` sibling file and one line to
+`registerDemoResources` in `features/demo/i18n.ts`.
+
+Clinical, consent and safety wording still needs a qualified translator and practitioner
+review, per your own specification. Interface labels do not.
+
 **A finding for the research team, and it is a defect in the specification rather than the
 build:** the master specification's own rehabilitation activities are wrong for asthma. It
 lists huff coughing, which belongs to a mucus-clearance protocol evidenced for cystic
@@ -116,12 +133,20 @@ None outstanding. All 1623 tests pass, the typecheck is clean and the build succ
 
 One resolved worth recording, because the reasoning nearly sent us the wrong way. A route
 crawl found the clinical view crashing when the audio player received a plain object instead
-of a recording. It looked like a data defect. It is not: a Blob written to the database in
-the *test* environment reads back as a plain object, because the in-memory database used for
-testing does not preserve Blobs through its structured clone. Real browsers do, so audio
-plays correctly on a device. Verified by experiment rather than argument. The player is now
-guarded anyway — a component handed data from a database it does not control should not take
-down a clinical screen when that data is malformed.
+of a recording. It looked like a data defect. It is not, and this was settled by measurement
+rather than argument — including a real-browser control:
+
+- In the *test* environment, a plain Blob through a bare database table comes back as an
+  empty object. The environment's own `structuredClone` fails on a Blob too, because its
+  Blob implementation is a stub with nothing to copy.
+- In headless Chrome over a real HTTP origin, a 64,044-byte audio Blob stored in IndexedDB
+  comes back byte-identical with its RIFF header intact and a working object URL.
+
+So seeded audio plays correctly on a device. There is also a structural argument worth
+keeping: seeded recordings go through exactly the same storage path as real device imports,
+so any storage-layer Blob failure would break real recordings identically — a demo-only Blob
+bug is close to impossible by construction. The player is guarded anyway, because a component
+handed data from a database it does not control should not take down a clinical screen.
 
 The printable referral report was cut. Nothing links to it.
 
