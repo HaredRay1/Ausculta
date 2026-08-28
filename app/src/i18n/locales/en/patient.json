@@ -1,0 +1,227 @@
+{
+  "nav": {
+    "label": "My health",
+    "home": "Home",
+    "results": "My results",
+    "trends": "Over time",
+    "history": "My history",
+    "rehab": "Breathing plan"
+  },
+
+  "home": {
+    "title": "My health",
+    "greeting": "Hello, {{name}}",
+    "subtitle": "This is your own respiratory health record.",
+    "latestHeading": "My latest check",
+    "latestDescription": "This is the most recent time your breathing sounds were recorded.",
+    "noLatest": "You have no checks yet.",
+    "goToHeading": "Where do you want to go?",
+    "openLatest": "Open this result",
+    "checkedOn": "Checked on {{date}}",
+    "zonesLine": "{{count}} of {{total}} places on your chest were recorded.",
+    "quickResults": "My results",
+    "quickResultsBody": "See every check of your breathing sounds.",
+    "quickRecordings": "My recordings",
+    "quickRecordingsBody": "Listen to the sounds that were recorded.",
+    "quickHistory": "My history",
+    "quickHistoryBody": "Your details, your past illnesses and your family's.",
+    "quickTrends": "Over time",
+    "quickTrendsBody": "See how your checks compare from visit to visit.",
+    "quickRehab": "Breathing plan",
+    "quickRehabBody": "Breathing exercises your practitioner has given you."
+  },
+
+  "results": {
+    "title": "My results",
+    "listHeading": "Every check, newest first",
+    "listDescription": "Each row is one visit. Tap a row to see the full result.",
+    "detailTitle": "Result of my check",
+    "openDetail": "See the full result",
+    "recordedPlaces": "Places recorded",
+    "placesCounted": "{{count}} of {{total}} places",
+    "overallHeading": "What the app heard overall",
+    "breakdown": {
+      "suggestive_one": "{{count}} place: something the app wants a person to look at",
+      "suggestive_other": "{{count}} places: something the app wants a person to look at",
+      "noAbnormality_one": "{{count}} place: nothing unusual heard",
+      "noAbnormality_other": "{{count}} places: nothing unusual heard",
+      "uncertain_one": "{{count}} place: the app could not tell",
+      "uncertain_other": "{{count}} places: the app could not tell",
+      "insufficientQuality_one": "{{count}} place: the recording was not clear enough",
+      "insufficientQuality_other": "{{count}} places: the recording was not clear enough",
+      "notAnalysed_one": "{{count}} place: not checked by the app yet",
+      "notAnalysed_other": "{{count}} places: not checked by the app yet",
+      "modelNotConnected_one": "{{count}} place: the app's listening tool was not running",
+      "modelNotConnected_other": "{{count}} places: the app's listening tool was not running",
+      "error_one": "{{count}} place: something went wrong",
+      "error_other": "{{count}} places: something went wrong"
+    },
+    "perLocationHeading": "Each place on your chest",
+    "possibleFindingIs": "The app thought this sounded like: {{condition}}",
+    "possibleFindingNote": "This is the app's guess about the sound. It is not a diagnosis and it is not a doctor's opinion.",
+    "modelVersion": "App listening tool version: {{version}}",
+    "modelVersionUnknown": "No listening tool ran on this recording.",
+    "qualityHeading": "Was the recording clear enough?",
+    "qualityOk": "Clear enough to check.",
+    "qualityBad": "Not clear enough to check. Nothing was decided from this recording.",
+    "qualityUnknown": "This recording was not given a clearness check.",
+    "notAnalysedTitle": "Not checked yet",
+    "notAnalysedBody": "This recording has not been through the app's listening tool yet. Nothing has been decided about your health from it.",
+    "errorTitle": "Something went wrong",
+    "errorBody": "The app could not finish checking this recording. Nothing has been decided about your health from it.",
+    "modelNotConnectedTitle": "The app's listening tool was not running",
+    "modelNotConnectedBody": "This recording was saved, but the part of the app that listens to it was not connected at the time. Nothing has been decided about your health from it.",
+    "severityTitle": "Severity score",
+    "severityBody": "Ausculta does not yet work out a severity score. There is no number here, and nothing on this screen is a score.",
+    "empty": {
+      "title": "You have no results yet",
+      "body": "Results appear here after a health worker records your breathing sounds with the Ausculta device. Nothing is missing — this is simply your first visit.",
+      "action": "Read what Ausculta can and cannot do"
+    },
+    "notFound": {
+      "title": "That result is not on this device",
+      "body": "The result you were looking for is not saved here. It may have been recorded on another device.",
+      "action": "Back to my results"
+    }
+  },
+
+  "recordings": {
+    "title": "My recordings",
+    "heading": "Every recording, newest first",
+    "description": "These are the sounds the device recorded from your chest. Tap play to listen.",
+    "playerLabel": "Recording from {{location}}",
+    "noAudio": "The sound file for this recording is not saved on this device.",
+    "loading": "Getting the recording ready…",
+    "openAssessment": "See the result for this visit",
+    "empty": {
+      "title": "You have no recordings yet",
+      "body": "Recordings appear here after a health worker uses the Ausculta device on your chest.",
+      "action": "Back to my health"
+    }
+  },
+
+  "review": {
+    "aiHeading": "What the app heard",
+    "aiLabel": "Automatic result from the app",
+    "aiCaveat": "This part was worked out by the app on its own. It is not a doctor's opinion and it is not a diagnosis.",
+    "practitionerHeading": "What the doctor said",
+    "practitionerLabel": "Reviewed by a practitioner",
+    "practitionerCaveat": "This part was written by a person — a doctor or health practitioner who looked at your recordings.",
+    "reviewedOn": "Reviewed on {{date}}",
+    "reviewedBy": "Reviewed by {{name}}",
+    "notesHeading": "Their comments",
+    "interpretation": "The practitioner's decision: {{interpretation}}",
+    "status": {
+      "label": "Has a person checked this?",
+      "DRAFT": "Not finished yet",
+      "PENDING_REVIEW": "Waiting for a practitioner to check it",
+      "APPROVED": "A practitioner has checked this",
+      "DISAPPROVED": "A practitioner did not agree with the app",
+      "FURTHER_REVIEW_REQUESTED": "A practitioner asked for another look"
+    },
+    "statusBody": {
+      "DRAFT": "This visit has not been sent for checking yet.",
+      "PENDING_REVIEW": "No person has looked at this yet. Only the app has. Please do not treat it as a medical opinion.",
+      "APPROVED": "A practitioner has read this result and agreed it can stand.",
+      "DISAPPROVED": "A practitioner read this result and did not agree with what the app heard. Follow what they told you, not the app.",
+      "FURTHER_REVIEW_REQUESTED": "A practitioner wants this looked at again, or recorded again. Please talk to your health worker."
+    },
+    "pending": {
+      "title": "No practitioner has checked this yet",
+      "body": "Everything above came from the app by itself. A doctor or health practitioner has not reviewed it."
+    }
+  },
+
+  "history": {
+    "title": "My history",
+    "profileHeading": "About me",
+    "name": "Name",
+    "studyId": "Study number",
+    "birthDate": "Date of birth",
+    "age": "Age",
+    "ageValue_one": "{{count}} year old",
+    "ageValue_other": "{{count}} years old",
+    "sex": "Sex",
+    "address": "Address",
+    "contact": "Contact number",
+    "language": "Preferred language",
+    "notRecorded": "Not recorded",
+    "consentHeading": "My consent",
+    "consentStatus": "Consent",
+    "consentGivenOn": "Given on {{date}}",
+    "consentLanguage": "Explained in: {{language}}",
+    "consentNone": "No consent has been recorded on this device yet. Ask your health worker about this.",
+    "respiratoryHeading": "My breathing history",
+    "familyHeading": "My family's breathing history",
+    "yesHeading": "Yes",
+    "noHeading": "No",
+    "notAskedHeading": "Not asked",
+    "notAskedNote": "Nobody has asked you these questions yet. That is not the same as answering no — they are simply blank.",
+    "noneRecorded": "Nothing has been recorded here yet.",
+    "readOnlyNote": "This page is read-only. To correct anything on it, ask your health worker.",
+    "empty": {
+      "title": "Your details are not on this device",
+      "body": "Your health worker has not registered your details here yet."
+    }
+  },
+
+  "trends": {
+    "title": "Over time",
+    "heading": "How your checks compare",
+    "description": "Each point is one visit, oldest on the left. This shows what the app heard — it is not a measure of how well or unwell you are.",
+    "findingsChartTitle": "Places the app flagged for a closer look",
+    "findingsChartDescription": "Out of the places recorded at each visit.",
+    "confidenceChartTitle": "How sure the app was",
+    "confidenceChartDescription": "Only shown for visits where the app named something. It is how sure the app was about its own guess, not a chance of illness.",
+    "confidenceNone": "The app did not name anything at any of these visits, so there is nothing to show here.",
+    "qualityChartTitle": "How many recordings were clear enough",
+    "qualityChartDescription": "A visit with few clear recordings tells you less than one with many.",
+    "severityTitle": "Severity over time",
+    "severityBody": "Ausculta does not yet work out a severity score, so there is no severity line to draw. Nothing on this page is a severity score.",
+    "changeDetected": "A change in the recorded breathing sound pattern was noticed between your last two visits.",
+    "noChangeDetected": "No change in the recorded breathing sound pattern was noticed between your last two visits.",
+    "changeNote": "A change in the sound pattern is not the same as your health getting better or worse. Only a practitioner can tell you that.",
+    "pointLabel": "{{date}}: {{value}}",
+    "axisVisit": "Visit",
+    "visitsCounted_one": "{{count}} visit",
+    "visitsCounted_other": "{{count}} visits",
+    "empty": {
+      "title": "Not enough visits to show a trend yet",
+      "body": "A trend needs at least two visits to compare. Drawing a line through a single point would suggest a direction that nobody has measured.",
+      "bodyNone": "You have no visits recorded yet, so there is nothing to compare.",
+      "action": "See my results"
+    }
+  },
+
+  "rehab": {
+    "title": "Breathing plan",
+    "heading": "Breathing exercises from your practitioner",
+    "whatItIs": "Ausculta can carry a set of breathing exercises that a practitioner chooses for you. The exercises come from published clinical guidance, and only a practitioner can put them on your plan.",
+    "empty": {
+      "title": "Your practitioner has not given you a plan yet",
+      "body": "When a doctor or health practitioner assigns breathing exercises to you, they will appear on this page with instructions. Ausculta will not invent exercises for you — breathing exercises can be unsafe for the wrong person, so a practitioner has to choose them.",
+      "action": "Back to my health"
+    },
+    "askNote": "If you would like a breathing plan, ask your health worker or doctor at your next visit."
+  },
+
+  "shared": {
+    "loading": "Loading your information…",
+    "loadError": "Your information could not be read from this device.",
+    "retry": "Try again",
+    "backHome": "Back to my health",
+    "backToResults": "Back to my results",
+    "signOut": "Sign out",
+    "aboutTitle": "What Ausculta can and cannot do",
+    "aboutBody": "Ausculta listens to recordings of your breathing and points out sounds a person may want to look at. It cannot diagnose an illness, it can be wrong, and it does not replace a doctor or a health worker. If you feel unwell, get help even if this app shows nothing.",
+    "noRecord": {
+      "title": "Your health record is not linked yet",
+      "body": "Your account is not yet connected to a patient record on this device. A health worker links them when they register you. Until then there is nothing of yours to show — this is not an error.",
+      "action": "What Ausculta can and cannot do"
+    },
+    "demoPreview": {
+      "title": "You are looking at sample data",
+      "body": "Your account has no patient record yet, so Ausculta is showing a made-up example so you can see how the app works. None of it is about you and none of it is real."
+    }
+  }
+}
