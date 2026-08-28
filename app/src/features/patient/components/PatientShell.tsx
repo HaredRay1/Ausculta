@@ -6,13 +6,13 @@ import {
   BottomNav,
   Button,
   FictionalDataBanner,
+  ExerciseIcon,
   HomeIcon,
-  InboxIcon,
   LungsIcon,
   Page,
-  PeopleIcon,
+  PersonIcon,
   RefreshIcon,
-  SettingsIcon,
+  TrendIcon,
   Spinner,
   type BottomNavItem,
 } from '../../../components'
@@ -32,9 +32,9 @@ import { PATIENT_NAV, PATIENT_PATHS, type PatientNavId } from '../navigation'
 const NAV_ICONS: Record<PatientNavId, ReactNode> = {
   home: <HomeIcon className="size-6" />,
   results: <LungsIcon className="size-6" />,
-  trends: <SettingsIcon className="size-6" />,
-  history: <PeopleIcon className="size-6" />,
-  rehab: <InboxIcon className="size-6" />,
+  trends: <TrendIcon className="size-6" />,
+  history: <PersonIcon className="size-6" />,
+  rehab: <ExerciseIcon className="size-6" />,
 }
 
 export interface PatientShellProps {

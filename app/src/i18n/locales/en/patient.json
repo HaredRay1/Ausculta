@@ -4,10 +4,9 @@
     "home": "Home",
     "results": "My results",
     "trends": "Over time",
-    "history": "My history",
+    "history": "About me",
     "rehab": "Breathing plan"
   },
-
   "home": {
     "title": "My health",
     "greeting": "Hello, {{name}}",
@@ -30,7 +29,6 @@
     "quickRehab": "Breathing plan",
     "quickRehabBody": "Breathing exercises your practitioner has given you."
   },
-
   "results": {
     "title": "My results",
     "listHeading": "Every check, newest first",
@@ -84,7 +82,6 @@
       "action": "Back to my results"
     }
   },
-
   "recordings": {
     "title": "My recordings",
     "heading": "Every recording, newest first",
@@ -99,7 +96,6 @@
       "action": "Back to my health"
     }
   },
-
   "review": {
     "aiHeading": "What the app heard",
     "aiLabel": "Automatic result from the app",
@@ -131,10 +127,9 @@
       "body": "Everything above came from the app by itself. A doctor or health practitioner has not reviewed it."
     }
   },
-
   "history": {
-    "title": "My history",
-    "profileHeading": "About me",
+    "title": "About me",
+    "profileHeading": "My details",
     "name": "Name",
     "studyId": "Study number",
     "birthDate": "Date of birth",
@@ -164,7 +159,6 @@
       "body": "Your health worker has not registered your details here yet."
     }
   },
-
   "trends": {
     "title": "Over time",
     "heading": "How your checks compare",
@@ -192,7 +186,6 @@
       "action": "See my results"
     }
   },
-
   "rehab": {
     "title": "Breathing plan",
     "heading": "Breathing exercises from your practitioner",
@@ -204,7 +197,6 @@
     },
     "askNote": "If you would like a breathing plan, ask your health worker or doctor at your next visit."
   },
-
   "shared": {
     "loading": "Loading your information…",
     "loadError": "Your information could not be read from this device.",

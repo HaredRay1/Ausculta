@@ -209,6 +209,43 @@ export const SignalOffIcon = makeIcon(
   </>,
 )
 
+/** Results over time. A rising line on an axis, not a cog. */
+export const TrendIcon = makeIcon(
+  'TrendIcon',
+  <>
+    <path d="M4 4v15.5a.5.5 0 0 0 .5.5H20" />
+    <path d="M7.5 15.5 11 11l3 2.5 4.5-6" />
+    <path d="M15.5 7.5h3v3" />
+  </>,
+)
+
+/**
+ * Breathing exercises and rehabilitation.
+ *
+ * A figure with raised arms rather than another pair of lungs: LungsIcon
+ * already sits two places away in the same bottom navigation, and two
+ * lung-shaped glyphs in one five-item bar are a coin toss at 24px.
+ */
+export const ExerciseIcon = makeIcon(
+  'ExerciseIcon',
+  <>
+    <circle cx="12" cy="4" r="2" />
+    <path d="M12 6.5v6.5" />
+    <path d="M7 6 12 9.5 17 6" />
+    <path d="m12 13-3.5 7" />
+    <path d="m12 13 3.5 7" />
+  </>,
+)
+
+/** One person — "about me". PeopleIcon is a group and reads as a caseload. */
+export const PersonIcon = makeIcon(
+  'PersonIcon',
+  <>
+    <circle cx="12" cy="8" r="3.75" />
+    <path d="M4.5 20.5a7.5 7.5 0 0 1 15 0" />
+  </>,
+)
+
 /* ---- Generic ------------------------------------------------------------ */
 
 export const SearchIcon = makeIcon(
@@ -268,8 +305,11 @@ export const ALL_ICONS: Readonly<Record<string, IconComponent>> = {
   EyeIcon,
   EyeOffIcon,
   RefreshIcon,
+  ExerciseIcon,
   LungsIcon,
   MicIcon,
+  PersonIcon,
+  TrendIcon,
   HandIcon,
   ChipIcon,
   FlaskIcon,
