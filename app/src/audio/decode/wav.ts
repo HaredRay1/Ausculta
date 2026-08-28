@@ -44,6 +44,15 @@ const PCM_SUBFORMAT_GUID = [
   0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x00, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71,
 ]
 const MAX_CHANNELS = 32
+/** The only depth this module reads. See the typed error below. */
+const SUPPORTED_BIT_DEPTH = 16
+const BYTES_PER_SAMPLE = SUPPORTED_BIT_DEPTH / 8
+/** Smallest fmt chunk that still holds every field parseWav reads. */
+const MIN_FMT_SIZE = 16
+/** fmt size a WAVE_FORMAT_EXTENSIBLE chunk needs to carry its subformat GUID. */
+const EXTENSIBLE_FMT_SIZE = 40
+/** Offset of the subformat GUID inside an EXTENSIBLE fmt chunk. */
+const SUBFORMAT_GUID_OFFSET = 24
 
 function readFourCC(view: DataView, offset: number): string {
   return (
@@ -92,7 +101,7 @@ export function parseWav(buffer: ArrayBuffer): WavAudio {
     offset = payload + declaredSize + (declaredSize % 2)
   }
 
-  if (fmtOffset < 0 || fmtSize < 16) {
+  if (fmtOffset < 0 || fmtSize < MIN_FMT_SIZE) {
     throw new WavParseError('missing-fmt', 'WAVE file has no usable fmt chunk')
   }
 
@@ -102,14 +111,14 @@ export function parseWav(buffer: ArrayBuffer): WavAudio {
   const bitsPerSample = view.getUint16(fmtOffset + 14, true)
 
   if (audioFormat === FORMAT_EXTENSIBLE) {
-    if (fmtSize < 40) {
+    if (fmtSize < EXTENSIBLE_FMT_SIZE) {
       throw new WavParseError(
         'unsupported-format',
         'WAVE_FORMAT_EXTENSIBLE fmt chunk is too small to hold a subformat GUID',
       )
     }
     for (let i = 0; i < PCM_SUBFORMAT_GUID.length; i++) {
-      if (view.getUint8(fmtOffset + 24 + i) !== PCM_SUBFORMAT_GUID[i]) {
+      if (view.getUint8(fmtOffset + SUBFORMAT_GUID_OFFSET + i) !== PCM_SUBFORMAT_GUID[i]) {
         throw new WavParseError(
           'unsupported-format',
           'WAVE_FORMAT_EXTENSIBLE file is not linear PCM',
@@ -129,7 +138,7 @@ export function parseWav(buffer: ArrayBuffer): WavAudio {
   if (sampleRate < 1) {
     throw new WavParseError('unsupported-format', 'WAVE file declares a zero sample rate')
   }
-  if (bitsPerSample !== 16) {
+  if (bitsPerSample !== SUPPORTED_BIT_DEPTH) {
     throw new WavParseError(
       'unsupported-bit-depth',
       `Unsupported bit depth ${bitsPerSample}; this device records 16-bit PCM`,
@@ -140,7 +149,7 @@ export function parseWav(buffer: ArrayBuffer): WavAudio {
     throw new WavParseError('missing-data', 'WAVE file has no data chunk')
   }
 
-  const blockAlign = channels * 2
+  const blockAlign = channels * BYTES_PER_SAMPLE
   const frames = Math.floor(dataSize / blockAlign)
   if (frames < 1) {
     throw new WavParseError('no-frames', 'WAVE data chunk holds no complete audio frames')
@@ -151,7 +160,7 @@ export function parseWav(buffer: ArrayBuffer): WavAudio {
     const base = dataOffset + frame * blockAlign
     let sum = 0
     for (let channel = 0; channel < channels; channel++) {
-      sum += view.getInt16(base + channel * 2, true)
+      sum += view.getInt16(base + channel * BYTES_PER_SAMPLE, true)
     }
     pcm[frame] = sum / channels
   }

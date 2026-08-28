@@ -4,7 +4,7 @@
  *
  * Not a test file — vitest only collects *.test.ts.
  */
-import { INT16_FULL_SCALE } from '../constants'
+import { INT16_FULL_SCALE, INT16_MAX, INT16_MIN } from '../constants'
 
 export const SR = 16000
 
@@ -83,14 +83,14 @@ export function injectClipping(src: Float32Array, fraction: number): Float32Arra
   const out = Float32Array.from(src)
   const step = Math.floor(1 / fraction)
   for (let i = 0; i < out.length; i += step) {
-    out[i] = i % (2 * step) === 0 ? 32767 : -32768
+    out[i] = i % (2 * step) === 0 ? INT16_MAX : INT16_MIN
   }
   return out
 }
 
 /** Amplify then hard-limit to the int16 rails. */
 export function clipWithGain(src: Float32Array, gain: number): Float32Array {
-  return Float32Array.from(src, (v) => Math.max(-32768, Math.min(32767, v * gain)))
+  return Float32Array.from(src, (v) => Math.max(INT16_MIN, Math.min(INT16_MAX, v * gain)))
 }
 
 /** Add a constant offset expressed as a fraction of full scale. */
@@ -103,7 +103,7 @@ export function addDcOffset(src: Float32Array, fractionOfFullScale: number): Flo
 export function quantizeToInt16(src: Float32Array): Int16Array {
   const out = new Int16Array(src.length)
   for (let i = 0; i < src.length; i++) {
-    out[i] = Math.max(-32768, Math.min(32767, Math.round(src[i])))
+    out[i] = Math.max(INT16_MIN, Math.min(INT16_MAX, Math.round(src[i])))
   }
   return out
 }

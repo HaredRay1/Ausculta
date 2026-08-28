@@ -15,6 +15,8 @@
  * *int16-range* values (-32768..32767), never Web Audio's -1..1.
  */
 export const INT16_FULL_SCALE = 32768
+export const INT16_MIN = -32768
+export const INT16_MAX = 32767
 
 /** Lowest dBFS value any metric will report, so a digital-silence buffer
  *  yields a finite, JSON-safe number instead of -Infinity. */

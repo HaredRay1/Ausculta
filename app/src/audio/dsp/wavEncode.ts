@@ -1,4 +1,4 @@
-import { DEFAULT_MODEL_ID, MODEL_REGISTRY } from '../constants'
+import { DEFAULT_MODEL_ID, INT16_MAX, INT16_MIN, MODEL_REGISTRY } from '../constants'
 
 const TARGET_RATE = MODEL_REGISTRY[DEFAULT_MODEL_ID].frequencyHz
 const HEADER_BYTES = 44
@@ -43,7 +43,7 @@ export function encodeWav(pcm16k: Int16Array, sampleRate = TARGET_RATE): Blob {
 export function toInt16(pcm: Float32Array): Int16Array {
   const out = new Int16Array(pcm.length)
   for (let i = 0; i < pcm.length; i++) {
-    out[i] = Math.max(-32768, Math.min(32767, Math.round(pcm[i])))
+    out[i] = Math.max(INT16_MIN, Math.min(INT16_MAX, Math.round(pcm[i])))
   }
   return out
 }

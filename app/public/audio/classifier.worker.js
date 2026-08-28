@@ -92,7 +92,13 @@ function handleLoad(message) {
   scope.importScripts(baseUrl + 'edge-impulse-standalone.js')
   scope.importScripts(baseUrl + 'run-impulse.js')
 
-  classifier = new scope.EdgeImpulseClassifier()
+  // `class EdgeImpulseClassifier {}` at the top level of a classic script
+  // creates a binding in the GLOBAL LEXICAL environment, NOT a property of the
+  // global object, so it has to be referenced as a bare identifier —
+  // `self.EdgeImpulseClassifier` is undefined. Do not "tidy" this into
+  // `scope.EdgeImpulseClassifier`; there is a test that fails if you do.
+  // @ts-ignore -- declared by the run-impulse.js imported immediately above.
+  classifier = new EdgeImpulseClassifier()
   classifier
     .init()
     .then(function () {
