@@ -174,6 +174,7 @@ function HistorySection<TCode extends string>({
         ) : null}
 
         <AnswerGroup
+          section={title}
           heading={t('patient:history.yesHeading')}
           icon={CheckCircleIcon}
           codes={split.yes}
@@ -181,6 +182,7 @@ function HistorySection<TCode extends string>({
           notes={notes}
         />
         <AnswerGroup
+          section={title}
           heading={t('patient:history.noHeading')}
           icon={CloseIcon}
           codes={split.no}
@@ -188,6 +190,7 @@ function HistorySection<TCode extends string>({
           notes={notes}
         />
         <AnswerGroup
+          section={title}
           heading={t('patient:history.notAskedHeading')}
           icon={QuestionIcon}
           codes={split.notAsked}
@@ -200,7 +203,16 @@ function HistorySection<TCode extends string>({
   )
 }
 
+/**
+ * The landmark name is "<section>: <group>", not just "Yes".
+ *
+ * Both history sections have a Yes group, and two landmarks called "Yes" on one
+ * page is a screen reader announcing the same name twice for different content
+ * — the listener cannot tell which list they have entered. Qualifying the name
+ * costs nothing visually and makes the rotor usable.
+ */
 function AnswerGroup<TCode extends string>({
+  section,
   heading,
   icon: Icon,
   codes,
@@ -208,6 +220,7 @@ function AnswerGroup<TCode extends string>({
   notes,
   note,
 }: {
+  section: string
   heading: string
   icon: IconComponent
   codes: readonly TCode[]
@@ -219,7 +232,7 @@ function AnswerGroup<TCode extends string>({
   if (codes.length === 0) return null
 
   return (
-    <section aria-label={heading} className="mt-4 first:mt-0">
+    <section aria-label={`${section}: ${heading}`} className="mt-4 first:mt-0">
       <h3 className="flex items-center gap-2 font-heading text-base font-bold text-on-surface">
         <Icon className="size-5 shrink-0 text-muted" />
         {heading}
