@@ -8,6 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react'
+import { syncDemoAssignments } from '../features/demo'
 import type { Role } from '../db/codes'
 import type { User } from '../db/types'
 import { authService, type AuthService } from './authService'
@@ -159,6 +160,28 @@ export function AuthProvider({
       const authenticated = await service.login(username, password)
       lastTouchRef.current = Date.now()
       applyUser(authenticated)
+
+      /*
+       * Seeded demo patients are assigned to accounts by role, and that
+       * normally runs at app start-up — which misses an account created
+       * during this session. Without this, someone who registers, signs in
+       * and lands on an empty patient list concludes the app is broken.
+       *
+       * Awaited so the caseload is populated before the caller navigates,
+       * and swallowed because nobody should be locked out of a clinical tool
+       * because demo seeding hiccuped. It is idempotent and only ever touches
+       * rows already marked fictional.
+       *
+       * This lives here rather than in authService: the service is the
+       * identity layer and has no business knowing demo mode exists.
+       */
+      try {
+        await syncDemoAssignments()
+      } catch {
+        // Sign-in has already succeeded; the empty-caseload cosmetic beats
+        // refusing entry.
+      }
+
       return authenticated
     },
     [service, applyUser],

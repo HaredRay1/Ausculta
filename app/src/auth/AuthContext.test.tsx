@@ -1,6 +1,6 @@
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 import { I18nextProvider } from 'react-i18next'
-import { afterEach, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { AuscultaDB } from '../db/db'
 import { ROLES } from '../db/codes'
 import { AUDIT_ACTIONS } from '../audit/audit'
@@ -9,6 +9,16 @@ import { AuthProvider, useAuth } from './AuthContext'
 import { AUTH_ERRORS, type AuthService } from './authService'
 import { registerAuthResources } from './i18n'
 import { createTestAuthService } from './testing'
+import { syncDemoAssignments } from '../features/demo'
+
+/*
+ * Demo-assignment sync is stubbed for this file. It is a demo-mode concern
+ * that runs against the app-wide database, and these tests drive their own;
+ * what matters here is only that login calls it and survives it failing.
+ */
+vi.mock('../features/demo', () => ({
+  syncDemoAssignments: vi.fn(async () => ({ patientsUpdated: 0, linkedPatientAccount: false })),
+}))
 
 registerAuthResources(appI18n)
 
@@ -85,6 +95,35 @@ describe('AuthProvider', () => {
 
     await waitFor(() => expect(screen.getByTestId('user')).toHaveTextContent('juan'))
     expect(screen.getByTestId('role')).toHaveTextContent(ROLES.PATIENT)
+  })
+
+  it('assigns seeded demo patients to the account that just signed in', async () => {
+    vi.mocked(syncDemoAssignments).mockClear()
+    await seedPatient()
+    const context = renderProbe()
+    await waitFor(() => expect(screen.getByTestId('loading')).toHaveTextContent('false'))
+
+    await act(async () => {
+      await context().login('juan', PASSWORD)
+    })
+
+    // An account created during this session is not covered by the start-up
+    // pass, and would otherwise land on an empty caseload.
+    expect(syncDemoAssignments).toHaveBeenCalled()
+  })
+
+  it('still signs the user in when demo assignment fails', async () => {
+    vi.mocked(syncDemoAssignments).mockRejectedValueOnce(new Error('seeding broke'))
+    await seedPatient()
+    const context = renderProbe()
+    await waitFor(() => expect(screen.getByTestId('loading')).toHaveTextContent('false'))
+
+    await act(async () => {
+      await expect(context().login('juan', PASSWORD)).resolves.toMatchObject({ username: 'juan' })
+    })
+
+    // Nobody gets locked out of a clinical tool because demo seeding hiccuped.
+    expect(screen.getByTestId('user')).toHaveTextContent('juan')
   })
 
   it('signs a user in through the context', async () => {
