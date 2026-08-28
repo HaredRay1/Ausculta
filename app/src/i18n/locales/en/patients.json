@@ -1,0 +1,166 @@
+{
+  "list": {
+    "title": "Patients",
+    "searchLabel": "Search by name or patient ID",
+    "searchHint": "You can type a patient ID with or without the dashes.",
+    "register": "Register a patient",
+    "count_one": "{{count}} patient",
+    "count_other": "{{count}} patients",
+    "empty": "No patients yet",
+    "emptyHint": "Patients you register will appear here.",
+    "noResults": "No patient matches that",
+    "noResultsHint": "Check the spelling, or try just the first few letters of the name.",
+    "researcherBlocked": "Researchers work from de-identified data",
+    "researcherBlockedHint": "The named patient register is not available in this role. Use the research export instead.",
+    "loading": "Loading patients"
+  },
+
+  "card": {
+    "age_one": "{{count}} year old",
+    "age_other": "{{count}} years old",
+    "ageUnknown": "Age unknown",
+    "consentMissing": "Consent not recorded",
+    "demo": "Demo record"
+  },
+
+  "register": {
+    "title": "Register a patient",
+    "demographics": "About the patient",
+    "demographicsHint": "Only name, date of birth and sex are required.",
+    "respiratory": "Breathing history",
+    "respiratoryHint": "Tick anything the patient has had. Ask each question out loud.",
+    "family": "Family and household history",
+    "familyHint": "Ask about people the patient lives with, not only blood relatives.",
+    "consent": "Consent",
+    "askedAll": "I asked every question on this list",
+    "askedAllHint": "Tick this so the record shows the unticked questions were answered no, rather than skipped.",
+    "submit": "Register patient",
+    "submitting": "Saving",
+    "cancel": "Cancel",
+    "draftRestored": "We brought back what you had already typed.",
+    "draftDiscard": "Start again",
+    "savedTitle": "Patient registered",
+    "savedBody": "The patient ID is {{id}}. Write it on the patient's form.",
+    "savedContinue": "Open patient record",
+    "savedAnother": "Register another patient",
+    "failed": "The patient could not be saved. Nothing was lost — try again.",
+    "fixErrors": "Check the highlighted questions before saving."
+  },
+
+  "field": {
+    "name": "Full name",
+    "nameHint": "As written on the patient's own records.",
+    "birthDate": "Date of birth",
+    "birthDateHint": "Year, month and day.",
+    "sex": "Sex",
+    "address": "Address",
+    "addressHint": "Barangay and municipality is enough.",
+    "contact": "Contact number",
+    "contactHint": "A neighbour's number is fine if the patient has none.",
+    "optional": "optional",
+    "yes": "Yes",
+    "no": "No",
+    "notAsked": "Not asked"
+  },
+
+  "consent": {
+    "title": "Informed consent",
+    "draftWarningTitle": "This consent text is a draft",
+    "draftWarningBody": "It has not been approved by a practitioner or an ethics reviewer. Do not use it to enrol a real participant.",
+    "outstandingTitle": "Still to be settled before approval",
+    "readAloud": "Read this to the patient in a language they understand.",
+    "languageNotice": "This text is available in English only. A Filipino version has not been prepared and must not be improvised or machine-translated.",
+    "statusLabel": "What did the patient say?",
+    "statusHint": "Record what the patient actually said, including if they declined.",
+    "recordedTitle": "Consent recorded",
+    "recordedOn": "Recorded {{date}}",
+    "recordedBy": "Recorded by {{name}}",
+    "shownIn": "Shown in {{language}}",
+    "version": "Text version {{version}}",
+    "notRecorded": "Consent has not been recorded",
+    "notRecordedHint": "Record the patient's answer before taking any recordings.",
+    "change": "Change consent",
+    "languageEnglish": "English"
+  },
+
+  "detail": {
+    "title": "Patient record",
+    "demographics": "Details",
+    "respiratory": "Breathing history",
+    "family": "Family and household history",
+    "consent": "Consent",
+    "care": "Care team",
+    "account": "Patient login",
+    "patientId": "Patient ID",
+    "studyId": "Study number",
+    "studyIdHint": "Used for research. It carries no personal details.",
+    "registered": "Registered {{date}}",
+    "noHistoryRecorded": "No breathing history recorded",
+    "noFamilyRecorded": "No family history recorded",
+    "notAskedNote": "Questions not listed here were not asked.",
+    "historyPresent": "Yes",
+    "historyAbsent": "No",
+    "edit": "Edit details",
+    "notFound": "Patient not found",
+    "notFoundHint": "It may belong to another health worker, or the ID may be wrong.",
+    "backToList": "Back to patients"
+  },
+
+  "care": {
+    "practitioners": "Practitioners",
+    "healthWorkers": "Health workers",
+    "none": "Nobody assigned yet",
+    "assign": "Assign someone",
+    "unassign": "Remove {{name}}",
+    "assignPractitionerLabel": "Refer to a practitioner",
+    "assignHint": "The person you choose will see this patient in their own list."
+  },
+
+  "account": {
+    "linked": "Linked to the login {{username}}",
+    "notLinked": "No patient login is linked",
+    "notLinkedHint": "Link an account so the patient can see their own results.",
+    "linkLabel": "Patient's username",
+    "link": "Link account",
+    "unlink": "Unlink account"
+  },
+
+  "error": {
+    "NAME_REQUIRED": "Enter the patient's name.",
+    "NAME_TOO_LONG": "That name is too long.",
+    "BIRTH_DATE_REQUIRED": "Enter the date of birth.",
+    "BIRTH_DATE_MALFORMED": "Enter the date as year, month and day.",
+    "BIRTH_DATE_NOT_A_REAL_DATE": "That date does not exist. Check the day and month.",
+    "BIRTH_DATE_IN_FUTURE": "The date of birth cannot be in the future.",
+    "BIRTH_DATE_TOO_LONG_AGO": "That date of birth is too long ago. Check the year.",
+    "SEX_REQUIRED": "Choose one.",
+    "SEX_UNKNOWN_CODE": "Choose one of the options.",
+    "ADDRESS_TOO_LONG": "That address is too long.",
+    "CONTACT_TOO_LONG": "That contact number is too long.",
+    "HISTORY_UNKNOWN_CODE": "That answer is not one we recognise.",
+    "HISTORY_DUPLICATE_CODE": "That question was answered twice.",
+    "HISTORY_NOTES_TOO_LONG": "That note is too long.",
+    "CONSENT_DOCUMENT_UNKNOWN": "The consent text could not be found. Do not record consent.",
+    "CONSENT_STATUS_INVALID": "Choose what the patient said.",
+    "CONSENT_RECORDER_REQUIRED": "You must be signed in to record consent.",
+    "PATIENT_NOT_FOUND": "That patient record is not available to you.",
+    "PATIENT_NOT_PERMITTED": "You do not have permission to do that.",
+    "PATIENT_INVALID_DEMOGRAPHICS": "Check the patient's details.",
+    "PATIENT_INVALID_HISTORY": "Check the history answers.",
+    "PATIENT_INVALID_CONSENT": "Consent could not be recorded.",
+    "PATIENT_ID_COLLISION": "Could not create a patient ID. Try again.",
+    "PATIENT_USER_NOT_FOUND": "No account with that username.",
+    "PATIENT_USER_NOT_A_PATIENT": "That account is not a patient account.",
+    "PATIENT_USER_ALREADY_LINKED": "That account is already linked to another patient."
+  },
+
+  "auditAction": {
+    "PATIENT_CREATED": "Patient registered",
+    "PATIENT_UPDATED": "Patient details changed",
+    "PATIENT_CONSENT_RECORDED": "Consent recorded",
+    "PATIENT_ASSIGNED": "Patient assigned",
+    "PATIENT_UNASSIGNED": "Patient assignment removed",
+    "PATIENT_ACCOUNT_LINKED": "Patient login linked",
+    "PATIENT_ACCOUNT_UNLINKED": "Patient login unlinked"
+  }
+}
