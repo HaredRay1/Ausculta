@@ -1,0 +1,42 @@
+{
+  "capturedFrom": "public/models/ei-disease-v5 (real WASM, run headless in Node)",
+  "windowSamples": 16000,
+  "sampleRate": 16000,
+  "runtime": {
+    "frequency": 16000,
+    "input_features_count": 16000,
+    "label_count": 4,
+    "slice_size": 4000,
+    "model_type": "classification",
+    "deploy_version": 5
+  },
+  "vectors": {
+    "zeros": {
+      "checksum": 0,
+      "probabilities": {
+        "Asthma": 0,
+        "Bronchiolitis": 0,
+        "Healthy": 0.98828125,
+        "Pneumonia": 0.01171875
+      }
+    },
+    "sine-440hz": {
+      "checksum": 1.546140993013978e-13,
+      "probabilities": {
+        "Asthma": 0.01953125,
+        "Bronchiolitis": 0.125,
+        "Healthy": 0.3046875,
+        "Pneumonia": 0.55078125
+      }
+    },
+    "seeded-noise": {
+      "checksum": -35.731928638346496,
+      "probabilities": {
+        "Asthma": 0.99609375,
+        "Bronchiolitis": 0,
+        "Healthy": 0.00390625,
+        "Pneumonia": 0
+      }
+    }
+  }
+}
