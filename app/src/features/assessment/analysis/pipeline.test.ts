@@ -1,7 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { encodeWav } from '../../../audio'
 import { AI_STATUS } from '../../../db/codes'
 import { toAiOutcome } from '../data/mapping'
 import { DEVICE_IMPORT_META, defaultAudioPort } from './audioPort'
@@ -30,39 +29,6 @@ function sampleFile(name: string): File {
 
 async function importSample(name: string) {
   return defaultAudioPort.precheck(sampleFile(name), DEVICE_IMPORT_META)
-}
-
-/**
- * Six seconds of low-passed noise at a third of full scale — spectrally
- * shaped enough to be neither flat nor tonal, and quiet enough not to clip.
- * Stands in for a usable auscultation recording, which `samples/` does not
- * currently contain (see the sample-file test below).
- */
-function usableRecording(): File {
-  const samples = 16000 * 6
-  let state = 12345
-  const signal = new Float32Array(samples)
-  for (let i = 0; i < samples; i++) {
-    state = (state * 1664525 + 1013904223) >>> 0
-    signal[i] = (state / 4294967296) * 2 - 1
-  }
-  // Two poles of low-pass: one is not enough shaping and the spectrum stays
-  // flat enough to be rejected as broadband noise, which is the point of that
-  // check.
-  for (let pole = 0; pole < 2; pole++) {
-    let filtered = 0
-    for (let i = 0; i < samples; i++) {
-      filtered = 0.6 * filtered + 0.4 * signal[i]
-      signal[i] = filtered
-    }
-  }
-  let peak = 0
-  for (const value of signal) peak = Math.max(peak, Math.abs(value))
-  const pcm = new Int16Array(samples)
-  for (let i = 0; i < samples; i++) {
-    pcm[i] = Math.round((signal[i] / peak) * 0.4 * 32768)
-  }
-  return new File([encodeWav(pcm)], 'usable.wav', { type: 'audio/wav' })
 }
 
 describe('the quality gate on the real sample recordings', () => {
@@ -110,36 +76,48 @@ describe('the quality gate on the real sample recordings', () => {
   })
 
   /**
-   * `samples/README.md` says 04-breath-like.wav should pass the gate and reach
-   * the model. It does not: it is generated at close to full scale, so 1.5 % of
-   * its samples sit on the int16 rail (the reject threshold is 1 %) and its
-   * whole-clip RMS is -8.7 dBFS, far hotter than any real chest recording.
+   * The one sample that must NOT be refused.
    *
-   * The gate is behaving correctly — a recording that clips that much IS
-   * unusable — so the fix belongs in whatever generated the sample: scale it to
-   * roughly a third of full scale. This test pins the discrepancy rather than
-   * hiding it, and will fail the moment the file is regenerated, which is when
-   * it should be replaced by the assertion the README describes.
+   * Three rejected files and one accepted tells the story the sample set is for
+   * — the gate discriminating, not the app being unable to analyse anything.
+   * Four rejected would tell a validator the opposite.
+   *
+   * Asserted with margins rather than just `ok`, so a fixture that drifts back
+   * towards a threshold fails here while it is still comfortably passing,
+   * instead of flipping silently the first time a metric crosses the line.
    */
-  it('records that 04-breath-like.wav does NOT yet pass the gate: it clips', async () => {
-    const precheck = await importSample('04-breath-like.wav')
+  it('lets 04-breath-like.wav through to the model, with room to spare', async () => {
+    const { quality } = await importSample('04-breath-like.wav')
+    const { metrics } = quality
 
-    expect(precheck.quality.ok).toBe(false)
-    expect(precheck.quality.flags.map((flag) => flag.code)).toEqual(['clipping'])
-    expect(precheck.quality.metrics.clipFraction).toBeGreaterThan(0.01)
+    expect(quality.ok).toBe(true)
+    // Not one flag, not even a warning.
+    expect(quality.flags).toEqual([])
+
+    expect(metrics.clipFraction).toBe(0)
+    expect(metrics.rmsDbfs).toBeGreaterThan(-40)
+    expect(metrics.durationMs).toBeGreaterThanOrEqual(3000)
+    expect(metrics.spectralFlatness).toBeLessThan(0.3)
+    expect(metrics.tonalityRatio).toBeLessThan(0.4)
+    expect(metrics.hfEnergyRatio).toBeLessThan(0.4)
+    expect(Math.abs(metrics.dcOffset)).toBeLessThan(0.01)
   })
 
-  it('lets a properly-levelled recording through to the model', async () => {
-    const precheck = await defaultAudioPort.precheck(usableRecording(), DEVICE_IMPORT_META)
+  it('hands 04-breath-like.wav to the classifier rather than stopping at the gate', async () => {
+    const analysed = await runAnalysis(await importSample('04-breath-like.wav'), defaultAudioPort)
 
-    expect(precheck.quality.ok).toBe(true)
-    expect(precheck.quality.flags.filter((flag) => flag.severity === 'reject')).toEqual([])
+    // The distinction that proves it got past the gate: a recording the gate
+    // refuses comes back `insufficient-quality` without the model ever being
+    // asked for. This one reaches `initClassifier` and only then finds there is
+    // no impulse in this environment.
+    expect(analysed.verdict.kind).not.toBe('insufficient-quality')
+    expect(toAiOutcome(analysed).aiStatus).toBe(AI_STATUS.MODEL_NOT_CONNECTED)
   })
 })
 
 describe('runAnalysis when the model cannot be loaded', () => {
   it('degrades to model-not-connected, never to a fabricated finding', async () => {
-    const precheck = await defaultAudioPort.precheck(usableRecording(), DEVICE_IMPORT_META)
+    const precheck = await importSample('04-breath-like.wav')
 
     // No classifier worker exists under jsdom, which is exactly the shape of a
     // deployment built without the Edge Impulse assets.

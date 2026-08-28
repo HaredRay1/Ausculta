@@ -3,7 +3,6 @@ import { resolve } from 'node:path'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { encodeWav } from '../../../audio'
 import { AuthProvider } from '../../../auth/AuthContext'
 import { createTestAuthService } from '../../../auth/testing'
 import { ROLES, USER_STATUSES } from '../../../db/codes'
@@ -59,29 +58,6 @@ function sampleFile(name: string): File {
   return new File([new Uint8Array(readFileSync(resolve(SAMPLES, name)))], name, {
     type: 'audio/wav',
   })
-}
-
-/** Six seconds of shaped noise at a safe level — passes the quality gate. */
-function usableFile(): File {
-  const samples = 16000 * 6
-  let seed = 12345
-  const signal = new Float32Array(samples)
-  for (let i = 0; i < samples; i++) {
-    seed = (seed * 1664525 + 1013904223) >>> 0
-    signal[i] = (seed / 4294967296) * 2 - 1
-  }
-  for (let pole = 0; pole < 2; pole++) {
-    let filtered = 0
-    for (let i = 0; i < samples; i++) {
-      filtered = 0.6 * filtered + 0.4 * signal[i]
-      signal[i] = filtered
-    }
-  }
-  let peak = 0
-  for (const value of signal) peak = Math.max(peak, Math.abs(value))
-  const pcm = new Int16Array(samples)
-  for (let i = 0; i < samples; i++) pcm[i] = Math.round((signal[i] / peak) * 0.4 * 32768)
-  return new File([encodeWav(pcm)], 'REC0001.WAV', { type: 'audio/wav' })
 }
 
 function renderWizard() {
@@ -184,9 +160,9 @@ describe('the walkthrough a validator performs', () => {
     expect(screen.getByLabelText(/recording file/i)).toBeInTheDocument()
   })
 
-  it('carries a usable recording through to a result and saves it', async () => {
+  it('carries 04-breath-like.wav through to a result and saves it', async () => {
     await toImportScreen()
-    chooseFile(usableFile())
+    chooseFile(sampleFile('04-breath-like.wav'))
 
     await waitFor(() =>
       expect(screen.getByText(/This recording can be analysed/i)).toBeInTheDocument(),
@@ -206,7 +182,7 @@ describe('the walkthrough a validator performs', () => {
     const row = (await db.recordings.toArray())[0]
     expect(row.aiStatus).toBe('MODEL_NOT_CONNECTED')
     expect(row.aiClassification).toBeUndefined()
-    expect(row.originalFileName).toBe('REC0001.WAV')
+    expect(row.originalFileName).toBe('04-breath-like.wav')
     expect(row.assessmentId).toBeTruthy()
 
     const assessment = await db.assessments.get(row.assessmentId)
