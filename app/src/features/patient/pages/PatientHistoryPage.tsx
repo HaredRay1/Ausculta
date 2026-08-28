@@ -14,7 +14,6 @@ import {
   type FamilyHistoryCode,
   type RespiratoryHistoryCode,
 } from '../../../db/codes'
-import type { Patient } from '../../../db/types'
 import { PatientScreen } from '../components/PatientScreen'
 import type { PatientRepository } from '../data/patientRepository'
 import { notesByCode, splitHistory } from '../data/history'
@@ -49,8 +48,7 @@ export function PatientHistoryPage({ repository }: PatientHistoryPageProps) {
       title={t('patient:history.title')}
       {...(repository !== undefined && { repository })}
     >
-      {(overview) => {
-        const patient = overview.patient as Patient
+      {({ patient }) => {
         const age = ageInYears(patient.birthDate)
 
         return (

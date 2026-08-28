@@ -103,10 +103,18 @@ export function RecordingResult({
             <p className="mt-1 text-sm">{t('patient:results.possibleFindingNote')}</p>
           </div>
         )}
+        {/*
+          Three states, not two. A recording that carries no quality report was
+          never measured for clearness — most seeded and imported audio is in
+          exactly that position — and telling a patient it was "clear enough to
+          check" would be asserting the result of a check nobody ran.
+        */}
         <p className="text-sm opacity-90">
           {view.state === 'insufficient-quality'
             ? t('patient:results.qualityBad')
-            : t('patient:results.qualityOk')}
+            : view.hasQualityReport
+              ? t('patient:results.qualityOk')
+              : t('patient:results.qualityUnknown')}
         </p>
         <p className="text-sm opacity-90">{modelLine}</p>
       </ResultCard>

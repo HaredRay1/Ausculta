@@ -319,6 +319,27 @@ describe('degraded states render no number anywhere', () => {
     expect(screen.queryByText('HIGH')).not.toBeInTheDocument()
   })
 
+  it('does not claim a clearness check that never ran', async () => {
+    await seedLinkedPatient({
+      assessments: [assessmentRow('as-1', '2026-08-01T01:30:00.000Z')],
+      recordings: [
+        // quality: null — nothing measured this signal, which is the state most
+        // imported and seeded audio is actually in.
+        recordingRow('r1', 'as-1', LOCATION_CODES.R_UPPER, {
+          quality: null,
+          aiClassification: CLASSIFICATION_CODES.HEALTHY,
+          aiConfidence: 0.9,
+        }),
+      ],
+    })
+
+    renderAt(`${PATIENT_PATHS.results}/as-1`)
+    await screen.findByText(t('results.perLocationHeading'))
+
+    expect(screen.getByText(t('results.qualityUnknown'))).toBeInTheDocument()
+    expect(screen.queryByText(t('results.qualityOk'))).not.toBeInTheDocument()
+  })
+
   it('shows a confidence only where the app actually named something', async () => {
     await seedLinkedPatient({
       assessments: [assessmentRow('as-1', '2026-08-01T01:30:00.000Z')],

@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Banner, Button, EmptyState, InfoIcon } from '../../../components'
 import { usePatientOverview } from '../data/usePatientOverview'
-import type { PatientOverview, PatientRepository } from '../data/patientRepository'
+import type { LoadedPatientOverview, PatientRepository } from '../data/patientRepository'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS, type PatientNavId } from '../navigation'
 import { PatientLoadError, PatientLoading, PatientShell } from './PatientShell'
@@ -26,7 +26,8 @@ export interface PatientScreenProps {
   subtitle?: string
   onBack?: () => void
   repository?: PatientRepository
-  children: (overview: PatientOverview) => ReactNode
+  /** Only ever called once a patient record is loaded — see LoadedPatientOverview. */
+  children: (overview: LoadedPatientOverview) => ReactNode
 }
 
 export function PatientScreen({
@@ -57,7 +58,10 @@ export function PatientScreen({
 
   if (isLoading) return frame(<PatientLoading label={t('patient:shared.loading')} />)
   if (error !== null) return frame(<PatientLoadError onRetry={reload} />)
-  if (overview.patient === null) return frame(<NoLinkedRecord />)
+
+  const { patient } = overview
+  if (patient === null) return frame(<NoLinkedRecord />)
+  const loaded: LoadedPatientOverview = { ...overview, patient }
 
   return frame(
     <>
@@ -66,7 +70,7 @@ export function PatientScreen({
           {t('patient:shared.demoPreview.body')}
         </Banner>
       )}
-      {children(overview)}
+      {children(loaded)}
     </>,
   )
 }

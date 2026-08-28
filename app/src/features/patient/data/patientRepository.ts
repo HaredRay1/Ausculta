@@ -67,6 +67,17 @@ export interface PatientOverview {
   isFictional: boolean
 }
 
+/**
+ * A `PatientOverview` that is known to have a record.
+ *
+ * `PatientScreen` only renders its children once `patient` is non-null, and
+ * this is how that guarantee reaches them — so no screen has to cast, and none
+ * can accidentally render a nullable patient as though it were present.
+ */
+export interface LoadedPatientOverview extends Omit<PatientOverview, 'patient'> {
+  patient: Patient
+}
+
 export const EMPTY_OVERVIEW: PatientOverview = {
   source: 'none',
   patient: null,
