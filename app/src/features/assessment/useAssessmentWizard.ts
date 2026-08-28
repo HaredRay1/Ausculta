@@ -136,6 +136,20 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     isDemo,
   } = input
 
+  /**
+   * The injected collaborators, held in a ref and refreshed every render.
+   *
+   * They must NOT be effect or callback dependencies. A caller that passes an
+   * inline `store={...}` or `readSkipGuide={async () => …}` creates a new
+   * identity on every render, and the opening effect below would then re-run
+   * forever — a render loop that a unit test surfaces as a hang and a phone
+   * surfaces as a flat battery. Reading them through a ref keeps the effect
+   * keyed on the only things that should reopen the flow: which assessment and
+   * which patient.
+   */
+  const deps = useRef({ store, audio, readSkipGuide, writeSkipGuide })
+  deps.current = { store, audio, readSkipGuide, writeSkipGuide }
+
   const [state, setState] = useState<WizardState>(INITIAL)
   /**
    * The chosen File itself.
@@ -156,13 +170,13 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     let cancelled = false
 
     async function open() {
-      const skipDeviceGuide = await readSkipGuide()
+      const skipDeviceGuide = await deps.current.readSkipGuide()
       if (assessmentId === null) {
         if (!cancelled) patch({ step: 'patient', patientId, skipDeviceGuide })
         return
       }
 
-      const loaded = await store.load(assessmentId)
+      const loaded = await deps.current.store.load(assessmentId)
       if (cancelled) return
       if (loaded === null) {
         patch({ step: 'patient', errorKey: 'error.notFound', skipDeviceGuide })
@@ -183,13 +197,13 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     return () => {
       cancelled = true
     }
-  }, [assessmentId, patientId, patch, readSkipGuide, store])
+  }, [assessmentId, patientId, patch])
 
   const start = useCallback(async () => {
     if (patientId === null) return
     patch({ busy: true, errorKey: null })
     try {
-      const assessment = await store.createDraft({
+      const assessment = await deps.current.store.createDraft({
         patientId,
         assessorId: actorId,
         interfaceLanguage,
@@ -203,14 +217,14 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     } catch {
       patch({ busy: false, errorKey: 'error.saveFailed' })
     }
-  }, [actorId, interfaceLanguage, isDemo, patch, patientId, state.skipDeviceGuide, store])
+  }, [actorId, interfaceLanguage, isDemo, patch, patientId, state.skipDeviceGuide])
 
   const finishDeviceGuide = useCallback(
     async (dontShowAgain: boolean) => {
-      if (dontShowAgain) await writeSkipGuide(true)
+      if (dontShowAgain) await deps.current.writeSkipGuide(true)
       patch({ step: 'location', skipDeviceGuide: dontShowAgain || state.skipDeviceGuide })
     },
-    [patch, state.skipDeviceGuide, writeSkipGuide],
+    [patch, state.skipDeviceGuide],
   )
 
   const chooseLocation = useCallback(
@@ -236,7 +250,7 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     async (file: File) => {
       patch({ busy: true, importErrorKey: null, fileName: file.name })
       try {
-        const precheck = await audio.precheck(file, {
+        const precheck = await deps.current.audio.precheck(file, {
           ...DEVICE_IMPORT_META,
           originalMime: file.type || DEVICE_IMPORT_META.originalMime,
         })
@@ -247,7 +261,7 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
         patch({ busy: false, importErrorKey: importErrorKey(error), precheck: null })
       }
     },
-    [audio, patch],
+    [patch],
   )
 
   const clearFile = useCallback(() => {
@@ -262,10 +276,10 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     if (precheck === null || locationCode === null || currentAssessmentId === null) return
 
     patch({ step: 'analysis', busy: true, errorKey: null })
-    const analysis = await runAnalysis(precheck, audio)
+    const analysis = await runAnalysis(precheck, deps.current.audio)
 
     try {
-      await store.saveRecording({
+      await deps.current.store.saveRecording({
         assessmentId: currentAssessmentId,
         patientId: state.patientId ?? '',
         locationCode,
@@ -289,7 +303,7 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
         ? current.recordedLocations
         : [...current.recordedLocations, locationCode],
     }))
-  }, [actorId, audio, isDemo, patch, state, store])
+  }, [actorId, isDemo, patch, state])
 
   const recordAgain = useCallback(() => {
     importedFile.current = null
@@ -321,12 +335,12 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     if (state.assessmentId === null) return
     patch({ busy: true, errorKey: null })
     try {
-      await store.submit(state.assessmentId, actorId)
+      await deps.current.store.submit(state.assessmentId, actorId)
       patch({ step: 'submitted', busy: false })
     } catch {
       patch({ busy: false, errorKey: 'error.submitFailed' })
     }
-  }, [actorId, patch, state.assessmentId, store])
+  }, [actorId, patch, state.assessmentId])
 
   const goBack = useCallback(() => {
     const target = BACK_TO[state.step]
