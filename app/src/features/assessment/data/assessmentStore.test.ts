@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest'
-import { encodeWav } from '../../../audio'
+import { encodeWav, type AnalysisResult } from '../../../audio'
 import { AuscultaDB } from '../../../db/db'
 import {
   AI_STATUS,
@@ -8,6 +8,7 @@ import {
   LOCATION_CODES,
   REVIEW_STATUSES,
 } from '../../../db/codes'
+import type { LocationCode } from '../../../db/codes'
 import { ASSESSMENT_AUDIT_ACTIONS } from './auditActions'
 import {
   UNKNOWN_AUDIO_METADATA,
@@ -74,8 +75,8 @@ async function startDraft() {
 
 async function saveAt(
   assessmentId: string,
-  locationCode = LOCATION_CODES.R_UPPER,
-  result = suggestiveResult(),
+  locationCode: LocationCode = LOCATION_CODES.R_UPPER,
+  result: AnalysisResult = suggestiveResult(),
   file: File | null = wavFile(),
 ) {
   return store.saveRecording({
