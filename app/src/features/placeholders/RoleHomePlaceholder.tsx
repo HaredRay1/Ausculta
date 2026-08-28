@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../auth/AuthContext'
+import { Banner, Button } from '../../components'
 
 /**
  * Stand-in for a role's dashboard until that phase builds the real one.
@@ -14,21 +15,17 @@ export function RoleHomePlaceholder() {
   const { user, logout } = useAuth()
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 p-6">
+    <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-6 bg-surface p-6">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">{t('appName')}</h1>
-        <p className="mt-1 text-slate-600">{t('signedInAs', { name: user?.name ?? '' })}</p>
+        <h1 className="font-heading text-2xl font-semibold text-on-surface">{t('appName')}</h1>
+        <p className="mt-1 text-muted">{t('signedInAs', { name: user?.name ?? '' })}</p>
       </div>
-      <p className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-slate-700">
-        {t('dashboardComingSoon')}
-      </p>
-      <button
-        type="button"
-        onClick={() => void logout()}
-        className="rounded-lg border border-slate-300 px-4 py-3 text-slate-900"
-      >
+
+      <Banner tone="info">{t('dashboardComingSoon')}</Banner>
+
+      <Button variant="secondary" onClick={() => void logout()}>
         {t('signOut')}
-      </button>
+      </Button>
     </main>
   )
 }

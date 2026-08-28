@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '../../components'
 import { DEVICE_LANGUAGE_STORAGE_KEY } from '../../lib/deviceLanguage'
 import type { SupportedLanguage } from '../../i18n'
 
@@ -24,18 +25,13 @@ export function LanguageSelect() {
   }
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-white px-6">
-      <h1 className="text-2xl font-semibold text-teal-900">{t('appName')}</h1>
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-surface px-6">
+      <h1 className="font-heading text-2xl font-semibold text-on-surface">{t('appName')}</h1>
       <div className="flex w-full max-w-xs flex-col gap-4">
         {LANGUAGE_OPTIONS.map((option) => (
-          <button
-            key={option.code}
-            type="button"
-            onClick={() => selectLanguage(option.code)}
-            className="w-full rounded-xl bg-teal-700 px-6 py-5 text-xl font-medium text-white shadow-sm active:bg-teal-800"
-          >
+          <Button key={option.code} size="lg" fullWidth onClick={() => selectLanguage(option.code)}>
             {t(option.labelKey)}
-          </button>
+          </Button>
         ))}
       </div>
     </main>

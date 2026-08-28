@@ -116,6 +116,18 @@ const CONTRAST_PAIRS: ReadonlyArray<{ fg: string; bg: string; min: number; note:
     note: 'danger banner',
   },
 
+  // Feature screens colour icons and inline status text directly with these
+  // on a card, so the pairs are load-bearing outside the banner components.
+  { fg: '--color-info', bg: '--color-surface-raised', min: 4.5, note: 'info ink on a card' },
+  { fg: '--color-success', bg: '--color-surface-raised', min: 4.5, note: 'success ink on a card' },
+  { fg: '--color-warning', bg: '--color-surface-raised', min: 4.5, note: 'warning ink on a card' },
+  {
+    fg: '--color-destructive',
+    bg: '--color-surface-raised',
+    min: 4.5,
+    note: 'destructive ink on a card',
+  },
+
   { fg: '--color-focus', bg: '--color-surface', min: 3, note: 'focus ring (non-text UI)' },
   { fg: '--color-border-strong', bg: '--color-surface', min: 3, note: 'input border' },
 ]
