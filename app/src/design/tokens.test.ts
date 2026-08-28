@@ -176,7 +176,7 @@ describe('compiled stylesheet', () => {
         const file = id.startsWith('.')
           ? path.resolve(base, id)
           : path.join(root, 'node_modules', id, 'index.css')
-        return { base: path.dirname(file), content: readFileSync(file, 'utf8') }
+        return { path: file, base: path.dirname(file), content: readFileSync(file, 'utf8') }
       },
     })
     return compiler.build(candidates)
