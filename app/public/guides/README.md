@@ -47,12 +47,40 @@ Each carries its step number as a badge in the top-left corner.
 | `device-07-remove-sd.svg` | The recorder dark and switched off, then the card sliding out; a dashed arc runs from the switch to the card to show that order. | Switch the recorder off first, then take the card out. |
 | `device-08-import-to-app.svg` | The memory card, an arrow, and the phone showing the transferred recordings in the app. | Copy the recordings from the card into the app. |
 | `device-09-clean.svg` | A cloth wiping the chestpiece with a disinfectant drop and a circular wiping motion, between one patient and the next. | Wipe and disinfect the chestpiece before the next patient. |
+| `device-10-charge-battery.svg` | A USB lead plugged into the socket on the recorder, with a battery filling and a charging bolt. | Charge the battery by plugging in the USB lead. |
+
+> **`device-10` is unverified.** The wiring diagram shows the battery running
+> through a boost converter to the power switch and draws no charging module, so
+> the diagram assumes charging happens through the micro-USB port on the ESP32
+> board itself. That port certainly exists, but that it is the intended charging
+> path has **not** been confirmed against the physical device. Check it before
+> this diagram is shown to any health worker, and redraw it if the real hardware
+> charges some other way.
+
+## Mistakes that ruin a recording
+
+The app runs an automatic quality check before analysis and rejects recordings
+that are too quiet, too noisy or clipped. Each of these four mistakes produces
+exactly such a rejection, and nothing else tells the health worker why. Each
+file shows the wrong way and the right way side by side — wrong on the left
+under a cross, right on the right under a tick.
+
+Captions state the correct action rather than scolding: a working nurse reads
+"Place the chestpiece directly on bare skin" better than "Do not place it over
+clothing."
+
+| File | Depicts | Caption to display |
+| --- | --- | --- |
+| `mistake-01-over-clothing.svg` | Left: the chestpiece pressed on a layer of clothing, the fabric scraping against it. Right: the clothing folded back and the chestpiece flat on bare skin. | Place the chestpiece directly on bare skin. Move clothing out of the way first. |
+| `mistake-02-loose-contact.svg` | Left: the chestpiece tilted so only one edge touches, with a gap under it and room noise getting in. Right: the whole rim flat on the chest with light, even pressure. | Hold the whole rim flat against the chest with light, even pressure. |
+| `mistake-03-talking-moving.svg` | Left: the patient talking and shifting about. Right: the patient sitting still, breathing through an open mouth. | Ask the patient to sit still and breathe deeply through an open mouth. |
+| `mistake-04-noisy-room.svg` | Left: a fan running and someone talking nearby. Right: the same recording with the fan off and nobody talking. | Record in a quiet room. Switch off fans and ask others not to talk. |
 
 ---
 
 ## Naming convention
 
-Keep new files consistent with these three shapes.
+Keep new files consistent with these four shapes.
 
 **`placement-<SIDE>_<LEVEL>.svg`** — one auscultation site per file.
 `SIDE` is `R` or `L` and always means the **patient's own** right or left, never
@@ -71,6 +99,13 @@ files sort into sequence. Inserting a step means renumbering the ones after it
 **and** redrawing their number badges — the badge is baked into the artwork.
 Leaving gaps (`10`, `20`, `30`) is the easier option if more steps are expected.
 
+**`mistake-<NN>-<kebab-slug>.svg`** — one wrong/right comparison per file, in a
+`0 0 320 200` frame split into two panels: the mistake on the left under a
+cross, the correct action on the right under a tick. `NN` orders them but they
+are independent, so numbers can be added at the end without renumbering. The
+slug names the mistake, not the fix, so the file is findable from the quality
+check that rejected the recording.
+
 ## Drawing rules
 
 Any new diagram must follow these, or it will not match the set.
@@ -83,7 +118,8 @@ Any new diagram must follow these, or it will not match the set.
 - **Hand-authored SVG.** No external references, no embedded raster images, no
   fonts, no stylesheets. Every file parses as standalone XML.
 - **`viewBox`, no fixed size.** `0 0 320 340` for the figure diagrams, `0 0 320
-  260` for the device steps. Designed to be legible at 320 px wide on a phone.
+  260` for the device steps, `0 0 320 200` for the wrong/right comparisons.
+  Designed to be legible at 320 px wide on a phone.
 - **Transparent background.** They render on white cards; no background rect.
 - **Palette.** Dark ink `#0f172a` for line work, teal `#0d9488` for the thing the
   viewer must look at, `#94a3b8` for background anatomy and inactive markers,
@@ -94,6 +130,13 @@ Any new diagram must follow these, or it will not match the set.
   are empty dashed circles. The set has been checked in greyscale and under a
   deuteranopia simulation.
 - **A `<title>` element** as the first child, in English, for screen readers.
+
+A shared visual vocabulary runs through the set, so a mark means the same thing
+everywhere. Teal marks what to do or where to look; ink marks what is happening
+to you. Concentric arcs are unwanted sound — leaking through a gap, coming off
+a fan, coming out of someone's mouth. Short radiating strokes are friction.
+Solid arrows are movement or an instruction. A cross is the wrong way, a tick
+the right way.
 
 ## Orientation convention — read this before editing the figure
 
