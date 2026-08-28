@@ -9,6 +9,7 @@ import { demoRoutes } from './features/demo'
 // patient management. Both export `patientRoutes`, hence the alias.
 import { patientRoutes as patientPortalRoutes } from './features/patient/routes'
 import { patientRoutes as patientManagementRoutes } from './features/patients/routes'
+import { rehabRoutes } from './features/rehab/routes'
 import { reviewRoutes } from './features/review/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
@@ -75,6 +76,15 @@ export function AppRoutes() {
         check belongs at the door as well as in the data.
       */}
       {reviewRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {/*
+        Unguarded on purpose. /rehab/safety is what to do during an asthma
+        attack — the one page in this app most worth reaching without first
+        finding a password.
+      */}
+      {rehabRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 

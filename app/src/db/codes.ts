@@ -186,6 +186,22 @@ export const FAMILY_HISTORY_CODES = {
   FAMILY_NONE_KNOWN: 'FAMILY_NONE_KNOWN',
 } as const
 
+/**
+ * Rehabilitation activities a practitioner may assign.
+ *
+ * Deliberately short. The master spec also listed huff coughing, which the
+ * clinical research found to be part of a mucus-clearance protocol evidenced
+ * for cystic fibrosis and COPD — and contraindicated in bronchospasm, i.e. in
+ * exactly this app's population. It is absent on purpose; do not add it back
+ * without a clinician's written say-so.
+ */
+export const REHAB_ACTIVITY_CODES = {
+  PURSED_LIP_BREATHING: 'PURSED_LIP_BREATHING',
+  DIAPHRAGMATIC_BREATHING: 'DIAPHRAGMATIC_BREATHING',
+  BREATHING_RELAXATION_RETRAINING: 'BREATHING_RELAXATION_RETRAINING',
+  EXERCISE_WARM_UP: 'EXERCISE_WARM_UP',
+} as const
+
 export const ALERT_STATUSES = {
   NEW: 'NEW',
   ACKNOWLEDGED: 'ACKNOWLEDGED',
@@ -213,6 +229,7 @@ export type ConsentStatus = (typeof CONSENT_STATUSES)[keyof typeof CONSENT_STATU
 export type RespiratoryHistoryCode =
   (typeof RESPIRATORY_HISTORY_CODES)[keyof typeof RESPIRATORY_HISTORY_CODES]
 export type FamilyHistoryCode = (typeof FAMILY_HISTORY_CODES)[keyof typeof FAMILY_HISTORY_CODES]
+export type RehabActivityCode = (typeof REHAB_ACTIVITY_CODES)[keyof typeof REHAB_ACTIVITY_CODES]
 
 /**
  * Namespace key -> its code list. Drives the i18n exhaustiveness test: every
@@ -240,4 +257,5 @@ export const CODE_REGISTRY: Record<string, readonly string[]> = {
   consentStatus: Object.values(CONSENT_STATUSES),
   respiratoryHistory: Object.values(RESPIRATORY_HISTORY_CODES),
   familyHistory: Object.values(FAMILY_HISTORY_CODES),
+  rehabActivity: Object.values(REHAB_ACTIVITY_CODES),
 }

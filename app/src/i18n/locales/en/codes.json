@@ -141,5 +141,11 @@
     "FAMILY_ALLERGIES": "Allergies in the family",
     "FAMILY_OTHER_RESPIRATORY": "Other lung illness in the family",
     "FAMILY_NONE_KNOWN": "None known"
+  },
+  "rehabActivity": {
+    "PURSED_LIP_BREATHING": "Pursed-lip breathing",
+    "DIAPHRAGMATIC_BREATHING": "Belly breathing",
+    "BREATHING_RELAXATION_RETRAINING": "Breathing and relaxation retraining",
+    "EXERCISE_WARM_UP": "Warm-up before exercise"
   }
 }
