@@ -1,0 +1,73 @@
+{
+  "action": {
+    "close": "Close",
+    "back": "Go back",
+    "dismiss": "Dismiss",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "recordAgain": "Record again",
+    "loading": "Loading…"
+  },
+
+  "field": {
+    "optional": "optional"
+  },
+
+  "disclaimer": {
+    "short": "Research prototype — not a medical device.",
+    "long": "Ausculta is a research prototype. It does not diagnose illness and does not replace a doctor or health worker."
+  },
+
+  "fictional": {
+    "title": "Sample data",
+    "body": "This is made-up information for showing how the app works. It is not a real person and not a real recording.",
+    "shortLabel": "Sample data — not a real patient"
+  },
+
+  "notConnected": {
+    "label": "Not available yet",
+    "body": "This part of Ausculta is not built yet. Nothing is being measured or calculated here.",
+    "noValue": "No value"
+  },
+
+  "source": {
+    "MANUAL_ENTRY": "Typed in by a person",
+    "AUSCULTATION_DERIVED": "Measured by the device",
+    "label": "Where this came from"
+  },
+
+  "confidence": {
+    "label": "How sure the app is",
+    "value": "{{percent}}%",
+    "explanation": "This is how sure the app is about its own guess. It is not the chance that you have an illness."
+  },
+
+  "result": {
+    "heading": "Result of this recording",
+    "SUGGESTIVE": {
+      "title": "Possible finding",
+      "body": "The app heard something in this recording that may need a closer look. This is not a diagnosis. Please show this result to a health worker or a doctor."
+    },
+    "NO_ABNORMALITY_DETECTED": {
+      "title": "Nothing unusual detected",
+      "body": "The app did not hear anything unusual in this recording. This does not rule out illness. If you feel unwell, see a health worker or a doctor even if this result looks fine."
+    },
+    "UNCERTAIN": {
+      "title": "Not clear",
+      "body": "The app could not tell from this recording. This does not mean you are well, and it does not mean you are unwell. Try recording again, or ask a health worker."
+    },
+    "INSUFFICIENT_QUALITY": {
+      "title": "Recording was not clear enough",
+      "body": "The sound was too noisy or too quiet to check. Nothing has been decided about your health. Please record again somewhere quieter."
+    }
+  },
+
+  "empty": {
+    "title": "Nothing here yet",
+    "body": "There is nothing to show on this screen yet."
+  },
+
+  "toast": {
+    "region": "Notifications"
+  }
+}
