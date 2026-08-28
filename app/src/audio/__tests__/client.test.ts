@@ -180,18 +180,87 @@ describe('ClassifierClient', () => {
     await expect(second).resolves.toEqual({ Healthy: 1 })
   })
 
-  it('fails in-flight requests when the worker itself errors', async () => {
-    const promise = client.classify(new Float32Array([1]))
+  it('respawns after a worker-level failure instead of posting into a corpse', async () => {
+    // The failure that matters: a 404 on the worker asset or a failed 8 MB
+    // WASM fetch. analyze.ts clears its cached init promise so the next call
+    // retries — that retry has to get a LIVE worker, or the user waits on a
+    // promise that never settles.
+    const first = client.classify(new Float32Array([1]))
     await flush()
     worker().onerror?.({ message: 'importScripts failed' } as ErrorEvent)
-    await expect(promise).rejects.toThrow('importScripts failed')
+    await expect(first).rejects.toThrow('importScripts failed')
+    expect(worker().terminated).toBe(true)
+
+    const retry = client.load('/models/ei-disease-v5/')
+    await flush()
+
+    expect(FakeWorker.instances).toHaveLength(2)
+    const respawned = FakeWorker.instances[1]
+    expect(respawned.posted[0].request).toMatchObject({ type: 'load' })
+    respawned.replyTo(0, loadedPayload)
+    await expect(retry).resolves.toMatchObject({ labels: loadedPayload.labels })
   })
 
-  it('fails in-flight requests on an undeserialisable message', async () => {
-    const promise = client.classify(new Float32Array([1]))
+  it('respawns after an undeserialisable message too', async () => {
+    const first = client.classify(new Float32Array([1]))
     await flush()
     worker().onmessageerror?.()
-    await expect(promise).rejects.toThrow(/deserialised/)
+    await expect(first).rejects.toThrow(/deserialised/)
+
+    const retry = client.load('/models/ei-disease-v5/')
+    await flush()
+    expect(FakeWorker.instances).toHaveLength(2)
+    FakeWorker.instances[1].replyTo(0, loadedPayload)
+    await expect(retry).resolves.toBeTruthy()
+  })
+
+  it('times out a worker that never answers, restarts it, and stays usable', async () => {
+    const quick = new ClassifierClient('/audio/classifier.worker.js', {
+      loadMs: 25,
+      requestMs: 25,
+    })
+    try {
+      const stuck = quick.classify(new Float32Array([1]))
+      await flush()
+      expect(FakeWorker.instances).toHaveLength(1)
+
+      // No reply ever comes — exactly what a wedged worker looks like.
+      await expect(stuck).rejects.toThrow(/did not answer "classify" within 25 ms/)
+      expect(FakeWorker.instances[0].terminated).toBe(true)
+
+      const after = quick.load('/models/ei-disease-v5/')
+      await flush()
+      expect(FakeWorker.instances).toHaveLength(2)
+      FakeWorker.instances[1].replyTo(0, loadedPayload)
+      await expect(after).resolves.toBeTruthy()
+    } finally {
+      quick.dispose()
+    }
+  })
+
+  it('does not fire a timeout for a request that was answered', async () => {
+    const quick = new ClassifierClient('/audio/classifier.worker.js', {
+      loadMs: 25,
+      requestMs: 25,
+    })
+    try {
+      const promise = quick.classify(new Float32Array([1]))
+      await flush()
+      FakeWorker.instances[0].replyTo(0, {
+        type: 'classified',
+        results: [{ label: 'Healthy', value: 1 }],
+        anomaly: 0,
+      })
+      await expect(promise).resolves.toEqual({ Healthy: 1 })
+
+      // Well past the deadline: the settled request must not retroactively
+      // kill a healthy worker.
+      await new Promise((resolve) => setTimeout(resolve, 60))
+      expect(FakeWorker.instances[0].terminated).toBe(false)
+      expect(FakeWorker.instances).toHaveLength(1)
+    } finally {
+      quick.dispose()
+    }
   })
 
   it('terminates the worker and rejects pending work on dispose', async () => {

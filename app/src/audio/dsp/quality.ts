@@ -89,10 +89,14 @@ function highFrequencyRatio(spectrum: Float64Array, total: number): number {
 }
 
 /**
- * All quality metrics for a 16 kHz int16-range buffer. The caller's buffer is
- * never modified: DC removal works on a copy.
+ * All quality metrics for a 16 kHz int16-range buffer, together with the
+ * mean-removed signal they were measured on. The caller's buffer is never
+ * modified: DC removal works on a copy.
  */
-export function computeQualityMetrics(pcm16k: Float32Array): QualityMetrics {
+function computeQualityMetrics(pcm16k: Float32Array): {
+  metrics: QualityMetrics
+  centered: Float32Array
+} {
   const length = pcm16k.length
   const durationMs = (length / SAMPLE_RATE) * 1000
 
@@ -118,24 +122,40 @@ export function computeQualityMetrics(pcm16k: Float32Array): QualityMetrics {
   for (let k = 1; k < spectrum.length; k++) total += spectrum[k]
 
   return {
-    durationMs,
-    rmsDbfs: windowRmsDbfs(centered, 0, length),
-    clipFraction,
-    /** Signed, as a fraction of full scale. */
-    dcOffset: mean / INT16_FULL_SCALE,
-    spectralFlatness: spectralFlatness(spectrum, total),
-    tonalityRatio: tonalityRatio(spectrum, total),
-    hfEnergyRatio: highFrequencyRatio(spectrum, total),
+    metrics: {
+      durationMs,
+      rmsDbfs: windowRmsDbfs(centered, 0, length),
+      clipFraction,
+      /** Signed, as a fraction of full scale. */
+      dcOffset: mean / INT16_FULL_SCALE,
+      spectralFlatness: spectralFlatness(spectrum, total),
+      tonalityRatio: tonalityRatio(spectrum, total),
+      hfEnergyRatio: highFrequencyRatio(spectrum, total),
+    },
+    centered,
   }
 }
 
 /**
- * Metrics plus the reject/warn decisions. `ok` is false if and only if at
- * least one flag has severity 'reject'; a false `ok` means inference must not
- * run at all.
+ * The quality report plus the mean-removed buffer every level metric in it was
+ * measured on.
+ *
+ * Downstream per-window level measurements MUST use `centered`, not the raw
+ * input. Measuring the clip on one signal and its windows on another is not a
+ * cosmetic inconsistency: a DC bias of just 0.18 % of full scale (~58 counts)
+ * lifts a digitally silent window's RAW rms to WINDOW_SILENCE_DBFS, which
+ * would silently switch quiet-window exclusion off altogether — while
+ * DC_OFFSET_WARN (2 %) is an order of magnitude away and only warns. Since the
+ * model scores silence as Healthy at 0.988, that would let the silent half of
+ * a half-contact recording vote its way to a false "no abnormality".
  */
-export function precheckQuality(pcm16k: Float32Array): QualityReport {
-  const metrics = computeQualityMetrics(pcm16k)
+export interface QualityAnalysis {
+  report: QualityReport
+  centered: Float32Array
+}
+
+export function analyzeQuality(pcm16k: Float32Array): QualityAnalysis {
+  const { metrics, centered } = computeQualityMetrics(pcm16k)
   const flags: QualityFlag[] = []
 
   if (metrics.durationMs < TUNABLES.MIN_DURATION_S * 1000) {
@@ -208,5 +228,17 @@ export function precheckQuality(pcm16k: Float32Array): QualityReport {
     })
   }
 
-  return { ok: !flags.some((flag) => flag.severity === 'reject'), flags, metrics }
+  return {
+    report: { ok: !flags.some((flag) => flag.severity === 'reject'), flags, metrics },
+    centered,
+  }
+}
+
+/**
+ * Metrics plus the reject/warn decisions. `ok` is false if and only if at
+ * least one flag has severity 'reject'; a false `ok` means inference must not
+ * run at all.
+ */
+export function precheckQuality(pcm16k: Float32Array): QualityReport {
+  return analyzeQuality(pcm16k).report
 }

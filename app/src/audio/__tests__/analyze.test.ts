@@ -11,7 +11,7 @@ import {
 import { notConnectedAnalyze } from '../notConnected'
 import { DEFAULT_MODEL_ID, INT16_FULL_SCALE, MODEL_REGISTRY, TUNABLES } from '../constants'
 import type { CaptureMeta, ModelInfo } from '../types'
-import { SR, quantizeToInt16, shapedNoise, sineWave } from './signals'
+import { SR, addDcOffset, quantizeToInt16, shapedNoise, sineWave } from './signals'
 import { buildWav } from './wavBuilder'
 
 const ENTRY = MODEL_REGISTRY[DEFAULT_MODEL_ID]
@@ -30,9 +30,22 @@ const MODEL: ModelInfo = {
 
 const META: CaptureMeta = { source: 'device-wav', originalMime: 'audio/wav' }
 
+/**
+ * Fingerprint of one window as the classifier received it. Recording the
+ * length alone would let a bug that classified the SAME window N times pass
+ * every assertion in this file, since window counts come from planSegments and
+ * startMs/endMs/rmsDbfs are all computed independently of the slice. The first
+ * and last sample pin both bounds of the actual PCM handed over.
+ */
+interface ClassifiedWindow {
+  length: number
+  first: number
+  last: number
+}
+
 interface SpyPort extends ClassifierPort {
   initCalls: number
-  classified: number[]
+  classified: ClassifiedWindow[]
 }
 
 /** A classifier stand-in that records every window it was handed. */
@@ -45,7 +58,7 @@ function spyPort(respond: (pcm: Float32Array) => Record<string, number>): SpyPor
       return MODEL
     },
     async classify(pcm) {
-      port.classified.push(pcm.length)
+      port.classified.push({ length: pcm.length, first: pcm[0], last: pcm[pcm.length - 1] })
       return respond(pcm)
     },
     dispose() {},
@@ -128,7 +141,7 @@ describe('analyzeFile — the happy path', () => {
 
     expect(result.quality.ok).toBe(true)
     expect(result.windows).toHaveLength(7) // 4.0 s at a 500 ms stride
-    expect(port.classified).toEqual(Array(7).fill(ENTRY.windowSamples))
+    expect(port.classified.map((w) => w.length)).toEqual(Array(7).fill(ENTRY.windowSamples))
     expect(result.aggregate).toMatchObject({ windowsUsed: 7, windowsTotal: 7, agreement: 1 })
     expect(result.verdict).toEqual({
       kind: 'no-abnormality',
@@ -167,6 +180,81 @@ describe('analyzeFile — the happy path', () => {
     }
     expect(result.aggregate!.windowsUsed).toBe(result.windows.length - excluded.length)
     expect(result.aggregate!.windowsTotal).toBe(result.windows.length)
+  })
+
+  it('hands the classifier consecutive strided windows, not the same one repeatedly', async () => {
+    const port = spyPort(() => uniform())
+    setClassifierPort(port)
+
+    const samples = quantizeToInt16(shapedNoise(4 * SR))
+    await analyzeFile(wavBlob(samples), META)
+
+    const stride = (TUNABLES.STRIDE_MS / 1000) * SR
+    expect(port.classified).toHaveLength(7)
+    port.classified.forEach((window, i) => {
+      expect(window.length).toBe(ENTRY.windowSamples)
+      expect(window.first).toBe(samples[i * stride])
+      expect(window.last).toBe(samples[i * stride + ENTRY.windowSamples - 1])
+    })
+    // And the windows really are distinct, not seven copies of one slice.
+    expect(new Set(port.classified.map((w) => w.first)).size).toBe(7)
+  })
+
+  it('excludes silent windows even when the capture chain carries a DC offset', async () => {
+    // THE REGRESSION THIS GUARDS: per-window level used to be measured on the
+    // raw buffer while the gate measured the clip on the mean-removed one. A
+    // DC bias of only ~0.18 % of full scale lifts a digitally silent window's
+    // raw RMS above WINDOW_SILENCE_DBFS, which switched exclusion off
+    // entirely. 0.5 % is used here: eight times past the breaking point, yet
+    // still a quarter of DC_OFFSET_WARN, so the clip does not even earn a
+    // warning. The model scores silence as Healthy 0.988, so an unexcluded
+    // silent half votes its way to a false "no abnormality".
+    const halfContact = shapedNoise(4 * SR)
+    halfContact.fill(0, 2.5 * SR)
+    const biased = addDcOffset(halfContact, 0.005)
+
+    const port = spyPort(() => ({
+      Asthma: 0.05,
+      Bronchiolitis: 0.05,
+      Healthy: 0.85,
+      Pneumonia: 0.05,
+    }))
+    setClassifierPort(port)
+
+    const result = await analyzeFile(wavBlob(quantizeToInt16(biased)), META)
+
+    expect(result.quality.ok).toBe(true)
+    expect(result.quality.flags.map((f) => f.code)).not.toContain('dc-offset')
+
+    const excluded = result.windows.filter((w) => w.excluded)
+    expect(excluded.length).toBeGreaterThan(0)
+    for (const window of excluded) {
+      expect(window.rmsDbfs).toBeLessThan(TUNABLES.WINDOW_SILENCE_DBFS)
+    }
+    expect(result.aggregate!.windowsUsed).toBeLessThan(result.aggregate!.windowsTotal)
+  })
+
+  it('measures window level on the centred signal, matching the clip-level metric', async () => {
+    // The same audio with and without a DC offset must yield the same
+    // per-window levels; if it does not, the two measurements have diverged
+    // again.
+    setClassifierPort(spyPort(() => uniform()))
+    const clean = shapedNoise(4 * SR)
+    clean.fill(0, 2.5 * SR)
+
+    const withoutOffset = await analyzeFile(wavBlob(quantizeToInt16(clean)), META)
+    setClassifierPort(spyPort(() => uniform()))
+    const withOffset = await analyzeFile(
+      wavBlob(quantizeToInt16(addDcOffset(clean, 0.005))),
+      META,
+    )
+
+    expect(withOffset.windows.map((w) => w.excluded)).toEqual(
+      withoutOffset.windows.map((w) => w.excluded),
+    )
+    withOffset.windows.forEach((window, i) => {
+      expect(window.rmsDbfs).toBeCloseTo(withoutOffset.windows[i].rmsDbfs, 1)
+    })
   })
 
   it('always fills in the original sample rate and the tunables version', async () => {
@@ -337,6 +425,15 @@ describe('notConnectedAnalyze', () => {
     expect(result.audio.pcm16k.length).toBe(4 * SR)
     expect(result.meta.originalSampleRate).toBe(16000)
     expect(result.tunablesVersion).toBe(TUNABLES.tunablesVersion)
+  })
+
+  it('refuses an unknown model id instead of fabricating model identity', async () => {
+    // Results are stored; a record claiming an id it does not have, while
+    // carrying the default model's labels and deploy version, would make a
+    // future retrained model impossible to reason about.
+    await expect(
+      notConnectedAnalyze(wavBlob(quantizeToInt16(shapedNoise(4 * SR))), META, 'not-a-model'),
+    ).rejects.toThrow('Unknown model id')
   })
 
   it('keeps the model-not-connected verdict even when quality also failed', async () => {

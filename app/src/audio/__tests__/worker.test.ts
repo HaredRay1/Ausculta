@@ -96,6 +96,18 @@ function startWorker(): WorkerHarness {
   }
 }
 
+/**
+ * Guard against the Tier-2 safety layer disappearing green. The suites below
+ * are skipIf-guarded because they cannot run without the deployment, but a
+ * missing model must FAIL here, loudly, rather than silently taking the
+ * silence/sine/noise safety assertions out of the run with it.
+ */
+describe('the Edge Impulse deployment files', () => {
+  it('are committed, so the real-WASM suites cannot silently skip', () => {
+    expect(assetsPresent).toBe(true)
+  })
+})
+
 describe.skipIf(!assetsPresent)('classifier.worker.js against the real WASM', () => {
   let worker: WorkerHarness
   let loaded: Extract<WorkerResponse, { type: 'loaded' }>

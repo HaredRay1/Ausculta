@@ -8,7 +8,7 @@ import {
   type ModelRegistryEntry,
 } from './constants'
 import { decodeFromBuffer, decodeToPcm16k, type DecodedAudio } from './decode/decode'
-import { precheckQuality } from './dsp/quality'
+import { analyzeQuality } from './dsp/quality'
 import { planSegments, windowRmsDbfs } from './dsp/segment'
 import { toInt16 } from './dsp/wavEncode'
 import type { AnalysisResult, CaptureMeta, ModelInfo, WindowResult } from './types'
@@ -165,7 +165,11 @@ async function runPipeline(
   const entry = requireEntry(modelId)
 
   const qualityStart = now()
-  const quality = precheckQuality(decoded.pcm16k)
+  // One centring for the whole pipeline: `centered` is the mean-removed signal
+  // the clip-level metrics were measured on, and per-window levels below are
+  // measured on it too. See QualityAnalysis for why measuring the clip and its
+  // windows on different signals would disable quiet-window exclusion.
+  const { report: quality, centered } = analyzeQuality(decoded.pcm16k)
   const qualityMs = now() - qualityStart
 
   const audio = {
@@ -203,7 +207,13 @@ async function runPipeline(
   const inferenceStart = now()
   const windows: WindowResult[] = []
   for (const segment of planSegments(decoded.pcm16k.length)) {
-    const rmsDbfs = windowRmsDbfs(decoded.pcm16k, segment.startSample, segment.endSample)
+    // Level is measured on the mean-removed signal, so a DC-biased capture
+    // chain cannot make a silent window look loud enough to vote.
+    const rmsDbfs = windowRmsDbfs(centered, segment.startSample, segment.endSample)
+    // The CLASSIFIER, though, gets the audio as decoded. The impulse's own DSP
+    // block front-ends the model, the device firmware already subtracts its
+    // ADC bias, and the captured fixtures pin what the model sees — changing
+    // its input is a calibration decision, not a bug fix.
     // A fresh copy per window: client.classify transfers the buffer away.
     const slice = decoded.pcm16k.slice(segment.startSample, segment.endSample)
     const probabilities = await classifier.classify(slice)

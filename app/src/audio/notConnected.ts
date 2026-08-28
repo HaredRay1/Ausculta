@@ -20,8 +20,17 @@ import type { AnalysisResult, CaptureMeta, ModelInfo } from './types'
  */
 const MODEL_NOT_CONNECTED_MESSAGE_KEY = 'verdict.modelNotConnected'
 
+/**
+ * Model identity carried by a result must be TRUTHFUL even on the no-model
+ * path: these results are stored, and a retrained model can only replace this
+ * one safely if every stored result says which model produced it. Falling back
+ * to the default entry while keeping the requested `id` would mint a record
+ * claiming an id it does not have, carrying another model's labels and deploy
+ * version. So an unknown id throws here exactly as it does in analyze.ts.
+ */
 function modelInfo(modelId: string): ModelInfo {
-  const entry = MODEL_REGISTRY[modelId] ?? MODEL_REGISTRY[DEFAULT_MODEL_ID]
+  const entry = MODEL_REGISTRY[modelId]
+  if (!entry) throw new Error(`Unknown model id "${modelId}"`)
   return {
     id: modelId,
     name: entry.name,

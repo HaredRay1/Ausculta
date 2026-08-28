@@ -1,4 +1,4 @@
-import { CLASSIFIER_WORKER_URL } from '../constants'
+import { CLASSIFIER_TIMEOUTS, CLASSIFIER_WORKER_URL } from '../constants'
 import type { ResponseFor, WorkerRequest, WorkerRequestType, WorkerResponse } from './protocol'
 
 interface Pending {
@@ -25,7 +25,10 @@ export class ClassifierClient {
   private nextId = 1
   private disposed = false
 
-  constructor(private readonly workerUrl: string = CLASSIFIER_WORKER_URL) {}
+  constructor(
+    private readonly workerUrl: string = CLASSIFIER_WORKER_URL,
+    private readonly timeouts: { loadMs: number; requestMs: number } = CLASSIFIER_TIMEOUTS,
+  ) {}
 
   private ensureWorker(): Worker {
     if (this.disposed) throw new Error('ClassifierClient has been disposed')
@@ -44,13 +47,33 @@ export class ClassifierClient {
     // reaches onmessage, so every in-flight request has to be failed by hand
     // or the pipeline hangs forever.
     worker.onerror = (event: ErrorEvent) => {
-      this.rejectAll(new Error(event.message || 'Classifier worker failed to start'))
+      this.discardWorker(worker, new Error(event.message || 'Classifier worker failed to start'))
     }
     worker.onmessageerror = () => {
-      this.rejectAll(new Error('Classifier worker sent a message that could not be deserialised'))
+      this.discardWorker(
+        worker,
+        new Error('Classifier worker sent a message that could not be deserialised'),
+      )
     }
     this.worker = worker
     return worker
+  }
+
+  /**
+   * Fail everything in flight AND throw the worker away, so the next request
+   * spawns a fresh one.
+   *
+   * Keeping a dead worker around is what turns a recoverable failure into a
+   * permanent one: analyze.ts clears its cached init promise so the next call
+   * can retry, and that retry would otherwise get this same corpse back and
+   * post into the void.
+   */
+  private discardWorker(worker: Worker | null, error: Error): void {
+    if (worker && this.worker === worker) {
+      this.worker = null
+      worker.terminate()
+    }
+    this.rejectAll(error)
   }
 
   private rejectAll(error: Error): void {
@@ -60,15 +83,34 @@ export class ClassifierClient {
 
   private send<T extends WorkerRequestType>(
     request: Omit<Extract<WorkerRequest, { type: T }>, 'id'>,
+    timeoutMs: number,
     transfer: Transferable[] = [],
   ): Promise<ResponseFor<T>> {
     const run = async (): Promise<ResponseFor<T>> => {
       const worker = this.ensureWorker()
       const id = this.nextId++
       return new Promise<ResponseFor<T>>((resolve, reject) => {
+        const timer = setTimeout(() => {
+          this.pending.delete(id)
+          // A worker that missed its deadline is presumed wedged: bin it so the
+          // next request starts clean rather than queueing behind a corpse.
+          this.discardWorker(worker, new Error('Classifier worker was restarted after a timeout'))
+          reject(
+            new Error(
+              `Classifier did not answer "${request.type}" within ${timeoutMs} ms and was restarted`,
+            ),
+          )
+        }, timeoutMs)
+
         this.pending.set(id, {
-          resolve: (response) => resolve(response as ResponseFor<T>),
-          reject,
+          resolve: (response) => {
+            clearTimeout(timer)
+            resolve(response as ResponseFor<T>)
+          },
+          reject: (error) => {
+            clearTimeout(timer)
+            reject(error)
+          },
         })
         worker.postMessage({ ...request, id }, transfer)
       })
@@ -82,7 +124,7 @@ export class ClassifierClient {
 
   /** Spawn the worker (if needed), load the model, report what it says it is. */
   load(baseUrl: string): Promise<ResponseFor<'load'>> {
-    return this.send<'load'>({ type: 'load', baseUrl })
+    return this.send<'load'>({ type: 'load', baseUrl }, this.timeouts.loadMs)
   }
 
   /**
@@ -91,7 +133,9 @@ export class ClassifierClient {
    * freshly sliced window each time.
    */
   async classify(pcm: Float32Array): Promise<Record<string, number>> {
-    const response = await this.send<'classify'>({ type: 'classify', pcm }, [pcm.buffer])
+    const response = await this.send<'classify'>({ type: 'classify', pcm }, this.timeouts.requestMs, [
+      pcm.buffer,
+    ])
     const probabilities: Record<string, number> = {}
     for (const result of response.results) probabilities[result.label] = result.value
     return probabilities
@@ -99,13 +143,11 @@ export class ClassifierClient {
 
   /** Clear continuous-inference state. Unused until live mic mode lands. */
   reset(): Promise<ResponseFor<'reset'>> {
-    return this.send<'reset'>({ type: 'reset' })
+    return this.send<'reset'>({ type: 'reset' }, this.timeouts.requestMs)
   }
 
   dispose(): void {
     this.disposed = true
-    this.rejectAll(new Error('Classifier was disposed'))
-    this.worker?.terminate()
-    this.worker = null
+    this.discardWorker(this.worker, new Error('Classifier was disposed'))
   }
 }

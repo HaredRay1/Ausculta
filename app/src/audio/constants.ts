@@ -61,6 +61,25 @@ export const DEFAULT_MODEL_ID = 'ei-disease-v5'
  *  imported through Vite — see classifier/client.ts for why. */
 export const CLASSIFIER_WORKER_URL = '/audio/classifier.worker.js'
 
+/**
+ * RPC timeouts. Infrastructure, not clinical thresholds, so they live outside
+ * TUNABLES and do not move `tunablesVersion`.
+ *
+ * Every request needs a deadline: without one, a 404 on the worker asset or a
+ * stalled 8 MB WASM fetch on a clinic connection leaves the caller awaiting a
+ * promise that never settles — a health worker sees a spinner forever instead
+ * of an error they can act on.
+ */
+export const CLASSIFIER_TIMEOUTS = {
+  /** Fetching, compiling and initialising the ~8 MB impulse, cold, on a slow
+   *  mobile connection. Generous on purpose — an over-eager deadline here
+   *  would fail loads that would have succeeded. */
+  loadMs: 90_000,
+  /** One 1-second window through an already-warm model. Two orders of
+   *  magnitude above the observed ~10 ms, so only a wedged worker trips it. */
+  requestMs: 20_000,
+} as const
+
 export const TUNABLES = {
   /** Bumped whenever any value below changes, so stored results stay
    *  interpretable against the thresholds that produced them. */
@@ -81,10 +100,23 @@ export const TUNABLES = {
   CONFIDENCE_MEAN_MIN: 0.6,
   /** Mean probability Healthy must reach before we say "no abnormality". */
   HEALTHY_MEAN_MIN: 0.6,
-  /** Fraction of voting windows that must agree with the aggregate winner. */
+  /** Fraction of voting windows that must agree with the aggregate winner.
+   *  TODAY THIS IS THE ONLY ACTIVE SEPARATION GUARD — see MARGIN_MIN. */
   AGREEMENT_MIN: 0.5,
-  /** Gap between the winning and runner-up mean probability. Guards against
-   *  a two-way split that averages into a spurious winner. */
+  /**
+   * Gap between the winning and runner-up mean probability.
+   *
+   * CURRENTLY INERT, deliberately. Mean probabilities sum to 1, so a winner at
+   * or above CONFIDENCE_MEAN_MIN (0.60) leaves at most 0.40 for the runner-up
+   * and the margin is therefore always >= 0.20. This clause cannot downgrade
+   * any verdict as the numbers stand, and AGREEMENT_MIN is doing all the work.
+   *
+   * It is kept, unchanged, because both values are placeholders awaiting
+   * calibration against labelled field recordings: MARGIN_MIN becomes
+   * load-bearing the moment calibration lowers CONFIDENCE_MEAN_MIN below
+   * 0.575, which is plausible. Do not read the decision table as having two
+   * independent separation guards — it has one, plus one held in reserve.
+   */
   MARGIN_MIN: 0.15,
 
   // --- Quality gate: time domain ----------------------------------------
