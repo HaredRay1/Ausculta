@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+/* System font stack only — no webfonts, no CDN. */
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+}
