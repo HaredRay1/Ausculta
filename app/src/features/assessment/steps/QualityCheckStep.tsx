@@ -75,7 +75,12 @@ export function QualityCheckStep({
                 )}
                 <div className="min-w-0">
                   <p className="text-base text-on-surface">{t(`quality.flag.${flag.code}`)}</p>
-                  <p className="text-sm text-muted">{t(mistakeCaptionKey(flag.code))}</p>
+                  {/* The fix is shown once. Where a drawing covers this flag it
+                      carries the wording as its caption below; only a flag with
+                      no drawing spells it out here. */}
+                  {MISTAKE_GUIDE_FOR_FLAG[flag.code] === undefined && (
+                    <p className="text-sm text-muted">{t(mistakeCaptionKey(flag.code))}</p>
+                  )}
                   <p className="text-xs font-medium text-muted">
                     {t(`quality.severity.${flag.severity}`)}
                   </p>
