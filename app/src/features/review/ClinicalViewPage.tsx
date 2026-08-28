@@ -142,20 +142,19 @@ export function ClinicalViewPage({ repository }: ClinicalViewPageProps = {}) {
         </Card>
       </Section>
 
-      <div className="flex flex-col gap-3 pb-4">
+      {/*
+        One primary action. The printable summary is not built yet, and a
+        button leading nowhere is scored as a navigation failure by the
+        validation protocol -- validators navigate unaided, so a dead end reads
+        as a broken app rather than an unbuilt feature.
+      */}
+      <div className="pb-4">
         <Button
           size="lg"
           fullWidth
           onClick={() => navigate(`/review/${assessment.id}/decide`)}
         >
           {t('case.startReview')}
-        </Button>
-        <Button
-          variant="secondary"
-          fullWidth
-          onClick={() => navigate(`/review/${assessment.id}/report`)}
-        >
-          {t('case.openReport')}
         </Button>
       </div>
     </Page>
@@ -239,7 +238,7 @@ function PatientContext({
             {symptoms.map((symptom) => (
               <li key={symptom.code} className="text-base text-on-surface">
                 {t(`codes:symptom.${symptom.code}`)}
-                {symptom.present ? '' : ` - ${t('label.notReviewed')}`}
+                {symptom.present ? '' : ` - ${t('case.symptomAbsent')}`}
                 {symptom.severityCode !== undefined &&
                   ` - ${t(`codes:symptomSeverity.${symptom.severityCode}`)}`}
               </li>
@@ -292,7 +291,7 @@ function HistoryList({
         <li key={entry.code} className="flex items-baseline justify-between gap-3">
           <span className="text-base text-on-surface">{t(`codes:${namespace}.${entry.code}`)}</span>
           <span className={entry.present ? 'text-base font-semibold text-on-surface' : 'text-base text-muted'}>
-            {entry.present ? 'Yes' : 'No'}
+            {entry.present ? t('case.yes') : t('case.no')}
           </span>
         </li>
       ))}

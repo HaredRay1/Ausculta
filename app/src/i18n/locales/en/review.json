@@ -7,7 +7,6 @@
     "notReviewed": "No practitioner has reviewed this yet",
     "notReviewedNote": "Only the automatic result is available so far."
   },
-
   "queue": {
     "title": "Cases to review",
     "subtitle": "Most in need of attention first",
@@ -32,7 +31,6 @@
     "notPermitted": "Reviewing is for practitioners",
     "notPermittedHint": "This queue is not available in your role."
   },
-
   "case": {
     "title": "Case review",
     "notFound": "Case not available",
@@ -58,9 +56,11 @@
     "age_one": "{{count}} year old",
     "age_other": "{{count}} years old",
     "ageUnknown": "Age not known",
-    "reviewedOn": "Reviewed {{date}}"
+    "reviewedOn": "Reviewed {{date}}",
+    "symptomAbsent": "reported as absent",
+    "yes": "Yes",
+    "no": "No"
   },
-
   "location": {
     "quality": "Recording quality",
     "qualityOk": "Usable",
@@ -77,7 +77,6 @@
     "unchanged": "No change in respiratory sound pattern was detected between these recordings.",
     "comparedWith": "Compared with {{date}}"
   },
-
   "form": {
     "title": "Your conclusion",
     "intro": "Record what you conclude about this assessment. Your conclusion is stored separately from the automatic result, which is never changed.",
@@ -100,7 +99,6 @@
     "backToQueue": "Next case",
     "immutabilityNote": "Submitting does not change the automatic result. It is kept exactly as the app produced it."
   },
-
   "outcome": {
     "CONFIRMED": "I agree with the automatic result",
     "CONFIRMED_DESC": "The app's result matches what you hear.",
@@ -113,13 +111,11 @@
     "REPEAT_REQUESTED": "Record this location again",
     "REPEAT_REQUESTED_DESC": "Ask the health worker to repeat a recording, and say why."
   },
-
   "repeat": {
     "title": "Repeat requested",
     "at": "At {{location}}",
     "reason": "Reason: {{reason}}"
   },
-
   "report": {
     "title": "Assessment summary",
     "patientReported": "What the patient reported",
@@ -129,7 +125,6 @@
     "print": "Print",
     "generatedOn": "Printed {{date}}"
   },
-
   "error": {
     "REVIEW_NOT_FOUND": "That case is not available to you.",
     "REVIEW_NOT_PERMITTED": "You do not have permission to review.",
@@ -140,7 +135,6 @@
     "REVIEW_UNKNOWN_RECORDING": "That recording is not part of this assessment.",
     "SUBMIT_FAILED": "Your conclusion could not be saved. Nothing was lost — try again."
   },
-
   "auditAction": {
     "REVIEW_SUBMITTED": "Clinical review submitted",
     "REVIEW_REPEAT_REQUESTED": "Repeat recording requested"
