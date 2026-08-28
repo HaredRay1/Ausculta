@@ -73,6 +73,7 @@ export function AssessmentWizard(props: AssessmentWizardProps = {}) {
             busy={state.busy}
             errorKey={state.errorKey}
             onStart={() => void wizard.start()}
+            onChoosePatient={() => navigate('/patients')}
           />
         )}
 

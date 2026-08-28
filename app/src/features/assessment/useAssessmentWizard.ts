@@ -67,6 +67,8 @@ export interface WizardState {
   /** The analysed result the result screen renders. */
   analysis: AnalysisResult | null
   recordedLocations: LocationCode[]
+  /** The patient's name, once read. Null while unknown or not on this device. */
+  patientName: string | null
   /** i18n key of the import failure, if the chosen file could not be read. */
   importErrorKey: string | null
   /** i18n key of a failure in this app rather than in the recording. */
@@ -84,6 +86,7 @@ const INITIAL: WizardState = {
   precheck: null,
   analysis: null,
   recordedLocations: [],
+  patientName: null,
   importErrorKey: null,
   errorKey: null,
   busy: false,
@@ -172,7 +175,12 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     async function open() {
       const skipDeviceGuide = await deps.current.readSkipGuide()
       if (assessmentId === null) {
-        if (!cancelled) patch({ step: 'patient', patientId, skipDeviceGuide })
+        if (cancelled) return
+        patch({ step: 'patient', patientId, skipDeviceGuide })
+        if (patientId !== null) {
+          const patient = await deps.current.store.loadPatient(patientId)
+          if (!cancelled) patch({ patientName: patient?.name ?? null })
+        }
         return
       }
 
@@ -191,6 +199,8 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
         recordedLocations: loaded.recordedLocations,
         skipDeviceGuide,
       })
+      const patient = await deps.current.store.loadPatient(loaded.assessment.patientId)
+      if (!cancelled) patch({ patientName: patient?.name ?? null })
     }
 
     void open()
@@ -201,6 +211,17 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
 
   const start = useCallback(async () => {
     if (patientId === null) return
+
+    // Backing out to this screen and pressing Start again is ordinary
+    // navigation, not a request for a second assessment. Creating one here
+    // would strand every recording already attached to the first — and leave
+    // the wizard pointing at an empty draft that cannot be submitted, while
+    // the position picker still showed those positions as recorded.
+    if (state.assessmentId !== null) {
+      patch({ step: state.skipDeviceGuide ? 'location' : 'deviceGuide', errorKey: null })
+      return
+    }
+
     patch({ busy: true, errorKey: null })
     try {
       const assessment = await deps.current.store.createDraft({
@@ -217,7 +238,7 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     } catch {
       patch({ busy: false, errorKey: 'error.saveFailed' })
     }
-  }, [actorId, interfaceLanguage, isDemo, patch, patientId, state.skipDeviceGuide])
+  }, [actorId, interfaceLanguage, isDemo, patch, patientId, state.assessmentId, state.skipDeviceGuide])
 
   const finishDeviceGuide = useCallback(
     async (dontShowAgain: boolean) => {

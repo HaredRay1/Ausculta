@@ -3,7 +3,7 @@ import { logAction } from '../../../audit/audit'
 import { AUDIO_SOURCES, REVIEW_STATUSES } from '../../../db/codes'
 import type { AudioSource, LocationCode } from '../../../db/codes'
 import { db as defaultDb, type AuscultaDB } from '../../../db/db'
-import type { Assessment, DemoFlag, Recording } from '../../../db/types'
+import type { Assessment, DemoFlag, Patient, Recording } from '../../../db/types'
 import { ASSESSMENT_AUDIT_ACTIONS } from './auditActions'
 import { toAiOutcome } from './mapping'
 
@@ -95,6 +95,8 @@ export interface AssessmentStore {
   load(assessmentId: string): Promise<LoadedAssessment | null>
   saveRecording(input: SaveRecordingInput): Promise<Recording>
   readAudio(audioBlobId: string): Promise<Blob | null>
+  /** The patient this assessment is about, for the confirmation screen. */
+  loadPatient(patientId: string): Promise<Patient | null>
   submit(assessmentId: string, actorId: string): Promise<Assessment>
 }
 
@@ -276,7 +278,16 @@ export function createAssessmentStore(database: AuscultaDB = defaultDb): Assessm
     return (await database.audioBlobs.get(audioBlobId))?.blob ?? null
   }
 
-  return { createDraft, load, saveRecording, readAudio, submit }
+  /**
+   * Read-only. This feature does not create or list patients — another owns
+   * that — but an id alone cannot confirm a person, and recording against the
+   * wrong patient is the one mistake in this flow nothing downstream undoes.
+   */
+  async function loadPatient(patientId: string): Promise<Patient | null> {
+    return (await database.patients.get(patientId)) ?? null
+  }
+
+  return { createDraft, load, saveRecording, readAudio, loadPatient, submit }
 }
 
 /** The store bound to the app's real database. */

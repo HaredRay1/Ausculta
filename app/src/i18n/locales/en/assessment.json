@@ -17,7 +17,8 @@
     "subtitle": "Check that you have the right person before you start.",
     "idLabel": "Patient ID",
     "missingTitle": "No patient chosen",
-    "missingBody": "Go back and choose a patient before starting an assessment.",
+    "missingBody": "An assessment is always about one person. Choose the patient first, then start recording.",
+    "choosePatient": "Choose a patient",
     "loading": "Opening the patient record…"
   },
   "deviceGuide": {

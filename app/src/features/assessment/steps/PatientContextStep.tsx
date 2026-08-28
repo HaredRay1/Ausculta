@@ -13,6 +13,8 @@ export interface PatientContextStepProps {
   busy: boolean
   errorKey: string | null
   onStart: () => void
+  /** Sends the health worker to the patient list to pick someone. */
+  onChoosePatient: () => void
 }
 
 export function PatientContextStep({
@@ -20,6 +22,7 @@ export function PatientContextStep({
   busy,
   errorKey,
   onStart,
+  onChoosePatient,
 }: PatientContextStepProps) {
   const { t } = useAssessmentTranslation()
 
@@ -29,6 +32,15 @@ export function PatientContextStep({
         title={t('patient.missingTitle')}
         body={t('patient.missingBody')}
         icon={<PeopleIcon className="size-10" />}
+        // Without this the screen is a dead end: the app bar shows no back
+        // button on the opening step, so someone who reached /assessment/new
+        // without a patient — a bookmark, a typed URL, a menu that forgot the
+        // parameter — would have no way forward at all.
+        action={
+          <Button onClick={onChoosePatient} size="lg">
+            {t('patient.choosePatient')}
+          </Button>
+        }
       />
     )
   }

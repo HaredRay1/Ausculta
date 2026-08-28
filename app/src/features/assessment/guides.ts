@@ -49,8 +49,36 @@ export const LUNG_MAP_SRC = `${GUIDES_BASE}/lung-map-overview.svg`
 export const LUNG_MAP_VIEWBOX = { width: 320, height: 340 } as const
 
 /**
+ * Tap-target geometry for the position picker.
+ *
+ * 48px is the floor for a gloved finger, never a starting point, so the targets
+ * are NEVER shrunk to make room — the coordinates move instead, and below a
+ * width where even that cannot work the markers stop being interactive at all.
+ */
+export const MAP_TARGET_PX = 48
+/** Minimum clear space between two adjacent targets. */
+export const MAP_MIN_GAP_PX = 8
+/** The container width the marker coordinates below are solved for. */
+export const LUNG_MAP_DESIGN_WIDTH_PX = 320
+/**
+ * Narrower than this and the markers are drawn but not tappable.
+ *
+ * The targets are a fixed 48px while the artwork scales with its container, so
+ * their separation shrinks as the phone gets smaller and no choice of
+ * coordinates can hold for every width. At 260px the closest pair overlaps by
+ * 2.5px, and an overlap means the later-rendered button silently wins the tap —
+ * on the one screen whose entire job is recording WHICH part of a lung was
+ * listened to. A mis-tap there is wrong clinical data, not an annoyance.
+ *
+ * So below this width the map becomes a picture and the list beneath it is the
+ * control. "The map is a diagram" is a fine failure mode; "the map lies about
+ * what you tapped" is not.
+ */
+export const MIN_INTERACTIVE_MAP_WIDTH_PX = 300
+
+/**
  * Where each position's target sits inside `lung-map-overview.svg`, in that
- * file's own viewBox units, so the app's tap targets land on the drawn circles.
+ * file's own viewBox units.
  *
  * ORIENTATION — read the guides README before changing a number here. The
  * figure is drawn ANTERIOR: the viewer faces the patient, so the patient's
@@ -58,14 +86,25 @@ export const LUNG_MAP_VIEWBOX = { width: 320, height: 340 } as const
  * backwards would file a recording under the wrong lung and produce
  * mis-attributed clinical data, so `guides.test.ts` asserts every `R_` marker
  * sits left of the midline and every `L_` marker right of it.
+ *
+ * SEPARATION — these are deliberately NOT the exact centres of the drawn
+ * circles. The targets are squares, so two of them collide when their centres
+ * are within `MAP_TARGET_PX` on EITHER axis, and the drawn centres left the
+ * upper pair only 52 units apart (4px of clear space) with the middle-to-lower
+ * pairs at 54 (6px). Each is nudged outward to put every pair at least
+ * `MAP_TARGET_PX + MAP_MIN_GAP_PX` = 56 units apart. The largest move is 4
+ * units against a drawn circle of radius 23, so every target still sits well
+ * inside the circle it belongs to — `guides.test.ts` asserts both the
+ * separation arithmetic and that containment, because a rendering test cannot
+ * catch either.
  */
 export const LUNG_MAP_MARKERS: Record<LocationCode, { x: number; y: number }> = {
-  [LOCATION_CODES.R_UPPER]: { x: 134, y: 136 },
-  [LOCATION_CODES.L_UPPER]: { x: 186, y: 136 },
+  [LOCATION_CODES.R_UPPER]: { x: 130, y: 136 },
+  [LOCATION_CODES.L_UPPER]: { x: 190, y: 136 },
   [LOCATION_CODES.R_MIDDLE]: { x: 130, y: 192 },
   [LOCATION_CODES.L_MIDDLE]: { x: 190, y: 192 },
-  [LOCATION_CODES.R_LOWER]: { x: 127, y: 246 },
-  [LOCATION_CODES.L_LOWER]: { x: 193, y: 246 },
+  [LOCATION_CODES.R_LOWER]: { x: 128, y: 248 },
+  [LOCATION_CODES.L_LOWER]: { x: 192, y: 248 },
 }
 
 /** The single-position drawing for one auscultation site. */

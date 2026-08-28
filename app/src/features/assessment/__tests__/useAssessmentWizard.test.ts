@@ -110,6 +110,36 @@ describe('the wizard sequence', () => {
     expect((await db.assessments.get(id))?.reviewStatus).toBe(REVIEW_STATUSES.DRAFT)
   })
 
+  it('reuses the draft when the flow is re-entered, rather than orphaning it', async () => {
+    // Back out of the position picker to the opening screen and start again —
+    // which is exactly what someone navigating unaided does. Creating a second
+    // draft here would strand every recording already attached to the first.
+    const hook = setup()
+    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
+    await act(async () => hook.result.current.start())
+    const first = hook.result.current.state.assessmentId
+
+    await act(async () => hook.result.current.finishDeviceGuide(false))
+    act(() => hook.result.current.goBack())
+    expect(hook.result.current.state.step).toBe('patient')
+    await act(async () => hook.result.current.start())
+
+    expect(hook.result.current.state.assessmentId).toBe(first)
+    expect(await db.assessments.count()).toBe(1)
+  })
+
+  it('keeps the recordings already taken when the flow is re-entered', async () => {
+    const hook = setup()
+    await toQualityCheck(hook, LOCATION_CODES.R_UPPER)
+    await act(async () => hook.result.current.acceptQuality())
+    act(() => hook.result.current.recordAnother())
+    act(() => hook.result.current.goBack())
+    await act(async () => hook.result.current.start())
+
+    expect(hook.result.current.state.recordedLocations).toEqual([LOCATION_CODES.R_UPPER])
+    expect(await db.recordings.count()).toBe(1)
+  })
+
   it('skips the device guide when the health worker has turned it off', async () => {
     const hook = setup({ readSkipGuide: async () => true })
     await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
