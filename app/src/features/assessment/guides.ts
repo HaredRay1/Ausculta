@@ -45,6 +45,29 @@ export function lungPositionNumber(code: LocationCode): number {
 /** The picker artwork: all six positions at once, as numbered targets. */
 export const LUNG_MAP_SRC = `${GUIDES_BASE}/lung-map-overview.svg`
 
+/** The picker artwork's own coordinate system. */
+export const LUNG_MAP_VIEWBOX = { width: 320, height: 340 } as const
+
+/**
+ * Where each position's target sits inside `lung-map-overview.svg`, in that
+ * file's own viewBox units, so the app's tap targets land on the drawn circles.
+ *
+ * ORIENTATION — read the guides README before changing a number here. The
+ * figure is drawn ANTERIOR: the viewer faces the patient, so the patient's
+ * RIGHT lung appears on the viewer's LEFT, at a SMALLER x. Getting this
+ * backwards would file a recording under the wrong lung and produce
+ * mis-attributed clinical data, so `guides.test.ts` asserts every `R_` marker
+ * sits left of the midline and every `L_` marker right of it.
+ */
+export const LUNG_MAP_MARKERS: Record<LocationCode, { x: number; y: number }> = {
+  [LOCATION_CODES.R_UPPER]: { x: 134, y: 136 },
+  [LOCATION_CODES.L_UPPER]: { x: 186, y: 136 },
+  [LOCATION_CODES.R_MIDDLE]: { x: 130, y: 192 },
+  [LOCATION_CODES.L_MIDDLE]: { x: 190, y: 192 },
+  [LOCATION_CODES.R_LOWER]: { x: 127, y: 246 },
+  [LOCATION_CODES.L_LOWER]: { x: 193, y: 246 },
+}
+
 /** The single-position drawing for one auscultation site. */
 export function placementGuideSrc(code: LocationCode): string {
   return `${GUIDES_BASE}/placement-${code}.svg`

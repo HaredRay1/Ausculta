@@ -10,6 +10,7 @@
     "chooseFile": "Choose the recording",
     "changeFile": "Choose a different file",
     "analyse": "Analyse this recording",
+    "keepAnyway": "Keep this recording without analysing it",
     "recordAgain": "Record again",
     "saveAndContinue": "Save and choose the next position",
     "submit": "Finish and send for review",

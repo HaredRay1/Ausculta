@@ -5,7 +5,9 @@ import { LOCATION_CODES } from '../../db/codes'
 import {
   DEVICE_STEPS,
   LOCATION_ORDER,
+  LUNG_MAP_MARKERS,
   LUNG_MAP_SRC,
+  LUNG_MAP_VIEWBOX,
   MISTAKE_GUIDE_FOR_FLAG,
   deviceStepCaptionKey,
   lungPositionNumber,
@@ -40,6 +42,36 @@ describe('placement art and location codes', () => {
   it('the picker art it numbers is the one that exists', () => {
     expect(LUNG_MAP_SRC).toBe('/guides/lung-map-overview.svg')
     expect(guideFiles).toContain('lung-map-overview.svg')
+  })
+})
+
+describe('the tap targets on the picker art', () => {
+  const map = readFileSync(resolve(GUIDES_DIR, 'lung-map-overview.svg'), 'utf8')
+
+  it('uses the viewBox of the artwork itself', () => {
+    expect(map).toContain(`viewBox="0 0 ${LUNG_MAP_VIEWBOX.width} ${LUNG_MAP_VIEWBOX.height}"`)
+  })
+
+  it('has one marker per position, drawn in the artwork at that point', () => {
+    expect(Object.keys(LUNG_MAP_MARKERS).sort()).toEqual(Object.values(LOCATION_CODES).sort())
+    for (const { x, y } of Object.values(LUNG_MAP_MARKERS)) {
+      // The target circle really is there: if the drawing moves, this fails
+      // rather than leaving a tap target floating over the wrong rib.
+      expect(map).toContain(`cx="${x}" cy="${y}"`)
+      expect(x).toBeGreaterThan(0)
+      expect(x).toBeLessThan(LUNG_MAP_VIEWBOX.width)
+      expect(y).toBeLessThan(LUNG_MAP_VIEWBOX.height)
+    }
+  })
+
+  it('keeps the anterior view: a patient right lung sits left of the midline', () => {
+    // The single most costly mistake this file could make. See the orientation
+    // note in public/guides/README.md.
+    const midline = LUNG_MAP_VIEWBOX.width / 2
+    for (const [code, marker] of Object.entries(LUNG_MAP_MARKERS)) {
+      if (code.startsWith('R_')) expect(marker.x).toBeLessThan(midline)
+      else expect(marker.x).toBeGreaterThan(midline)
+    }
   })
 })
 
