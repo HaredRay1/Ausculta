@@ -4,8 +4,12 @@ import type {
   AlertType,
   AudioSource,
   ClassificationCode,
+  ConsentStatus,
+  FamilyHistoryCode,
   InterpretationCode,
   LocationCode,
+  RespiratoryHistoryCode,
+  SexCode,
   MeasurementCode,
   MeasurementSource,
   ReviewStatus,
@@ -39,7 +43,7 @@ export interface User {
 }
 
 export interface PatientConsent {
-  status: string
+  status: ConsentStatus
   language: string
   textVersion: string
   presentedAt: string
@@ -49,9 +53,22 @@ export interface PatientConsent {
 export interface PatientDemographics {
   name: string
   birthDate: string
-  sex: string
+  sex: SexCode
   address?: string
   contact?: string
+}
+
+/**
+ * One answered history question. Standing history is a property of the person,
+ * asked once at registration — unlike `SymptomEntry`, which records what was
+ * true at a single assessment. An entry absent from the array means the
+ * question was not asked, which is distinct from `present: false` (asked and
+ * answered no).
+ */
+export interface HistoryEntry<TCode extends string = string> {
+  code: TCode
+  present: boolean
+  notes?: string
 }
 
 export interface Patient extends PatientDemographics {
@@ -61,6 +78,8 @@ export interface Patient extends PatientDemographics {
   assignedPractitionerIds: string[]
   assignedHealthWorkerIds: string[]
   consent: PatientConsent | null
+  respiratoryHistory: HistoryEntry<RespiratoryHistoryCode>[]
+  familyHistory: HistoryEntry<FamilyHistoryCode>[]
   preferredLanguage: string
   isDemo: DemoFlag
   createdAt: string

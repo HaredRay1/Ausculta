@@ -126,6 +126,66 @@ export const ALERT_TYPES = {
   REPEATED_POOR_QUALITY: 'REPEATED_POOR_QUALITY',
 } as const
 
+/**
+ * Recorded because lung-function reference values are sex-specific, and it is a
+ * research export variable. `UNDISCLOSED` covers refusal to answer — the field
+ * is never mandatory. The research protocol owner may extend this list.
+ */
+export const SEX_CODES = {
+  FEMALE: 'FEMALE',
+  MALE: 'MALE',
+  UNDISCLOSED: 'UNDISCLOSED',
+} as const
+
+/**
+ * Consent lives here rather than inside the patients feature (as audit actions
+ * do) because consent state leaves the device in research exports and governs
+ * whether a record may be exported at all. It is a study variable, not an
+ * operational one.
+ */
+export const CONSENT_STATUSES = {
+  GRANTED: 'GRANTED',
+  DECLINED: 'DECLINED',
+  WITHDRAWN: 'WITHDRAWN',
+} as const
+
+/**
+ * Standing respiratory history — a property of the person, asked once at
+ * registration, distinct from SYMPTOM_CODES (what is true at a single visit).
+ * Selected for this study's setting: TB is endemic in the Philippines, and
+ * biomass cooking smoke is a major rural COPD risk factor.
+ */
+export const RESPIRATORY_HISTORY_CODES = {
+  ASTHMA_DIAGNOSED: 'ASTHMA_DIAGNOSED',
+  PNEUMONIA_PAST: 'PNEUMONIA_PAST',
+  TUBERCULOSIS_PAST: 'TUBERCULOSIS_PAST',
+  BRONCHIOLITIS_PAST: 'BRONCHIOLITIS_PAST',
+  COPD_DIAGNOSED: 'COPD_DIAGNOSED',
+  CHRONIC_COUGH: 'CHRONIC_COUGH',
+  ALLERGIES: 'ALLERGIES',
+  SMOKER_CURRENT: 'SMOKER_CURRENT',
+  SMOKER_FORMER: 'SMOKER_FORMER',
+  SECONDHAND_SMOKE: 'SECONDHAND_SMOKE',
+  BIOMASS_SMOKE_EXPOSURE: 'BIOMASS_SMOKE_EXPOSURE',
+  OCCUPATIONAL_DUST: 'OCCUPATIONAL_DUST',
+  PRIOR_RESPIRATORY_HOSPITALIZATION: 'PRIOR_RESPIRATORY_HOSPITALIZATION',
+  INHALER_USE: 'INHALER_USE',
+  OTHER: 'OTHER',
+} as const
+
+/**
+ * Family respiratory history. Household TB contact is the dominant
+ * transmission route locally, so it is captured explicitly.
+ */
+export const FAMILY_HISTORY_CODES = {
+  FAMILY_ASTHMA: 'FAMILY_ASTHMA',
+  FAMILY_TUBERCULOSIS: 'FAMILY_TUBERCULOSIS',
+  FAMILY_COPD: 'FAMILY_COPD',
+  FAMILY_ALLERGIES: 'FAMILY_ALLERGIES',
+  FAMILY_OTHER_RESPIRATORY: 'FAMILY_OTHER_RESPIRATORY',
+  FAMILY_NONE_KNOWN: 'FAMILY_NONE_KNOWN',
+} as const
+
 export const ALERT_STATUSES = {
   NEW: 'NEW',
   ACKNOWLEDGED: 'ACKNOWLEDGED',
@@ -148,6 +208,11 @@ export type InterpretationCode = (typeof INTERPRETATION_CODES)[keyof typeof INTE
 export type UserStatus = (typeof USER_STATUSES)[keyof typeof USER_STATUSES]
 export type AlertType = (typeof ALERT_TYPES)[keyof typeof ALERT_TYPES]
 export type AlertStatus = (typeof ALERT_STATUSES)[keyof typeof ALERT_STATUSES]
+export type SexCode = (typeof SEX_CODES)[keyof typeof SEX_CODES]
+export type ConsentStatus = (typeof CONSENT_STATUSES)[keyof typeof CONSENT_STATUSES]
+export type RespiratoryHistoryCode =
+  (typeof RESPIRATORY_HISTORY_CODES)[keyof typeof RESPIRATORY_HISTORY_CODES]
+export type FamilyHistoryCode = (typeof FAMILY_HISTORY_CODES)[keyof typeof FAMILY_HISTORY_CODES]
 
 /**
  * Namespace key -> its code list. Drives the i18n exhaustiveness test: every
@@ -171,4 +236,8 @@ export const CODE_REGISTRY: Record<string, readonly string[]> = {
   userStatus: Object.values(USER_STATUSES),
   alertType: Object.values(ALERT_TYPES),
   alertStatus: Object.values(ALERT_STATUSES),
+  sex: Object.values(SEX_CODES),
+  consentStatus: Object.values(CONSENT_STATUSES),
+  respiratoryHistory: Object.values(RESPIRATORY_HISTORY_CODES),
+  familyHistory: Object.values(FAMILY_HISTORY_CODES),
 }

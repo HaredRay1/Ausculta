@@ -106,5 +106,40 @@
     "NEW": "New",
     "ACKNOWLEDGED": "Acknowledged",
     "CLOSED": "Closed"
+  },
+  "sex": {
+    "FEMALE": "Female",
+    "MALE": "Male",
+    "UNDISCLOSED": "Prefer not to say"
+  },
+  "consentStatus": {
+    "GRANTED": "Consent given",
+    "DECLINED": "Consent declined",
+    "WITHDRAWN": "Consent withdrawn"
+  },
+  "respiratoryHistory": {
+    "ASTHMA_DIAGNOSED": "Diagnosed with asthma",
+    "PNEUMONIA_PAST": "Had pneumonia before",
+    "TUBERCULOSIS_PAST": "Had tuberculosis before",
+    "BRONCHIOLITIS_PAST": "Had bronchiolitis before",
+    "COPD_DIAGNOSED": "Diagnosed with COPD",
+    "CHRONIC_COUGH": "Long-lasting cough",
+    "ALLERGIES": "Allergies",
+    "SMOKER_CURRENT": "Currently smokes",
+    "SMOKER_FORMER": "Used to smoke",
+    "SECONDHAND_SMOKE": "Exposed to other people’s smoke",
+    "BIOMASS_SMOKE_EXPOSURE": "Exposed to cooking or wood smoke",
+    "OCCUPATIONAL_DUST": "Exposed to dust or fumes at work",
+    "PRIOR_RESPIRATORY_HOSPITALIZATION": "Hospitalised before for breathing problems",
+    "INHALER_USE": "Uses an inhaler or breathing medicine",
+    "OTHER": "Other respiratory history"
+  },
+  "familyHistory": {
+    "FAMILY_ASTHMA": "Asthma in the family",
+    "FAMILY_TUBERCULOSIS": "Tuberculosis in the family or household",
+    "FAMILY_COPD": "COPD in the family",
+    "FAMILY_ALLERGIES": "Allergies in the family",
+    "FAMILY_OTHER_RESPIRATORY": "Other lung illness in the family",
+    "FAMILY_NONE_KNOWN": "None known"
   }
 }
