@@ -190,6 +190,12 @@ export interface QueueItem {
 export interface LocationCase {
   recording: Recording
   locationCode: LocationCode
+  /**
+   * The audio itself, loaded here so the screen never reaches into the
+   * database on its own. Undefined when the blob is missing, which the view
+   * must show as a failure rather than as silence.
+   */
+  audioBlob?: Blob
   /** The most recent earlier recording at this location, if any. */
   previous?: Recording
   /**
@@ -368,29 +374,12 @@ export function createReviewRepository(database: AuscultaDB = defaultDb) {
       await database.recordings.where('patientId').equals(patient.id).toArray()
     ).filter((r) => r.assessmentId !== assessment.id)
 
-    const locations: LocationCase[] = recordings
-      .sort((a, b) => a.locationCode.localeCompare(b.locationCode))
-      .map((recording) => {
-        const previous = history
-          .filter(
-            (r) =>
-              r.locationCode === recording.locationCode &&
-              r.createdAt < recording.createdAt,
-          )
-          .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]
-
-        if (previous === undefined) {
-          // No `changed` at all rather than `false`: there is nothing to compare.
-          return { recording, locationCode: recording.locationCode }
-        }
-
-        return {
-          recording,
-          locationCode: recording.locationCode,
-          previous,
-          changed: previous.aiClassification !== recording.aiClassification,
-        }
-      })
+    const locations: LocationCase[] = []
+    for (const recording of recordings.sort((a, b) =>
+      a.locationCode.localeCompare(b.locationCode),
+    )) {
+      locations.push(await buildLocationCase(recording, history))
+    }
 
     const reviews = await database.clinicalReviews
       .where('assessmentId')
@@ -398,6 +387,40 @@ export function createReviewRepository(database: AuscultaDB = defaultDb) {
       .toArray()
 
     return { assessment, patient, locations, reviews }
+  }
+
+  async function buildLocationCase(
+    recording: Recording,
+    history: readonly Recording[],
+  ): Promise<LocationCase> {
+    const blobRow = await database.audioBlobs.get(recording.audioBlobId)
+    const audio = blobRow?.blob
+
+    return ((recording) => {
+      const previous = history
+        .filter(
+          (r) =>
+            r.locationCode === recording.locationCode && r.createdAt < recording.createdAt,
+        )
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0]
+
+      if (previous === undefined) {
+        // No `changed` at all rather than `false`: there is nothing to compare.
+        return {
+          recording,
+          locationCode: recording.locationCode,
+          ...(audio !== undefined && { audioBlob: audio }),
+        }
+      }
+
+      return {
+        recording,
+        locationCode: recording.locationCode,
+        ...(audio !== undefined && { audioBlob: audio }),
+        previous,
+        changed: previous.aiClassification !== recording.aiClassification,
+      }
+    })(recording)
   }
 
   function snapshotOf(recordings: readonly Recording[], at: string): AiSnapshotEntry[] {

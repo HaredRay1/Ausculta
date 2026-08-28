@@ -112,40 +112,32 @@ describe('de-identified study id', () => {
     expect(new Set(identical).size).toBe(200)
   })
 
-  it('contains nothing drawn from name, birth date or contact details', () => {
-    const patient = {
-      name: 'Maria Dela Cruz',
-      birthDate: '1978-03-14',
-      contact: '09171234567',
-      address: 'Barangay Bancao-Bancao, Puerto Princesa',
-    }
+  // A previous version of this test generated 500 ids and asserted none
+  // CONTAINED a token from a sample patient's details. It was measuring
+  // coincidence, not derivation, and it failed roughly 1 run in 54: a 4-symbol
+  // token has 13 possible positions in a 16-symbol body over a 32-symbol
+  // alphabet, which across 500 draws and three digit tokens is a ~1.8% chance
+  // per run. A privacy test that cries wolf gets muted, and then a real leak
+  // walks past a red that nobody trusts. These two assert the same property
+  // deterministically instead.
 
-    // Every token a naive implementation might splice in: name parts, initials,
-    // and every run of digits from the date and phone number.
-    const forbidden = [
-      ...patient.name.toUpperCase().split(/\s+/),
-      'MDC',
-      'MARIA',
-      'CRUZ',
-      '1978',
-      '0314',
-      '19780314',
-      '78',
-      '0917',
-      '1234567',
-      '09171234567',
-      'BANCAO',
-    ]
-
-    for (let i = 0; i < 500; i++) {
-      const studyId = generateStudyId()
-      const body = studyId.replace(/^ST-/, '')
-      for (const token of forbidden) {
-        // 2-char tokens would collide with random output by chance; only test
-        // tokens long enough for a match to mean something.
-        if (token.length >= 4) expect(body).not.toContain(token)
-      }
+  it('cannot contain a name at all, by construction', () => {
+    // This is a proof, not a sample. The alphabet excludes I, L, O and U, so
+    // any token containing one is unrepresentable in a study id no matter what
+    // the generator does. Every name and place in the sample below is
+    // disqualified by at least one such letter.
+    for (const token of ['MARIA', 'DELA', 'CRUZ', 'BANCAO', 'PUERTO', 'PRINCESA']) {
+      const impossible = [...token].some((ch) => !ID_ALPHABET.includes(ch))
+      expect(impossible).toBe(true)
     }
+  })
+
+  it('produces a different id every time for the very same patient', () => {
+    // The real derivation test. A study id computed from name, birth date or
+    // contact details would repeat for identical input; one drawn from the
+    // CSPRNG cannot. No coincidence term, so no flake.
+    const forOnePatient = new Set(Array.from({ length: 2000 }, () => generateStudyId()))
+    expect(forOnePatient.size).toBe(2000)
   })
 
   it('cannot be linked back to the clinic id', () => {
