@@ -1,0 +1,41 @@
+{
+  "title": "Demonstration mode",
+  "intro": "Loads a small fictional clinic so every screen in the app has something real to show. Use it for training and for walkthroughs.",
+  "banner": {
+    "label": "Demonstration data",
+    "body": "These are invented records for training and demonstration. No part of this is a real patient, and the recordings are synthetic test tones, not lung sounds.",
+    "short": "Demonstration data — not a real patient"
+  },
+  "toggle": {
+    "label": "Show demonstration data",
+    "hintOn": "Fictional records are visible throughout the app, each marked as demonstration data.",
+    "hintOff": "Only real records are shown. Any demonstration data stays on the device, hidden."
+  },
+  "status": {
+    "heading": "On this device",
+    "empty": "No demonstration data has been loaded.",
+    "loaded": "{{patients}} patients, {{assessments}} assessments and {{recordings}} recordings.",
+    "loadedAt": "Loaded {{date}}."
+  },
+  "actions": {
+    "load": "Load demonstration data",
+    "loading": "Loading…",
+    "reload": "Reload demonstration data",
+    "remove": "Remove demonstration data",
+    "removing": "Removing…",
+    "confirmRemove": "Remove every demonstration record from this device? Real patient records are not affected.",
+    "removed": "Demonstration data removed."
+  },
+  "walkthrough": {
+    "heading": "Where to start",
+    "body": "Open {{name}}. She has asthma and {{count}} assessments over the past two months, so her results show a trend rather than a single reading."
+  },
+  "audio": {
+    "heading": "About the recordings",
+    "body": "Every demonstration recording plays the same kind of synthetic test tone. Nothing here is a lung sound and nothing here should be judged clinically."
+  },
+  "errors": {
+    "load": "Could not load the demonstration data.",
+    "remove": "Could not remove the demonstration data."
+  }
+}
