@@ -70,6 +70,7 @@ export function AssessmentWizard(props: AssessmentWizardProps = {}) {
         {state.step === 'patient' && (
           <PatientContextStep
             patientId={state.patientId}
+            patientName={state.patientName}
             busy={state.busy}
             errorKey={state.errorKey}
             onStart={() => void wizard.start()}

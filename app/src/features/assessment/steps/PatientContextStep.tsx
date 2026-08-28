@@ -10,6 +10,8 @@ import { useAssessmentTranslation } from '../i18n'
  */
 export interface PatientContextStepProps {
   patientId: string | null
+  /** Null while unknown — never a placeholder standing in for a real person. */
+  patientName: string | null
   busy: boolean
   errorKey: string | null
   onStart: () => void
@@ -19,6 +21,7 @@ export interface PatientContextStepProps {
 
 export function PatientContextStep({
   patientId,
+  patientName,
   busy,
   errorKey,
   onStart,
@@ -50,9 +53,22 @@ export function PatientContextStep({
       {errorKey !== null && <Banner tone="danger">{t(errorKey)}</Banner>}
 
       <Card>
-        <dl className="flex flex-col gap-1">
-          <dt className="text-sm font-medium text-muted">{t('patient.idLabel')}</dt>
-          <dd className="font-heading text-xl font-bold text-on-surface">{patientId}</dd>
+        <dl className="flex flex-col gap-3">
+          {/* The name leads, because an ID cannot tell anyone whether this is
+              the person in front of them — and recording against the wrong
+              patient is the one mistake here that nothing downstream undoes.
+              When the record cannot be read the row is simply absent: no
+              placeholder, no dash that could be mistaken for a name. */}
+          {patientName !== null && (
+            <div className="flex flex-col gap-1">
+              <dt className="text-sm font-medium text-muted">{t('patient.nameLabel')}</dt>
+              <dd className="font-heading text-2xl font-bold text-on-surface">{patientName}</dd>
+            </div>
+          )}
+          <div className="flex flex-col gap-1">
+            <dt className="text-sm font-medium text-muted">{t('patient.idLabel')}</dt>
+            <dd className="font-heading text-lg font-bold text-on-surface">{patientId}</dd>
+          </div>
         </dl>
       </Card>
 

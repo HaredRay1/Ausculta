@@ -110,6 +110,34 @@ describe('the wizard sequence', () => {
     expect((await db.assessments.get(id))?.reviewStatus).toBe(REVIEW_STATUSES.DRAFT)
   })
 
+  it('reads the patient name so the screen can confirm a person, not an id', async () => {
+    await db.patients.add({
+      id: PATIENT,
+      studyId: 'ST-0000000000000000',
+      assignedPractitionerIds: [],
+      assignedHealthWorkerIds: [],
+      consent: null,
+      respiratoryHistory: [],
+      familyHistory: [],
+      preferredLanguage: 'en',
+      isDemo: 0,
+      createdAt: new Date().toISOString(),
+      name: 'Juan Dela Cruz',
+      birthDate: '1990-01-01',
+      sex: 'MALE',
+    })
+    const hook = setup()
+
+    await waitFor(() => expect(hook.result.current.state.patientName).toBe('Juan Dela Cruz'))
+  })
+
+  it('leaves the name null rather than inventing one when the record is missing', async () => {
+    const hook = setup()
+    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
+
+    expect(hook.result.current.state.patientName).toBeNull()
+  })
+
   it('reuses the draft when the flow is re-entered, rather than orphaning it', async () => {
     // Back out of the position picker to the opening screen and start again —
     // which is exactly what someone navigating unaided does. Creating a second

@@ -14,7 +14,8 @@
   },
   "patient": {
     "title": "Patient",
-    "subtitle": "Check that you have the right person before you start.",
+    "subtitle": "Check this is the person in front of you before you start.",
+    "nameLabel": "Patient",
     "idLabel": "Patient ID",
     "missingTitle": "No patient chosen",
     "missingBody": "An assessment is always about one person. Choose the patient first, then start recording.",
@@ -67,7 +68,7 @@
   "capture": {
     "title": "Import the recording",
     "subtitle": "Choose the WAV file you recorded at position {{number}}.",
-    "hint": "Copy the files off the memory card first — that is step 8 of the device guide.",
+    "hint": "Take the memory card out of the recorder and copy its recordings onto this phone first. Then choose the one for this position.",
     "fileLabel": "Recording file",
     "selected": "Chosen file: {{name}}",
     "checking": "Reading the recording…",
