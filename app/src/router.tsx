@@ -2,8 +2,13 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { authRoutes } from './auth/routes'
 import { RequireAuth } from './auth/guards'
+import { assessmentRoutes } from './features/assessment/routes'
 import { demoRoutes } from './features/demo'
-import { patientRoutes } from './features/patients/routes'
+// Two different features, deliberately named apart: `features/patient` (singular)
+// is the patient's own portal; `features/patients` (plural) is clinician-facing
+// patient management. Both export `patientRoutes`, hence the alias.
+import { patientRoutes as patientPortalRoutes } from './features/patient/routes'
+import { patientRoutes as patientManagementRoutes } from './features/patients/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
@@ -16,11 +21,11 @@ function Root() {
 }
 
 /**
- * Per-role landing routes that `roleHomePath()` sends users to after login.
- * `/admin/users` is a real screen and comes from `authRoutes`; the other four
- * are placeholders until their dashboards are built.
+ * Role homes that still have no real dashboard. `/patient` is deliberately
+ * absent — the patient portal now provides it — and `/admin/users` comes from
+ * the auth routes.
  */
-const ROLE_HOME_ROUTES = ['/patient', '/practitioner', '/health-worker', '/researcher']
+const ROLE_HOME_ROUTES = ['/practitioner', '/health-worker', '/researcher']
 
 /**
  * The component gallery renders every design-system component in every state.
@@ -36,17 +41,25 @@ export function AppRoutes() {
       <Route path="/language" element={<LanguageSelect />} />
       <Route path="/landing" element={<Landing />} />
 
-      {/* Auth layer's own routes, carrying their own guards where needed. */}
+      {/* Each feature owns its own guards; the router only mounts them. */}
       {authRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
       {/*
-        Patient management. Order is load-bearing: `/patients/new` must be
-        declared before `/patients/:patientId` or "new" is swallowed as an id.
-        The source array is already in that order — preserve it.
+        Order is load-bearing here: `/patients/new` must be declared before
+        `/patients/:patientId` or "new" is swallowed as an id. The source array
+        is already in that order — preserve it.
       */}
-      {patientRoutes.map((route) => (
+      {patientManagementRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {patientPortalRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {assessmentRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
