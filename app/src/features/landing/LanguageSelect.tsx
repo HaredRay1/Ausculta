@@ -25,7 +25,7 @@ export function LanguageSelect() {
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-6 bg-white px-6">
-      <h1 className="text-2xl font-semibold text-teal-900">Ausculta</h1>
+      <h1 className="text-2xl font-semibold text-teal-900">{t('appName')}</h1>
       <div className="flex w-full max-w-xs flex-col gap-4">
         {LANGUAGE_OPTIONS.map((option) => (
           <button
