@@ -112,10 +112,16 @@ Each is reversible. If any is wrong, it is worth saying so.
 
 ## Known issues
 
-Two tests fail: a route-crawl check on the clinical view, caused by the audio player
-receiving something that is not a Blob from a seeded record. Being fixed defensively in the
-component regardless of what the data turns out to be. It may be a test-environment artifact
-rather than a real defect.
+None outstanding. All 1623 tests pass, the typecheck is clean and the build succeeds.
+
+One resolved worth recording, because the reasoning nearly sent us the wrong way. A route
+crawl found the clinical view crashing when the audio player received a plain object instead
+of a recording. It looked like a data defect. It is not: a Blob written to the database in
+the *test* environment reads back as a plain object, because the in-memory database used for
+testing does not preserve Blobs through its structured clone. Real browsers do, so audio
+plays correctly on a device. Verified by experiment rather than argument. The player is now
+guarded anyway — a component handed data from a database it does not control should not take
+down a clinical screen when that data is malformed.
 
 The printable referral report was cut. Nothing links to it.
 
