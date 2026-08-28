@@ -220,6 +220,49 @@ describe('AudioPlayer failure', () => {
     expect(onError).toHaveBeenCalledTimes(1)
   })
 
+  // The value arrives from a database this component does not control.
+  // createObjectURL throws a TypeError on anything that is not a Blob, and it
+  // is called from a passive effect — so an unguarded throw is an uncaught
+  // exception that unmounts the whole screen. On a review screen that is a
+  // practitioner opening a case and getting a blank page.
+  it.each([
+    ['a plain object where a Blob was expected', { size: 10, type: 'audio/wav' }],
+    ['undefined', undefined],
+    ['null', null],
+    ['a string', 'not-a-blob'],
+  ])('shows the error state rather than crashing on %s', (_label, value) => {
+    const onError = vi.fn()
+
+    expect(() =>
+      render(
+        <AudioPlayer
+          blob={value as unknown as Blob}
+          label="Right upper lung"
+          onError={onError}
+        />,
+      ),
+    ).not.toThrow()
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      t('audio.errorTitle', { label: 'Right upper lung' }),
+    )
+    expect(onError).toHaveBeenCalledTimes(1)
+    expect(createObjectURL).not.toHaveBeenCalled()
+  })
+
+  it('does not churn the object URL when onError is a fresh function each render', () => {
+    const blob = makeBlob()
+    const { rerender } = render(
+      <AudioPlayer blob={blob} label="Right upper lung" onError={() => undefined} />,
+    )
+    rerender(<AudioPlayer blob={blob} label="Right upper lung" onError={() => undefined} />)
+    rerender(<AudioPlayer blob={blob} label="Right upper lung" onError={() => undefined} />)
+
+    // An unstable onError must not tear down and rebuild the URL each render.
+    expect(createObjectURL).toHaveBeenCalledTimes(1)
+    expect(revokeObjectURL).not.toHaveBeenCalled()
+  })
+
   it('recovers when a new blob arrives after a failure', () => {
     const { rerender } = render(
       <AudioPlayer blob={makeBlob('broken')} label="Right upper lung" durationSec={5} />,

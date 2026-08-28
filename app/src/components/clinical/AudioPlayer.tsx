@@ -16,7 +16,7 @@ export interface AudioPlayerProps {
   label: string
   /** Known duration, used until the browser reports its own. */
   durationSec?: number
-  /** Called once when the blob cannot be decoded. */
+  /** Called once when the recording cannot be played, for any reason. */
   onError?: () => void
 }
 
@@ -64,14 +64,48 @@ export function AudioPlayer({ blob, label, durationSec, onError }: AudioPlayerPr
   const [duration, setDuration] = useState(durationSec ?? 0)
   const [failed, setFailed] = useState(false)
 
-  // One object URL per blob, revoked on unmount and whenever the blob changes.
+  /**
+   * Held in a ref so `fail` stays stable.
+   *
+   * If `fail` changed identity whenever a caller passed a fresh inline
+   * `onError`, the effect below would tear down and rebuild the object URL on
+   * every render — the exact leak this component exists to prevent.
+   */
+  const onErrorRef = useRef(onError)
   useEffect(() => {
-    const objectUrl = URL.createObjectURL(blob)
+    onErrorRef.current = onError
+  }, [onError])
+
+  const fail = useCallback(() => {
+    setFailed(true)
+    setPlaying(false)
+    onErrorRef.current?.()
+  }, [])
+
+  /**
+   * One object URL per blob, revoked on unmount and whenever the blob changes.
+   *
+   * Guarded because this value comes out of a database this component does not
+   * control, and `createObjectURL` throws a TypeError on anything that is not a
+   * Blob. Thrown from a passive effect that becomes an uncaught exception which
+   * unmounts the whole screen — so a practitioner opening a case would get a
+   * blank page with nothing saying why. A bad value belongs in the same stated
+   * error state as a blob that will not decode.
+   */
+  useEffect(() => {
+    let objectUrl: string
+    try {
+      if (!(blob instanceof Blob)) throw new TypeError('not a Blob')
+      objectUrl = URL.createObjectURL(blob)
+    } catch {
+      fail()
+      return
+    }
     setUrl(objectUrl)
     setFailed(false)
     setCurrentTime(0)
     return () => URL.revokeObjectURL(objectUrl)
-  }, [blob])
+  }, [blob, fail])
 
   const pause = useCallback(() => {
     audioRef.current?.pause()
@@ -84,12 +118,6 @@ export function AudioPlayer({ blob, label, durationSec, onError }: AudioPlayerPr
       mountedPlayers.delete(pause)
     }
   }, [pause])
-
-  const fail = useCallback(() => {
-    setFailed(true)
-    setPlaying(false)
-    onError?.()
-  }, [onError])
 
   async function toggle() {
     const audio = audioRef.current
