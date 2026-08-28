@@ -1,5 +1,5 @@
 import type { QualityReport } from '../../../audio'
-import { Banner, Button, Card, CheckCircleIcon, Section, WarningIcon } from '../../../components'
+import { Banner, Button, Card, InfoIcon, Section, WarningIcon } from '../../../components'
 import { GuideFigure } from '../components/GuideFigure'
 import { MISTAKE_GUIDE_FOR_FLAG, mistakeCaptionKey } from '../guides'
 import { useAssessmentTranslation } from '../i18n'
@@ -71,7 +71,7 @@ export function QualityCheckStep({
                 {flag.severity === 'reject' ? (
                   <WarningIcon className="mt-0.5 size-5 shrink-0 text-destructive" />
                 ) : (
-                  <CheckCircleIcon className="mt-0.5 size-5 shrink-0 text-warning" />
+                  <InfoIcon className="mt-0.5 size-5 shrink-0 text-warning" />
                 )}
                 <div className="min-w-0">
                   <p className="text-base text-on-surface">{t(`quality.flag.${flag.code}`)}</p>
