@@ -50,7 +50,7 @@ export function ResearchDashboardPage({ database = defaultDb }: { database?: Aus
         {demoEnabled && <FictionalDataBanner />}
 
         {counts === null ? (
-          <Spinner label={t('dashboard.title')} />
+          <Spinner label={t('dashboard.loading')} />
         ) : !hasData ? (
           <EmptyState
             title={t('dashboard.emptyTitle')}

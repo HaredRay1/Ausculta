@@ -60,7 +60,7 @@ export function PerformancePage({ database = defaultDb }: { database?: AuscultaD
         <p className="text-base text-muted">{t('performance.intro')}</p>
 
         {view === null ? (
-          <Spinner label={t('performance.title')} />
+          <Spinner label={t('performance.loading')} />
         ) : !view.report.sufficient ? (
           <EmptyState
             title={t('performance.insufficientTitle')}

@@ -91,7 +91,7 @@ export function ExportPage({ database = defaultDb }: { database?: AuscultaDB } =
         <p className="text-base text-muted">{t('export.intro')}</p>
 
         {rows === null ? (
-          <Spinner label={t('export.title')} />
+          <Spinner label={t('export.loading')} />
         ) : rows.length === 0 ? (
           <EmptyState
             title={t('export.emptyTitle')}

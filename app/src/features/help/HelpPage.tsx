@@ -37,14 +37,25 @@ const MISTAKES = [
 interface GuideProps {
   file: string
   caption: string
+  /**
+   * What the drawing SHOWS, which is not what the caption says.
+   *
+   * Using the caption as alt text made a screen reader announce the same
+   * sentence twice — once for the image, once for the paragraph below it —
+   * while telling a blind user nothing about the picture. That matters most on
+   * the mistake diagrams, which are two-panel comparisons: without a
+   * description, "the tick shows the right way" is meaningless to someone who
+   * cannot see the panels.
+   */
+  alt: string
 }
 
-function Guide({ file, caption }: GuideProps) {
+function Guide({ file, caption, alt }: GuideProps) {
   return (
     <Card as="li" padding="md">
       <img
         src={`/guides/${file}.svg`}
-        alt={caption}
+        alt={alt}
         className="mx-auto block w-full max-w-xs"
         loading="lazy"
       />
@@ -67,7 +78,12 @@ export function HelpPage() {
       <Section title={t('help.deviceHeading')} description={t('help.deviceIntro')}>
         <ol className="flex flex-col gap-4">
           {DEVICE_STEPS.map((file) => (
-            <Guide key={file} file={file} caption={t(`help.device.${file}`)} />
+            <Guide
+              key={file}
+              file={file}
+              caption={t(`help.device.${file}`)}
+              alt={t(`help.deviceAlt.${file}`)}
+            />
           ))}
         </ol>
       </Section>
@@ -75,7 +91,12 @@ export function HelpPage() {
       <Section title={t('help.mistakesHeading')} description={t('help.mistakesIntro')}>
         <ul className="flex flex-col gap-4">
           {MISTAKES.map((file) => (
-            <Guide key={file} file={file} caption={t(`help.mistake.${file}`)} />
+            <Guide
+              key={file}
+              file={file}
+              caption={t(`help.mistake.${file}`)}
+              alt={t(`help.mistakeAlt.${file}`)}
+            />
           ))}
         </ul>
       </Section>

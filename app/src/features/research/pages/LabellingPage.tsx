@@ -69,7 +69,7 @@ export function LabellingPage({ database = defaultDb }: { database?: AuscultaDB 
         <p className="text-base text-muted">{t('labels.intro')}</p>
 
         {queue === null ? (
-          <Spinner label={t('labels.title')} />
+          <Spinner label={t('labels.loading')} />
         ) : queue.length === 0 ? (
           <EmptyState
             title={t('labels.emptyTitle')}
@@ -104,7 +104,7 @@ export function LabellingPage({ database = defaultDb }: { database?: AuscultaDB 
                       ].join(' ')}
                     >
                       <span className="min-w-0">
-                        <span className="block truncate text-base">
+                        <span className="block break-words text-base">
                           {tc(`location.${row.recording.locationCode}`)}
                         </span>
                         <span className="block text-sm text-muted">
@@ -194,7 +194,7 @@ function LabelEditor({
   }
 
   return (
-    <Card as="section" aria-label={t('labels.title')}>
+    <Card as="section" aria-label={tc(`location.${row.recording.locationCode}`)}>
       <p className="font-heading text-lg font-bold text-on-surface">
         {tc(`location.${row.recording.locationCode}`)}
       </p>

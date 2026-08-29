@@ -1,7 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { authRoutes } from './auth/routes'
-import { RequireAuth } from './auth/guards'
 import { adminRoutes } from './features/admin/routes'
 import { assessmentRoutes } from './features/assessment/routes'
 import { demoRoutes } from './features/demo'
@@ -17,7 +16,6 @@ import { reviewRoutes } from './features/review/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
-import { RoleHomePlaceholder } from './features/placeholders/RoleHomePlaceholder'
 import { HelpPage } from './features/help/HelpPage'
 import { NotFoundPage } from './features/status/NotFoundPage'
 import { SystemStatusPage } from './features/status/SystemStatusPage'
@@ -28,12 +26,6 @@ function Root() {
   return <Navigate to={hasChosenLanguage ? '/landing' : '/language'} replace />
 }
 
-/**
- * Role homes that still have no real dashboard. `/patient` is deliberately
- * absent — the patient portal now provides it — and `/admin/users` comes from
- * the auth routes.
- */
-const ROLE_HOME_ROUTES = ['/practitioner', '/health-worker']
 
 /**
  * The component gallery renders every design-system component in every state.
@@ -114,12 +106,19 @@ export function AppRoutes() {
       ))}
 
       {/*
-        `roleHomePath()` sends a researcher to /researcher, but the dashboard
-        lives at /research. Redirect rather than renaming either: the role home
-        map is another feature's, and a researcher landing on a placeholder
-        while their real dashboard sits one letter away is the kind of thing
-        nobody notices until a validator does.
+        `roleHomePath()` sends each role to a home path that predates the
+        features themselves, so every one of these lands somewhere that is not
+        the thing that role actually does. Redirect rather than editing the role
+        map, which belongs to the auth layer.
+
+        These are not cosmetic. Before this, a practitioner signed in and met
+        "dashboard coming soon" with no route to the review queue they exist to
+        use, and a health worker could not reach the patient list at all. Every
+        target below is already guarded at its own route, so redirecting widens
+        nobody's access.
       */}
+      <Route path="/practitioner" element={<Navigate to="/review" replace />} />
+      <Route path="/health-worker" element={<Navigate to="/patients" replace />} />
       <Route path="/researcher" element={<Navigate to="/research" replace />} />
 
       {/*
@@ -131,17 +130,6 @@ export function AppRoutes() {
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
-      {ROLE_HOME_ROUTES.map((path) => (
-        <Route
-          key={path}
-          path={path}
-          element={
-            <RequireAuth>
-              <RoleHomePlaceholder />
-            </RequireAuth>
-          }
-        />
-      ))}
 
       {/*
         Must stay last. Without it React Router renders nothing for an unknown
