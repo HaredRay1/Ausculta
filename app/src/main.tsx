@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next'
 import { registerSW } from 'virtual:pwa-register'
 import { App } from './App'
 import { ensureFirstRunDemo } from './features/demo/firstRun'
+import { registerHardwareBackButton } from './lib/hardwareBack'
 import { i18n } from './i18n'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import './index.css'
@@ -25,6 +26,8 @@ const updateSW = registerSW({
     }
   },
 })
+
+registerHardwareBackButton()
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
