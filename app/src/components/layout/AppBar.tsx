@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { useDesignTranslation } from '../../design/i18n'
-import { ChevronLeftIcon } from '../icons'
+import { ChevronLeftIcon, LungsIcon } from '../icons'
 
 export interface AppBarProps {
   title: string
@@ -30,10 +30,21 @@ export function AppBar({ title, onBack, backLabel, action, subtitle }: AppBarPro
 
   return (
     <header
-      className="sticky top-0 z-(--z-appbar) border-b border-border bg-surface-raised"
+      className="sticky top-0 z-(--z-appbar) border-b border-border bg-chrome text-on-chrome elevation-1"
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <div className="mx-auto flex w-full max-w-lg items-center gap-2 px-2 py-2">
+        {/*
+          The mark, on any screen you did not arrive at from somewhere else.
+          One element that says this is Ausculta rather than a template, in the
+          place a phone user already looks for an app's identity.
+        */}
+        {onBack === undefined && (
+          <span className="ml-1 inline-flex size-10 shrink-0 items-center justify-center text-primary">
+            <LungsIcon className="size-7" />
+          </span>
+        )}
+
         {onBack !== undefined && (
           <button
             type="button"

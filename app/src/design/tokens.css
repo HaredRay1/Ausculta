@@ -30,9 +30,13 @@
     Arial, sans-serif;
 
   /* ---- Surfaces and ink (light) ---------------------------------------- */
-  --color-surface: #f8fafc;
+  --color-surface: #f6f8fa;
   --color-surface-raised: #ffffff;
-  --color-surface-sunken: #f1f5f9;
+  --color-surface-sunken: #edf1f5;
+  /* The app bar and bottom nav. Distinct from both the page and its cards, so
+   * the chrome reads as chrome rather than as more page. */
+  --color-chrome: #ffffff;
+  --color-on-chrome: #0f172a;
   --color-on-surface: #0f172a;
   /* Secondary text. 9.9:1 on --color-surface — AAA, not a low-contrast grey. */
   --color-muted: #334155;
@@ -192,12 +196,14 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --color-surface: #0f172a;
-    --color-surface-raised: #1e293b;
-    --color-surface-sunken: #020617;
+    --color-surface: #0b1220;
+    --color-surface-raised: #1a2537;
+    --color-surface-sunken: #070c14;
+    --color-chrome: #131e2d;
+    --color-on-chrome: #f1f5f9;
     --color-on-surface: #f1f5f9;
     --color-muted: #cbd5e1;
-    --color-border: #334155;
+    --color-border: #3a4a5f;
     --color-border-strong: #94a3b8;
 
     --color-primary: #5eead4;
@@ -238,12 +244,14 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --color-surface: #0f172a;
-  --color-surface-raised: #1e293b;
-  --color-surface-sunken: #020617;
+  --color-surface: #0b1220;
+  --color-surface-raised: #1a2537;
+  --color-surface-sunken: #070c14;
+  --color-chrome: #131e2d;
+  --color-on-chrome: #f1f5f9;
   --color-on-surface: #f1f5f9;
   --color-muted: #cbd5e1;
-  --color-border: #334155;
+  --color-border: #3a4a5f;
   --color-border-strong: #94a3b8;
 
   --color-primary: #5eead4;

@@ -128,6 +128,13 @@ const CONTRAST_PAIRS: ReadonlyArray<{ fg: string; bg: string; min: number; note:
     note: 'destructive ink on a card',
   },
 
+  // The layered surfaces and the chrome the bars sit on. Added with the
+  // surfaces themselves rather than after, so "AA on every new surface" is a
+  // number here rather than a claim in a commit message.
+  { fg: '--color-on-chrome', bg: '--color-chrome', min: 4.5, note: 'app bar and nav text' },
+  { fg: '--color-primary', bg: '--color-chrome', min: 4.5, note: 'the mark on the chrome' },
+  { fg: '--color-muted', bg: '--color-surface-sunken', min: 4.5, note: 'secondary in a well' },
+
   { fg: '--color-focus', bg: '--color-surface', min: 3, note: 'focus ring (non-text UI)' },
   { fg: '--color-border-strong', bg: '--color-surface', min: 3, note: 'input border' },
 ]
@@ -164,6 +171,24 @@ describe('theme completeness', () => {
     )
 
     expect(darkOnly).toEqual([])
+  })
+
+  it('separates the three surface layers, so a card reads as a card', () => {
+    // The owner's verdict on the previous palette was "a flat navy page" — one
+    // surface doing three jobs. These are not WCAG numbers (surface-to-surface
+    // is not a text pair); they are the reason the layering is visible at all,
+    // so they are pinned rather than left to drift back to flat.
+    for (const [name, tokens] of [
+      ['light', lightTokens],
+      ['dark', darkTokens],
+    ] as const) {
+      const page = relativeLuminance(resolve(tokens, '--color-surface'))
+      const card = relativeLuminance(resolve(tokens, '--color-surface-raised'))
+      const chrome = relativeLuminance(resolve(tokens, '--color-chrome'))
+
+      expect(card, `${name}: card must differ from the page`).not.toBeCloseTo(page, 4)
+      expect(chrome, `${name}: chrome must differ from the page`).not.toBeCloseTo(page, 4)
+    }
   })
 
   it('keeps the light and dark surfaces genuinely different', () => {

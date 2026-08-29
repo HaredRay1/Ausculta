@@ -37,7 +37,7 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
   return (
     <nav
       aria-label={label}
-      className="fixed inset-x-0 bottom-0 z-(--z-nav) border-t border-border bg-surface-raised"
+      className="fixed inset-x-0 bottom-0 z-(--z-nav) border-t border-border bg-chrome text-on-chrome elevation-2"
       style={{
         paddingBottom: 'env(safe-area-inset-bottom)',
         // Never taller than what Page reserves for it.

@@ -52,9 +52,9 @@ export function AdminShell({ activeId, title, subtitle, children }: AdminShellPr
         </ul>
       </nav>
 
-      <Section title={title} description={subtitle}>
-        {children}
-      </Section>
+      {/* No title here: StaffShell's app bar already carries it, and repeating
+          it as a body headline is what made these screens read as documents. */}
+      <Section description={subtitle}>{children}</Section>
     </StaffShell>
   )
 }
