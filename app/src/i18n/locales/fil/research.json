@@ -1,0 +1,54 @@
+{
+  "title": "Pananaliksik",
+  "subtitle": "De-identified na datos ng pag-aaral",
+  "dashboard": {
+    "title": "Pananaliksik",
+    "dataHeading": "Nakalap na datos",
+    "modelHeading": "Pagsusuri sa model",
+    "patients": "Mga pasyente",
+    "assessments": "Mga assessment",
+    "recordings": "Mga recording",
+    "withPrediction": "May prediction ng model",
+    "withReferenceLabel": "May reference label",
+    "emptyTitle": "Wala pang datos ng pag-aaral",
+    "emptyBody": "Kapag may na-import at nasuring recording na, lalabas dito ang bilang ng mga ito. Walang tinatantiya sa screen na ito — binibilang ang bawat numero mula sa device na ito.",
+    "goLabels": "Lagyan ng label ang mga recording",
+    "goPerformance": "Performance ng model",
+    "goExport": "I-export ang datos"
+  },
+  "labels": {
+    "title": "Reference labelling",
+    "queueHeading": "Mga recording",
+    "unlabelled": "Wala pang label",
+    "labelled": "May label na",
+    "emptyTitle": "Walang lalagyan ng label",
+    "emptyBody": "Wala pang recording sa device na ito.",
+    "save": "I-save ang label",
+    "saving": "Sine-save…",
+    "saved": "Na-save ang label.",
+    "labelledBy": "Nilagyan ng label ni {{who}} noong {{when}}",
+    "error": "Hindi ma-save ang label."
+  },
+  "performance": {
+    "title": "Performance ng model",
+    "labelMore": "Lagyan ng label ang mga recording"
+  },
+  "export": {
+    "title": "I-export ang datos ng pag-aaral",
+    "intro": "Isang hilera bawat recording, de-identified.",
+    "privacyHeading": "Ano ang lumalabas sa device na ito",
+    "privacyBody": "Ang study identifier lang ang dala ng export, at hindi kailanman ang pangalan, petsa ng kapanganakan, tirahan o contact ng pasyente. Edad sa taon ang kapalit ng petsa ng kapanganakan, at bilang ng araw mula sa unang assessment ng pasyente ang kapalit ng petsa sa kalendaryo. Ini-export bilang code at hindi bilang isinaling salita ang mga klinikal na halaga, para mapagsama-sama ang mga export mula sa mga device na iba-iba ang wika.",
+    "demoWarningTitle": "May kasamang datos na panghalimbawa ang export na ito",
+    "demoWarningBody": "Naka-on ang demo mode, kaya may lalamang gawa-gawang rekord ang file. May isDemo column ang bawat hilera para makilala ang mga ito, pero kailangan itong alisin bago ang anumang pagsusuri.",
+    "rowCount": "{{count}} hilera ang handang i-export.",
+    "emptyTitle": "Walang i-e-export",
+    "emptyBody": "Wala pang recording sa device na ito.",
+    "formatHeading": "Format",
+    "csvHint": "Isang hilera bawat recording. Nabubuksan sa spreadsheet.",
+    "jsonHint": "Parehong field at parehong pagkakasunod-sunod, bilang array ng mga object.",
+    "download": "I-download ang export",
+    "preparing": "Inihahanda…",
+    "columnsHeading": "Mga column",
+    "error": "Hindi mabuo ang export."
+  }
+}

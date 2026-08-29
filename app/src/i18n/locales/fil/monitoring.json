@@ -1,0 +1,80 @@
+{
+  "plan": {
+    "title": "Monitoring plan",
+    "subtitleFor": "Para kay {{name}}",
+    "current": "Kasalukuyang plano",
+    "none": "Walang monitoring plan",
+    "noneHint": "Wala pang naaprubahang plano para sa pasyenteng ito.",
+    "startLabel": "Petsa ng simula",
+    "endLabel": "Petsa ng katapusan",
+    "endHint": "Iwanang blangko kung walang takdang katapusan.",
+    "save": "I-save bilang draft",
+    "saving": "Sine-save",
+    "approve": "Aprubahan ang planong ito",
+    "approving": "Ina-aprubahan",
+    "approved": "Naaprubahan ang plano",
+    "everyDays_one": "Araw-araw",
+    "everyDays_other": "Tuwing {{count}} araw",
+    "startedOn": "Mula {{date}}",
+    "untilOn": "Hanggang {{date}}",
+    "openEnded": "Walang petsa ng katapusan",
+    "status": "Status",
+    "statusDRAFT": "Draft, hindi pa naaaprubahan",
+    "statusACTIVE": "Naaprubahan at aktibo",
+    "statusARCHIVED": "Napalitan ng mas bagong plano",
+    "history": "Mga naunang plano",
+    "notFound": "Hindi available ang pasyente",
+    "notFoundHint": "Maaaring nakatalaga sila sa ibang practitioner."
+  },
+
+  "alerts": {
+    "title": "Mga alerto",
+    "empty": "Walang bukas na alerto",
+    "emptyHint": "Lalabas dito ang mga alerto tungkol sa inyong mga pasyente.",
+    "loading": "Nilo-load ang mga alerto",
+    "count_one": "{{count}} bukas na alerto",
+    "count_other": "{{count}} bukas na alerto",
+    "acknowledge": "Markahang nakita",
+    "close": "Isara ang alertong ito",
+    "closeNoteLabel": "Bakit walang kailangang gawin?",
+    "closeNoteHint": "Isang desisyon ang naitatala kapag isinara ang alerto, kaya kailangan nito ng dahilan.",
+    "closeConfirm": "Isara ang alerto",
+    "cancel": "Kanselahin",
+    "acknowledged": "Nakita",
+    "raisedOn": "Napansin noong {{date}}",
+    "notPermitted": "Para sa mga practitioner ang mga alerto",
+    "notPermittedHint": "Hindi available ang queue na ito sa inyong role."
+  },
+
+  "trend": {
+    "title": "Trend sa paglipas ng panahon",
+    "subtitle": "Ano ang na-record sa bawat bisita",
+    "none": "Walang naitalang assessment",
+    "byLocation": "Ayon sa lokasyon sa baga",
+    "symptoms": "Mga naiulat na sintomas",
+    "vitals": "Mga sukat",
+    "assessmentsCount_one": "{{count}} assessment",
+    "assessmentsCount_other": "{{count}} assessment",
+    "noDataAt": "Walang naitala sa lokasyong ito"
+  },
+
+  "error": {
+    "MONITORING_NOT_FOUND": "Hindi iyan available sa inyo.",
+    "MONITORING_NOT_PERMITTED": "Wala kayong pahintulot na gawin iyan.",
+    "MONITORING_INVALID_INTERVAL": "Ilagay kung ilang araw ang pagitan ng mga assessment, mula 1 hanggang 365.",
+    "MONITORING_NO_LOCATIONS": "Pumili ng kahit isang lokasyon sa baga.",
+    "MONITORING_INVALID_DATE_RANGE": "Hindi puwedeng mas maaga ang petsa ng katapusan kaysa sa petsa ng simula.",
+    "MONITORING_ALREADY_APPROVED": "Naaprubahan na ang planong iyan.",
+    "MONITORING_NOTE_REQUIRED": "Pakisabi kung bakit walang kailangang gawin.",
+    "SAVE_FAILED": "Hindi iyon na-save. Walang nawala — subukan ulit."
+  },
+
+  "auditAction": {
+    "MONITORING_PLAN_DRAFTED": "Nagdraft ng monitoring plan",
+    "MONITORING_PLAN_APPROVED": "Naaprubahan ang monitoring plan",
+    "MONITORING_PLAN_ARCHIVED": "Napalitan ang monitoring plan",
+    "MONITORING_ALERT_RAISED": "May itinaas na alerto",
+    "MONITORING_ALERT_ACKNOWLEDGED": "Namarkahang nakita ang alerto",
+    "MONITORING_ALERT_CLOSED": "Isinara ang alerto"
+  }
+}
