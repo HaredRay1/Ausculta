@@ -1,0 +1,42 @@
+{
+  "title": "Demo mode",
+  "intro": "Naglo-load ng maliit at gawa-gawang klinika para may maipakita ang bawat screen ng app. Gamitin ito sa pagsasanay at sa paglilibot sa app.",
+  "banner": {
+    "label": "Datos na panghalimbawa",
+    "body": "Gawa-gawang mga rekord ito para sa pagsasanay at demonstrasyon. Walang tunay na pasyente rito, at ang mga recording ay gawa-gawang test tone lamang, hindi tunog ng baga.",
+    "short": "Datos na panghalimbawa — hindi tunay na pasyente"
+  },
+  "toggle": {
+    "label": "Ipakita ang datos na panghalimbawa",
+    "hintOn": "Makikita sa buong app ang mga gawa-gawang rekord, at may markang panghalimbawang datos ang bawat isa.",
+    "hintOff": "Mga tunay na rekord lang ang ipinapakita. Nananatili sa device ang datos na panghalimbawa, nakatago."
+  },
+  "status": {
+    "heading": "Sa device na ito",
+    "empty": "Walang na-load na datos na panghalimbawa.",
+    "loaded": "{{patients}} pasyente, {{assessments}} assessment at {{recordings}} recording.",
+    "loadedAt": "Na-load noong {{date}}."
+  },
+  "actions": {
+    "load": "I-load ang datos na panghalimbawa",
+    "loading": "Naglo-load…",
+    "reload": "I-load ulit ang datos na panghalimbawa",
+    "remove": "Alisin ang datos na panghalimbawa",
+    "removing": "Inaalis…",
+    "confirmRemove": "Alisin ang lahat ng panghalimbawang rekord sa device na ito? Hindi maaapektuhan ang mga tunay na rekord ng pasyente.",
+    "removed": "Naalis na ang datos na panghalimbawa."
+  },
+  "walkthrough": {
+    "heading": "Saan magsisimula",
+    "body": "Buksan si {{name}}. May hika siya at may {{count}} assessment sa nakaraang dalawang buwan, kaya nagpapakita ng trend ang kanyang mga resulta at hindi lang iisang resulta."
+  },
+  "audio": {
+    "heading": "Tungkol sa mga recording",
+    "body": "Pare-parehong gawa-gawang test tone ang tumutugtog sa bawat panghalimbawang recording. Walang tunog ng baga rito, at walang dapat suriing klinikal dito."
+  },
+  "errors": {
+    "title": "May nangyaring mali",
+    "load": "Hindi ma-load ang datos na panghalimbawa.",
+    "remove": "Hindi maalis ang datos na panghalimbawa."
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "action": {
+    "close": "Isara",
+    "back": "Bumalik",
+    "dismiss": "Alisin",
+    "cancel": "Kanselahin",
+    "confirm": "Kumpirmahin",
+    "recordAgain": "Mag-record ulit",
+    "loading": "Naglo-load…",
+    "showPassword": "Ipakita ang password",
+    "hidePassword": "Itago ang password"
+  },
+  "field": {
+    "optional": "opsyonal"
+  },
+  "fictional": {
+    "title": "Halimbawang datos",
+    "body": "Gawa-gawa lamang ang impormasyong ito para ipakita kung paano gumagana ang app. Hindi ito tunay na tao at hindi ito tunay na recording.",
+    "shortLabel": "Halimbawang datos — hindi tunay na pasyente"
+  },
+  "notConnected": {
+    "label": "Wala pa",
+    "body": "Hindi pa gawa ang bahaging ito ng Ausculta. Walang sinusukat o kinukuwenta rito.",
+    "noValue": "Walang halaga"
+  },
+  "source": {
+    "MANUAL_ENTRY": "Inilagay ng tao",
+    "AUSCULTATION_DERIVED": "Sinukat ng device",
+    "label": "Saan ito nanggaling"
+  },
+  "empty": {
+    "title": "Wala pa rito",
+    "body": "Wala pang maipapakita sa screen na ito."
+  },
+  "toast": {
+    "region": "Mga abiso"
+  },
+  "audio": {
+    "play": "I-play ang recording: {{label}}",
+    "pause": "I-pause ang recording: {{label}}",
+    "seek": "Ilipat ang posisyon sa recording: {{label}}",
+    "errorTitle": "Hindi ma-play: {{label}}"
+  }
+}

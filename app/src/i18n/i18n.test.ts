@@ -57,12 +57,13 @@ describe('i18next fallback behavior', () => {
     const i18n = createI18n(db)
     await i18n.changeLanguage('fil')
 
-    // "getStarted" only exists in en/common.json this phase; fil/common.json
-    // is deliberately minimal (§5). The resolved string must be the English
-    // value, never the raw "common:getStarted" key.
-    const resolved = i18n.t('common:getStarted')
-    expect(resolved).not.toBe('common:getStarted')
-    expect(resolved).toBe(i18n.getResource('en', 'common', 'getStarted'))
+    // "disclaimer" exists only in en/common.json and always will: it is safety
+    // wording, and the project forbids machine-translating clinical, consent
+    // and safety text (§5). The resolved string must be the English value,
+    // never the raw "common:disclaimer" key.
+    const resolved = i18n.t('common:disclaimer')
+    expect(resolved).not.toBe('common:disclaimer')
+    expect(resolved).toBe(i18n.getResource('en', 'common', 'disclaimer'))
   })
 
   it('resolves real strings before any changeLanguage call (LanguageSelect renders on first load)', () => {

@@ -1,4 +1,84 @@
 {
+  "tagline": "Makinig. Tuklasin. Kumilos.",
+  "languageNameEn": "English",
   "languageNameFil": "Filipino",
-  "continue": "Magpatuloy"
+  "getStarted": "Magsimula",
+  "continue": "Magpatuloy",
+  "settings": "Mga setting",
+  "changeLanguage": "Palitan ang wika",
+  "demoData": "Datos na panghalimbawa",
+  "signedInAs": "Naka-sign in bilang {{name}}",
+  "signOut": "Mag-sign out",
+  "dashboardComingSoon": "Ginagawa pa ang inyong dashboard. Gumagana na ang pag-sign in, ang mga role, at ang pag-apruba ng account.",
+  "systemStatus": {
+    "title": "Ano ang gumagana sa bersyong ito",
+    "intro": "Ang Ausculta ay isang research prototype. May mga bahaging tapos na at may mga hindi pa. Sinasabi ng pahinang ito kung alin ang alin, para alam ninyo ang tinitingnan ninyo.",
+    "back": "Bumalik",
+    "group": {
+      "built": "Gumagana",
+      "partial": "Hindi pa tapos",
+      "notConnected": "Wala pa"
+    },
+    "status": {
+      "built": "Status: gumagana",
+      "partial": "Status: hindi pa tapos",
+      "notConnected": "Status: wala pa"
+    },
+    "capability": {
+      "recordingImport": {
+        "name": "Pagkuha ng recording mula sa device",
+        "detail": "Binabasa ang mga WAV file na isinusulat ng stethoscope sa memory card nito."
+      },
+      "qualityCheck": {
+        "name": "Pagsusuri sa kalidad ng recording",
+        "detail": "Tinatanggihan ang mga recording na tahimik, maingay, sira o masyadong maikli, bago pa magsimula ang anumang pagsusuri."
+      },
+      "classification": {
+        "name": "Awtomatikong pagsusuri ng tunog ng baga",
+        "detail": "Sa mismong telepono tumatakbo, hindi kailangan ng internet."
+      },
+      "accounts": {
+        "name": "Mga account at role",
+        "detail": "Pag-sign in, pagrehistro, at pag-apruba ng administrator sa mga account ng staff."
+      },
+      "patientRecords": {
+        "name": "Mga rekord ng pasyente",
+        "detail": "Pagrehistro ng pasyente, pagtala ng kanilang kasaysayan, pagtingin at paghahanap."
+      },
+      "practitionerReview": {
+        "name": "Pagsusuri ng practitioner",
+        "detail": "May kwalipikadong practitioner na kumukumpirma o hindi sumasang-ayon sa bawat awtomatikong resulta."
+      },
+      "guides": {
+        "name": "Mga larawang panturo",
+        "detail": "Kung paano gamitin ang device at kung saan ilalagay ang stethoscope sa dibdib."
+      },
+      "offline": {
+        "name": "Gumagana kahit walang internet",
+        "detail": "Pagkatapos ng unang pag-load, gumagana ang buong app pati ang pagsusuri kahit walang signal."
+      },
+      "rehabilitation": {
+        "name": "Suporta sa rehabilitation"
+      },
+      "trends": {
+        "name": "Mga trend sa paglipas ng panahon",
+        "detail": "Mga chart ng mga nakaraang resulta. Kailangan ng higit sa isang assessment bago may maipakitang makabuluhan."
+      },
+      "filipino": {
+        "name": "Salin sa Filipino",
+        "detail": "Bahagyang naisalin ang teksto ng interface. Mananatiling Ingles ang mga salitang pang-consent at pangkaligtasan hangga't hindi ito nasusuri ng kwalipikadong tagasalin at ng doktor — hindi katanggap-tanggap ang machine translation para sa klinikal na teksto."
+      },
+      "severityScore": {
+        "detail": "Walang modelo para dito. Sa halip na mag-imbento, walang ipinapakitang numero ang app."
+      },
+      "cloudSync": {
+        "name": "Pag-sync sa pagitan ng mga device",
+        "detail": "Nananatili sa teleponong ito ang lahat. Walang ini-upload kahit saan."
+      },
+      "bluetooth": {
+        "name": "Koneksyon sa stethoscope sa pamamagitan ng Bluetooth",
+        "detail": "Sa memory card na lang dumadaan ang mga recording."
+      }
+    }
+  }
 }
