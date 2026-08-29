@@ -209,7 +209,15 @@ export function AudioPlayer({ blob, label, durationSec, onError }: AudioPlayerPr
 
         <div className="flex min-w-0 flex-1 items-center gap-2">
           <MicIcon className="size-5 shrink-0 text-muted" />
-          <span className="truncate text-base font-medium text-on-surface">{label}</span>
+          {/*
+            Wraps rather than truncating. The label is what tells six players on
+            one review screen apart — "Play recording: Left lower lung" — and
+            measured in a real browser it was being cut at the lung position,
+            the only part that distinguishes them, at NORMAL font size and worse
+            when enlarged. A player you cannot identify is one a practitioner has
+            to play to find out what it is.
+          */}
+          <span className="break-words text-base font-medium text-on-surface">{label}</span>
         </div>
 
         {/* Both times as text. A bar position is not a readable number. */}
