@@ -104,7 +104,14 @@ describe('the fixed bottom bar and the space reserved for it', () => {
     // mentions truncation, and matching that would be checking the prose.
     const code = nav.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '')
     expect(code).not.toMatch(/truncate/)
-    expect(code).toContain('line-clamp-2')
+    // Asserts the property rather than one implementation of it. A two-line
+    // clamp was the first fix and it still lost text once the system font
+    // size was turned up: measured in a real browser at 200% root font, "My
+    // results", "About me" and "Breathing plan" were all clipped mid-label.
+    // The requirement is that nothing cuts the label off, by any mechanism.
+    expect(code).not.toMatch(/line-clamp/)
+    expect(code).not.toMatch(/text-ellipsis/)
+    expect(code).toContain('break-words')
   })
 })
 

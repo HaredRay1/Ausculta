@@ -76,10 +76,18 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
                   truncated to "Plano s…" is worse than a taller bar, because
                   the label is the only thing making the destination findable
                   to someone navigating unaided.
+
+                  The two-line clamp that replaced the truncation was still losing
+                  text once the system font size was turned up: measured in a real
+                  browser at 200% root font, "My results", "About me" and "Breathing
+                  plan" were all clipped mid-label. Enlarged text is exactly the
+                  setting the older users this app is for tend to run, so the clamp
+                  is gone and the label wraps as far as it needs to. The bar grows;
+                  same trade as before, for the same reason.
                 */}
                 <span
                   className={[
-                    'line-clamp-2 w-full break-words text-center text-sm leading-tight',
+                    'w-full break-words text-center text-sm leading-tight',
                     active ? 'font-bold' : 'font-medium',
                   ].join(' ')}
                 >
