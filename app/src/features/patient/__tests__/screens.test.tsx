@@ -749,9 +749,12 @@ describe('against demo-seeded data', () => {
     renderAt(PATIENT_PATHS.home)
     await waitFor(() => expect(screen.getByText(t('home.latestHeading_example'))).toBeInTheDocument())
 
-    // No linked record, so the sample-data path: labelled as invented, twice.
+    // No linked record, so the sample-data path: labelled as invented. Once,
+    // now -- the long banner shortens to its pill here because the preview
+    // panel beneath it says everything the banner did and more. Both labels
+    // are still on screen; only the duplication is gone.
     expect(screen.getByText(t('shared.demoPreview.title'))).toBeInTheDocument()
-    expect(screen.getByText(design('fictional.title'))).toBeInTheDocument()
+    expect(screen.getByText(design('fictional.shortLabel'))).toBeInTheDocument()
 
     expect(screen.getByRole('link', { name: new RegExp(t('home.openLatest')) })).toBeInTheDocument()
   })
@@ -790,5 +793,67 @@ describe('against demo-seeded data', () => {
         name: `${t('history.familyHeading_example')}: ${t('history.yesHeading')}`,
       }),
     ).toBeInTheDocument()
+  })
+})
+
+// --- the sample-data label, and the two shapes it takes -----------------------
+
+describe('the sample-data label shortens only where a fuller notice replaces it', () => {
+  /**
+   * Two banners saying one thing do not double the warning. In example mode the
+   * blue demo-preview panel already states the record is invented, NAMES whose
+   * it is, says it is not the reader's, and offers the way out -- strictly more
+   * than the brown banner above it. Stacked, they took over half of a 390x844
+   * screen and pushed the reader's own name and first data card below the fold,
+   * which teaches the habit of scrolling past warning copy. That habit is the
+   * cost this split exists to avoid.
+   *
+   * The seeded-record-without-that-panel case is the one the full-strength
+   * banner was written for, and it has to keep it. These two tests pin the
+   * split so a later refactor cannot quietly collapse the cases into one.
+   */
+  beforeEach(async () => {
+    await seedDemoData(db, { now: Date.parse('2026-08-29T00:00:00.000Z') })
+    await setDemoMode(true, db)
+    setExampleRecordShown(false)
+  })
+
+  afterEach(() => setExampleRecordShown(false))
+
+  it('shows the pill AND the named preview panel when the user asked for an example', async () => {
+    setExampleRecordShown(true)
+    renderAt(PATIENT_PATHS.home)
+
+    // The fuller notice, intact: it is what earns the shortening above it.
+    const panel = await screen.findByText(design('fictional.shortLabel'))
+    expect(panel).toBeInTheDocument()
+    expect(screen.getByText(t('shared.demoPreview.title'))).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: t('shared.demoPreview.stop') })).toBeInTheDocument()
+
+    // Whose record it is, still named. Without this the shortening is a loss.
+    const example = await db.patients.filter((row) => row.isDemo === 1).first()
+    expect(example).toBeDefined()
+    expect(
+      screen.getByText(new RegExp(example?.name ?? 'no-such-patient', 'i')),
+    ).toBeInTheDocument()
+
+    // And the long form is gone, which is the whole point.
+    expect(screen.queryByText(design('fictional.body'))).not.toBeInTheDocument()
+  })
+
+  it('keeps the full banner for a seeded record met without that panel', async () => {
+    // A demo row LINKED to the account: fictional, so the label must appear,
+    // but source is 'linked' rather than 'demo-preview', so nothing else on the
+    // screen explains it. This is the case FictionalDataBanner was written for.
+    const example = await db.patients.filter((row) => row.isDemo === 1).first()
+    expect(example).toBeDefined()
+    await db.patients.update(example?.id ?? '', { linkedUserId: userId })
+
+    renderAt(PATIENT_PATHS.home)
+
+    expect(await screen.findByText(design('fictional.title'))).toBeInTheDocument()
+    expect(screen.getByText(design('fictional.body'))).toBeInTheDocument()
+    expect(screen.queryByText(t('shared.demoPreview.title'))).not.toBeInTheDocument()
+    expect(screen.queryByText(design('fictional.shortLabel'))).not.toBeInTheDocument()
   })
 })

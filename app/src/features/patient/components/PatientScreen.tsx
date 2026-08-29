@@ -55,11 +55,23 @@ export function PatientScreen({
   })
 
   const heading = title ?? t(`patient:nav.${activeId}`)
-  const frame = (content: ReactNode) => (
+  /**
+   * `compactFictionalLabel` is an argument rather than something read from
+   * `overview`, so the pill can only ever appear in a tree that also renders
+   * the demo-preview panel below it.
+   *
+   * Keying it off `source === 'demo-preview'` up here would look equivalent and
+   * is not: `frame` also wraps the loading, error and no-record branches, none
+   * of which render that panel. In those the shortened label would be the only
+   * thing on screen saying the data is invented, which is the one outcome this
+   * change must not produce.
+   */
+  const frame = (content: ReactNode, compactFictionalLabel = false) => (
     <PatientShell
       activeId={activeId}
       title={heading}
       fictional={overview.isFictional}
+      compactFictionalLabel={compactFictionalLabel}
       {...(subtitle !== undefined && { subtitle })}
       {...(onBack !== undefined && { onBack })}
     >
@@ -87,9 +99,14 @@ export function PatientScreen({
   }
   const loaded: LoadedPatientOverview = { ...overview, patient }
 
+  // The one branch that renders the demo-preview panel, and therefore the only
+  // one allowed to shorten the label above it. Same expression, one line apart,
+  // on purpose: if the panel ever stops rendering here the pill goes with it.
+  const showsPreviewNotice = overview.source === 'demo-preview'
+
   return frame(
     <>
-      {overview.source === 'demo-preview' && (
+      {showsPreviewNotice && (
         <Banner
           tone="info"
           title={t('patient:shared.demoPreview.title')}
@@ -113,6 +130,7 @@ export function PatientScreen({
       */}
       <ExampleCopyProvider example={overview.isFictional}>{children(loaded)}</ExampleCopyProvider>
     </>,
+    showsPreviewNotice,
   )
 }
 

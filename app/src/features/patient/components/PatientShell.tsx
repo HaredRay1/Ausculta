@@ -46,6 +46,22 @@ export interface PatientShellProps {
   onBack?: () => void
   /** Labels this screen's content as invented, for the demo walkthrough. */
   fictional?: boolean
+  /**
+   * Renders the sample-data label as a pill instead of the full banner.
+   *
+   * Only ever set when the screen ALSO shows the demo-preview panel, which
+   * states the same fact with more in it: whose record this is, that it is not
+   * the reader's, and the way out. Two banners saying one thing do not double
+   * the warning — they halve the chance either is read, and on a 390x844 screen
+   * they pushed the reader's own name and first data card below the fold, which
+   * teaches the habit of scrolling past warning copy. That habit is the real
+   * safety cost.
+   *
+   * A seeded record met WITHOUT that panel — a clinician opening demo rows —
+   * still gets the full-strength banner. See PatientScreen for why the flag is
+   * computed at the one call site that renders both.
+   */
+  compactFictionalLabel?: boolean
   children: ReactNode
 }
 
@@ -55,6 +71,7 @@ export function PatientShell({
   subtitle,
   onBack,
   fictional = false,
+  compactFictionalLabel = false,
   children,
 }: PatientShellProps) {
   const { t } = usePatientTranslation()
@@ -70,7 +87,14 @@ export function PatientShell({
     <>
       <AppBar title={title} subtitle={subtitle} onBack={onBack} />
       <Page hasBottomNav>
-        {fictional && <FictionalDataBanner />}
+        {fictional && (
+          <FictionalDataBanner
+            compact={compactFictionalLabel}
+            // The pill is inline; Page's column would otherwise stretch it to
+            // the full width and it would read as a squat banner again.
+            className={compactFictionalLabel ? 'self-start' : ''}
+          />
+        )}
         {children}
       </Page>
       <BottomNav
