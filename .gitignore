@@ -10,3 +10,4 @@ app/android/
 dist-apk/
 node_modules/
 signing/
+design-preview/
