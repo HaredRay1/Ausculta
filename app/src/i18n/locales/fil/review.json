@@ -1,0 +1,89 @@
+{
+  "queue": {
+    "title": "Mga kasong susuriin",
+    "empty": "Walang naghihintay",
+    "emptyHint": "Lalabas dito ang mga assessment na kailangan ninyong suriin.",
+    "loading": "Nilo-load ang mga kaso",
+    "count_one": "{{count}} kaso",
+    "count_other": "{{count}} kaso",
+    "filterLabel": "Ipakita",
+    "open": "Suriin ang kasong ito",
+    "locations_one": "{{count}} lokasyon ang na-record",
+    "locations_other": "{{count}} lokasyon ang na-record",
+    "waiting_one": "{{count}} araw nang naghihintay",
+    "waiting_other": "{{count}} araw nang naghihintay",
+    "waitingToday": "Na-record ngayong araw",
+    "notPermitted": "Para sa mga practitioner ang pagsusuri",
+    "notPermittedHint": "Hindi available ang queue na ito sa inyong role."
+  },
+  "case": {
+    "title": "Pagsusuri ng kaso",
+    "notFound": "Hindi available ang kaso",
+    "notFoundHint": "Maaaring pag-aari ito ng ibang practitioner, o luma na ang link.",
+    "backToQueue": "Balik sa mga kaso",
+    "patientContext": "Tungkol sa pasyenteng ito",
+    "symptoms": "Mga naiulat na sintomas",
+    "vitals": "Mga sukat",
+    "noSymptoms": "Walang naitalang sintomas",
+    "noVitals": "Walang naitalang sukat",
+    "respiratory": "Kasaysayan ng paghinga",
+    "family": "Kasaysayan ng pamilya at kasambahay",
+    "noHistory": "Walang naitalang kasaysayan",
+    "notAskedNote": "Hindi tinanong ang mga tanong na wala sa listahan, at hindi ito katulad ng sagot na hindi.",
+    "recordings": "Mga recording",
+    "modelVersion": "Bersyon ng model {{version}}",
+    "modelUnknown": "Hindi naitala ang bersyon ng model",
+    "startReview": "Itala ang inyong konklusyon",
+    "openReport": "Buod na puwedeng i-print",
+    "recordedOn": "Na-record noong {{date}}",
+    "age_one": "{{count}} taong gulang",
+    "age_other": "{{count}} taong gulang",
+    "ageUnknown": "Hindi alam ang edad",
+    "reviewedOn": "Nasuri noong {{date}}",
+    "yes": "Oo",
+    "no": "Hindi"
+  },
+  "location": {
+    "listen": "I-play ang recording: {{location}}"
+  },
+  "form": {
+    "title": "Ang inyong konklusyon",
+    "intro": "Itala ang inyong konklusyon tungkol sa assessment na ito. Hiwalay na naka-imbak ang inyong konklusyon sa awtomatikong resulta, na hindi kailanman binabago.",
+    "outcomeLabel": "Ano ang inyong konklusyon?",
+    "notesLabel": "Mga nota",
+    "notesHint": "Ipapakita sa pasyente ang isusulat ninyo rito, kasama ng inyong konklusyon.",
+    "notesRequired": "Mga nota",
+    "locationLabel": "Aling lokasyon ang tinutukoy nito?",
+    "locationHint": "Nakikita ito ng health worker, kaya pangalanan ang lugar na tinutukoy ninyo.",
+    "modifiedLabel": "Ano ang konklusyon ninyo sa halip?",
+    "addLocation": "Magkomento sa isang tiyak na lokasyon",
+    "removeLocation": "Alisin ang komentong ito sa lokasyon",
+    "locationOutcomeLabel": "Konklusyon para sa {{location}}",
+    "submit": "Ipasa ang konklusyon",
+    "submitting": "Sine-save",
+    "cancel": "Kanselahin",
+    "submitted": "Naitala ang konklusyon",
+    "submittedHint": "Makikita na ngayon ng pasyente ang inyong konklusyon kasama ng awtomatikong resulta.",
+    "backToCase": "Balik sa kaso",
+    "backToQueue": "Susunod na kaso",
+    "immutabilityNote": "Hindi binabago ng pagpasa ang awtomatikong resulta. Nananatili itong eksakto gaya ng ginawa ng app."
+  },
+  "repeat": {
+    "at": "Sa {{location}}",
+    "reason": "Dahilan: {{reason}}"
+  },
+  "error": {
+    "REVIEW_NOT_FOUND": "Hindi available sa inyo ang kasong iyan.",
+    "REVIEW_NOT_PERMITTED": "Wala kayong pahintulot na magsuri.",
+    "REVIEW_INVALID_INTERPRETATION": "Pumili sa mga konklusyon.",
+    "REVIEW_NOTES_REQUIRED": "Pakisabi kung bakit.",
+    "REVIEW_MODIFIED_CLASSIFICATION_REQUIRED": "Piliin kung ano ang konklusyon ninyo sa halip.",
+    "REVIEW_LOCATION_REQUIRED": "Piliin kung aling lokasyon ang tinutukoy nito.",
+    "REVIEW_UNKNOWN_RECORDING": "Hindi bahagi ng assessment na ito ang recording na iyan.",
+    "SUBMIT_FAILED": "Hindi na-save ang inyong konklusyon. Walang nawala — subukan ulit."
+  },
+  "auditAction": {
+    "REVIEW_SUBMITTED": "Naipasa ang klinikal na pagsusuri",
+    "REVIEW_REPEAT_REQUESTED": "Hiniling na ulitin ang recording"
+  }
+}

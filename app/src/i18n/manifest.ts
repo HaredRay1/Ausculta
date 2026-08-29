@@ -28,4 +28,5 @@ export const TRANSLATION_MANIFEST: readonly TranslationManifestEntry[] = [
   { namespace: 'auth', language: 'fil', version: 1, status: 'draft' },
   { namespace: 'patients', language: 'fil', version: 1, status: 'draft' },
   { namespace: 'assessment', language: 'fil', version: 1, status: 'draft' },
+  { namespace: 'review', language: 'fil', version: 1, status: 'draft' },
 ]
