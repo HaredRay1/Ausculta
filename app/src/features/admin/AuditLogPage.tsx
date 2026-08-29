@@ -239,7 +239,7 @@ export function AuditLogPage({ database }: AuditLogPageProps = {}) {
                           <summary className="min-h-12 cursor-pointer py-3">
                             {t('admin:audit.detail')}
                           </summary>
-                          <pre className="overflow-x-auto whitespace-pre-wrap break-all text-xs">
+                          <pre className="overflow-x-auto whitespace-pre-wrap break-all text-sm">
                             {JSON.stringify(row.detail, null, 2)}
                           </pre>
                         </details>

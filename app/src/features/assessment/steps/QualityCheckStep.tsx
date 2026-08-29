@@ -81,7 +81,7 @@ export function QualityCheckStep({
                   {MISTAKE_GUIDE_FOR_FLAG[flag.code] === undefined && (
                     <p className="text-sm text-muted">{t(mistakeCaptionKey(flag.code))}</p>
                   )}
-                  <p className="text-xs font-medium text-muted">
+                  <p className="text-sm font-medium text-muted">
                     {t(`quality.severity.${flag.severity}`)}
                   </p>
                 </div>

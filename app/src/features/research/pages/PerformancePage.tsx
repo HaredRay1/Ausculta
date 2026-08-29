@@ -191,7 +191,7 @@ function PerClassTable({ perClass }: { perClass: readonly ClassMetrics[] }) {
                 <th scope="row" className="px-2 py-2 text-left font-normal text-on-surface">
                   {tc(`classification.${entry.code}`)}
                   {entry.underSupported && (
-                    <span className="mt-0.5 flex items-center gap-1 text-xs text-on-warning-surface">
+                    <span className="mt-0.5 flex items-center gap-1 text-sm text-on-warning-surface">
                       <WarningIcon className="size-3.5" />
                       {t('performance.underSupported', { n: MINIMUM_CLASS_SUPPORT })}
                     </span>

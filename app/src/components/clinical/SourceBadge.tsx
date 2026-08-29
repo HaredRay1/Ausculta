@@ -1,11 +1,14 @@
-import { useDesignTranslation } from '../../design/i18n'
+import { useTranslation } from 'react-i18next'
+import type { MeasurementSource } from '../../db/codes'
 import { ChipIcon, HandIcon, type IconComponent } from '../icons'
 
 /**
- * Matches MEASUREMENT_SOURCES in src/db/codes.ts, so a stored value maps
- * straight onto a badge with no translation table in between.
+ * The stored code itself, not a copy of it.
+ *
+ * Re-declaring the union here would be a second place for the vocabulary to
+ * live, which is the drift this component just suffered from.
  */
-export type ValueSource = 'MANUAL_ENTRY' | 'AUSCULTATION_DERIVED'
+export type ValueSource = MeasurementSource
 
 const SOURCE_ICONS: Record<ValueSource, IconComponent> = {
   MANUAL_ENTRY: HandIcon,
@@ -20,15 +23,23 @@ export interface SourceBadgeProps {
 /**
  * Where a clinical value came from.
  *
- * Every number on a clinical screen must say whether a person typed it or the
- * device produced it. A reviewing clinician weighs the two differently, and a
- * screen that mixes them silently invites a device-derived estimate to be read
- * as a measured observation.
+ * Every number on a clinical screen must say whether a person measured it or
+ * the app worked it out. A reviewing clinician weighs the two differently, and
+ * a screen that blurs them invites a derived estimate to be read as an
+ * observation.
+ *
+ * The wording comes from `codes.json` and nowhere else. This component briefly
+ * carried its own copy in the design namespace, which drifted until it read
+ * "Measured by the device" for an auscultation-derived value — a false claim
+ * about provenance, on the one control whose whole purpose is stating
+ * provenance. Clinical vocabulary lives in the code registry, which the
+ * exhaustiveness test polices and whose values leave the device in research
+ * exports.
  *
  * Icon plus words, never the icon alone.
  */
 export function SourceBadge({ source, className = '' }: SourceBadgeProps) {
-  const { t } = useDesignTranslation()
+  const { t } = useTranslation('codes', { useSuspense: false })
   const Icon = SOURCE_ICONS[source]
 
   return (
@@ -41,7 +52,7 @@ export function SourceBadge({ source, className = '' }: SourceBadgeProps) {
         .join(' ')}
     >
       <Icon className="size-4 shrink-0" />
-      {t(`source.${source}`)}
+      {t(`measurementSource.${source}`)}
     </span>
   )
 }

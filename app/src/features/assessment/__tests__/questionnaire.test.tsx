@@ -305,10 +305,12 @@ describe('the vitals screen', () => {
     renderVitals()
 
     // The SourceBadge wording, so a reviewer never has to guess whether a
-    // person measured the number or the device produced it.
-    expect(screen.queryByText(/typed in by a person/i)).not.toBeInTheDocument()
+    // person measured the number or the app worked it out. It now comes from
+    // codes.json rather than a private copy in the design namespace, which had
+    // drifted to claiming a derived value was "measured by the device".
+    expect(screen.queryByText(/measured by a person/i)).not.toBeInTheDocument()
     fireEvent.change(screen.getByLabelText(/oxygen level/i), { target: { value: '95' } })
-    expect(screen.getByText(/typed in by a person/i)).toBeInTheDocument()
+    expect(screen.getByText(/measured by a person/i)).toBeInTheDocument()
   })
 
   it('offers no box for an auscultation-derived respiratory rate', () => {

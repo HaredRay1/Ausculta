@@ -61,7 +61,7 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
                 <span className="relative">
                   {item.icon}
                   {item.badge !== undefined && item.badge > 0 && (
-                    <span className="absolute -right-2.5 -top-1 min-w-5 rounded-pill bg-destructive px-1 text-center text-xs font-bold leading-5 text-on-destructive">
+                    <span className="absolute -right-2.5 -top-1 min-w-6 rounded-pill bg-destructive px-1 text-center text-sm font-bold leading-6 text-on-destructive">
                       {item.badge}
                     </span>
                   )}
@@ -79,7 +79,7 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
                 */}
                 <span
                   className={[
-                    'line-clamp-2 w-full break-words text-center text-xs leading-tight',
+                    'line-clamp-2 w-full break-words text-center text-sm leading-tight',
                     active ? 'font-bold' : 'font-medium',
                   ].join(' ')}
                 >

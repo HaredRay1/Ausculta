@@ -307,7 +307,7 @@ function Row({ label, value, hint }: { label: string; value: string; hint?: stri
     <div>
       <dt className="text-sm text-muted">{label}</dt>
       <dd className="text-base text-on-surface">{value}</dd>
-      {hint !== undefined && <dd className="text-xs text-muted">{hint}</dd>}
+      {hint !== undefined && <dd className="text-sm text-muted">{hint}</dd>}
     </div>
   )
 }

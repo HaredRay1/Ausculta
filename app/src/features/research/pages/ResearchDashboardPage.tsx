@@ -98,7 +98,7 @@ function Stat({ label, value, hint }: { label: string; value: number; hint?: str
     <Card padding="sm">
       <p className="font-heading text-3xl font-bold tabular-nums text-on-surface">{value}</p>
       <p className="mt-1 text-sm text-muted">{label}</p>
-      {hint !== undefined && <p className="mt-1 text-xs text-muted">{hint}</p>}
+      {hint !== undefined && <p className="mt-1 text-sm text-muted">{hint}</p>}
     </Card>
   )
 }

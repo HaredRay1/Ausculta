@@ -56,7 +56,7 @@ function Swatch({ token, label }: { token: string; label: string }) {
         className="h-12 rounded-control border border-border"
         style={{ background: `var(${token})` }}
       />
-      <code className="text-xs text-muted">{label}</code>
+      <code className="text-sm text-muted">{label}</code>
     </div>
   )
 }

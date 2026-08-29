@@ -27,11 +27,6 @@
     "body": "This part of Ausculta is not built yet. Nothing is being measured or calculated here.",
     "noValue": "No value"
   },
-  "source": {
-    "MANUAL_ENTRY": "Typed in by a person",
-    "AUSCULTATION_DERIVED": "Measured by the device",
-    "label": "Where this came from"
-  },
   "confidence": {
     "label": "How sure the app is",
     "value": "{{percent}}%",

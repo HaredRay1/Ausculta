@@ -172,7 +172,7 @@
  */
 @media (orientation: landscape) and (max-height: 480px) {
   :root {
-    --size-bottom-nav: 3.5rem;
+    --size-bottom-nav: 4.25rem;
   }
 }
 
@@ -285,7 +285,19 @@
     background-color: var(--color-surface);
     color: var(--color-on-surface);
     font-family: var(--font-sans);
-    /* 16px floor. Never smaller anywhere in the app. */
+    /*
+     * Body text is 16px, and 14px is the floor for anything else.
+     *
+     * This previously read "16px floor, never smaller anywhere", which the
+     * codebase then broke 155 times — and a documented invariant the code
+     * violates just teaches everyone to stop reading the documentation. So the
+     * rule now says what is actually true and is enforced by a test.
+     *
+     * 14px for hints, captions and secondary text is a real hierarchy and
+     * worth keeping. 12px is not: the readers are often older health workers,
+     * in bright daylight or a dim clinic, and there is no place in this app
+     * where saving two pixels is worth a line they have to squint at.
+     */
     font-size: 1rem;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;

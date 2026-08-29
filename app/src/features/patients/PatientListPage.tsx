@@ -181,6 +181,6 @@ function Tag({ tone, children }: { tone: 'neutral' | 'warning'; children: React.
       ? 'bg-warning-surface text-on-warning-surface'
       : 'bg-surface-sunken text-muted'
   return (
-    <span className={`rounded-pill px-2.5 py-1 text-xs font-medium ${className}`}>{children}</span>
+    <span className={`rounded-pill px-2.5 py-1 text-sm font-medium ${className}`}>{children}</span>
   )
 }

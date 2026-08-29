@@ -14,6 +14,8 @@ registerDesignResources(appI18n)
 afterEach(cleanup)
 
 const t = (key: string, options?: Record<string, unknown>) => appI18n.t(`design:${key}`, options)
+/** SourceBadge reads clinical vocabulary from the code registry, not `design`. */
+const tCodes = (key: string) => appI18n.t(`codes:${key}`)
 const ALL_VERDICTS = Object.values(RESULT_VERDICTS) as ResultVerdict[]
 
 describe('ResultCard', () => {
@@ -225,18 +227,32 @@ describe('SourceBadge', () => {
     (source) => {
       const { container } = render(<SourceBadge source={source} />)
 
-      expect(screen.getByText(t(`source.${source}`))).toBeInTheDocument()
+      expect(screen.getByText(tCodes(`measurementSource.${source}`))).toBeInTheDocument()
       expect(container.querySelector('svg')).toBeInTheDocument()
     },
   )
 
-  it('tells a typed-in value apart from a device-derived one', () => {
+  it('tells a measured value apart from a derived one', () => {
     const { unmount } = render(<SourceBadge source="MANUAL_ENTRY" />)
-    expect(screen.getByText(/typed in by a person/i)).toBeInTheDocument()
+    expect(screen.getByText(/measured by a person/i)).toBeInTheDocument()
     unmount()
 
     render(<SourceBadge source="AUSCULTATION_DERIVED" />)
-    expect(screen.getByText(/measured by the device/i)).toBeInTheDocument()
+    // Not "measured by the device": nothing measured it. It was computed from
+    // a recording, and saying otherwise is a false provenance claim on the one
+    // control whose whole purpose is stating provenance.
+    expect(screen.getByText(/worked out from the recording/i)).toBeInTheDocument()
+    expect(screen.queryByText(/measured by the device/i)).not.toBeInTheDocument()
+  })
+
+  it('reads its wording from the clinical code registry, not a private copy', () => {
+    render(<SourceBadge source="AUSCULTATION_DERIVED" />)
+
+    // A second home for clinical vocabulary is what let this drift into a
+    // false claim in the first place.
+    expect(
+      screen.getByText(tCodes('measurementSource.AUSCULTATION_DERIVED')),
+    ).toBeInTheDocument()
   })
 })
 

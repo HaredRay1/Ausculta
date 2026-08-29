@@ -108,6 +108,18 @@ describe('the fixed bottom bar and the space reserved for it', () => {
   })
 })
 
+describe('the smallest text in the app', () => {
+  it('never drops below 14px', () => {
+    // tokens.css states body text is 16px with a 14px floor for everything
+    // else. The readers are often older health workers reading in bright
+    // daylight or a dim clinic; 12px is below what that audience can
+    // comfortably read, and no screen here needs the two pixels.
+    const offenders = files.filter((file) => /text-xs/.test(read(file)))
+
+    expect(offenders).toEqual([])
+  })
+})
+
 describe('reading measure on a tablet', () => {
   it('caps the content column rather than stretching it', () => {
     const page = readFileSync(path.join(SRC, 'components/layout/Page.tsx'), 'utf8')

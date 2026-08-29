@@ -68,7 +68,7 @@ function ReportSection({
   return (
     <section className="print-keep-together flex flex-col gap-2 border-t-2 border-on-surface pt-3">
       <header className="flex flex-col gap-0.5">
-        <span className="text-xs font-bold uppercase tracking-widest text-muted">
+        <span className="text-sm font-bold uppercase tracking-widest text-muted">
           {t('review:report.sectionOf', { number })}
         </span>
         <h2 className="font-heading text-lg font-bold text-on-surface">{title}</h2>
@@ -381,7 +381,7 @@ export function ReportPage({ repository }: ReportPageProps = {}) {
             </div>
           </ReportSection>
 
-          <footer className="print-keep-together border-t-2 border-on-surface pt-3 text-xs">
+          <footer className="print-keep-together border-t-2 border-on-surface pt-3 text-sm">
             <p className="font-semibold">{t('review:report.disclaimer')}</p>
             <p className="mt-1">
               {t('review:report.generatedOn', { date: new Date().toLocaleString() })}
