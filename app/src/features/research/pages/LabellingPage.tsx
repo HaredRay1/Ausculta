@@ -17,7 +17,7 @@ import {
 } from '../../../components'
 import { useTranslation } from 'react-i18next'
 import { CLASSIFICATION_CODES, type ClassificationCode } from '../../../db/codes'
-import { db } from '../../../db/db'
+import { db as defaultDb, type AuscultaDB } from '../../../db/db'
 import { useAuth } from '../../../auth/AuthContext'
 import { useDemoMode } from '../../demo/useDemoMode'
 import { readLabellingQueue, saveResearchLabel, type LabellingRow } from '../data'
@@ -39,20 +39,20 @@ import { useResearchTranslation } from '../i18n'
  * recording. That separation is the whole basis of the performance screen: if
  * labelling overwrote the prediction there would be nothing left to score.
  */
-export function LabellingPage() {
+export function LabellingPage({ database = defaultDb }: { database?: AuscultaDB } = {}) {
   const { t } = useResearchTranslation()
   const { t: tc } = useTranslation('codes', { useSuspense: false })
   const { user } = useAuth()
-  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(db)
+  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(database)
 
   const [queue, setQueue] = useState<LabellingRow[] | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
 
   const refresh = useCallback(async () => {
-    const rows = await readLabellingQueue(db, demoEnabled, 100)
+    const rows = await readLabellingQueue(database, demoEnabled, 100)
     setQueue(rows)
     setSelectedId((current) => current ?? rows[0]?.recording.id ?? null)
-  }, [demoEnabled])
+  }, [database, demoEnabled])
 
   useEffect(() => {
     if (!demoReady) return
@@ -82,6 +82,7 @@ export function LabellingPage() {
               <LabelEditor
                 key={selected.recording.id}
                 row={selected}
+                database={database}
                 labeledBy={user?.id ?? ''}
                 onSaved={refresh}
               />
@@ -129,10 +130,12 @@ export function LabellingPage() {
 
 function LabelEditor({
   row,
+  database,
   labeledBy,
   onSaved,
 }: {
   row: LabellingRow
+  database: AuscultaDB
   labeledBy: string
   onSaved: () => Promise<void>
 }) {
@@ -154,7 +157,7 @@ function LabelEditor({
 
   useEffect(() => {
     let cancelled = false
-    void db.audioBlobs.get(row.recording.audioBlobId).then((found) => {
+    void database.audioBlobs.get(row.recording.audioBlobId).then((found) => {
       // A blob that survived storage as something other than a Blob is not
       // playable and must not reach the player; the screen simply says so.
       if (!cancelled) setBlob(found?.blob instanceof Blob ? found.blob : null)
@@ -162,7 +165,7 @@ function LabelEditor({
     return () => {
       cancelled = true
     }
-  }, [row.recording.audioBlobId])
+  }, [database, row.recording.audioBlobId])
 
   const needsClass = (STATUSES_REQUIRING_LABEL as readonly string[]).includes(status)
 
@@ -179,7 +182,7 @@ function LabelEditor({
             : {}),
           labeledBy,
         },
-        db,
+        database,
       )
       setSaved(true)
       await onSaved()

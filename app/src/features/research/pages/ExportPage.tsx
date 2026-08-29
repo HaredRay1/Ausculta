@@ -12,7 +12,7 @@ import {
   Section,
   Spinner,
 } from '../../../components'
-import { db } from '../../../db/db'
+import { db as defaultDb, type AuscultaDB } from '../../../db/db'
 import { useDemoMode } from '../../demo/useDemoMode'
 import {
   EXPORT_COLUMNS,
@@ -35,9 +35,9 @@ type Format = 'csv' | 'json'
  * it says so in a warning the reader cannot miss — a fictional patient inside
  * a research dataset is a contamination that is very hard to notice later.
  */
-export function ExportPage() {
+export function ExportPage({ database = defaultDb }: { database?: AuscultaDB } = {}) {
   const { t } = useResearchTranslation()
-  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(db)
+  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(database)
 
   const [rows, setRows] = useState<ExportRow[] | null>(null)
   const [format, setFormat] = useState<Format>('csv')
@@ -47,13 +47,13 @@ export function ExportPage() {
   useEffect(() => {
     if (!demoReady) return
     let cancelled = false
-    void buildExportRows(db, demoEnabled).then((next) => {
+    void buildExportRows(database, demoEnabled).then((next) => {
       if (!cancelled) setRows(next)
     })
     return () => {
       cancelled = true
     }
-  }, [demoEnabled, demoReady])
+  }, [database, demoEnabled, demoReady])
 
   function download() {
     if (rows === null) return

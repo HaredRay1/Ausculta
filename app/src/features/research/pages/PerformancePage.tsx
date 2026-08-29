@@ -13,7 +13,7 @@ import {
   Spinner,
   WarningIcon,
 } from '../../../components'
-import { db } from '../../../db/db'
+import { db as defaultDb, type AuscultaDB } from '../../../db/db'
 import { useDemoMode } from '../../demo/useDemoMode'
 import { readPerformance, type PerformanceView } from '../data'
 import { GROUND_TRUTH_STATUS_LIST } from '../groundTruth'
@@ -36,21 +36,21 @@ import {
  * denominator, an undefined metric prints an em dash rather than 0%, and a
  * class resting on too few recordings says so next to its own row.
  */
-export function PerformancePage() {
+export function PerformancePage({ database = defaultDb }: { database?: AuscultaDB } = {}) {
   const { t } = useResearchTranslation()
-  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(db)
+  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(database)
   const [view, setView] = useState<PerformanceView | null>(null)
 
   useEffect(() => {
     if (!demoReady) return
     let cancelled = false
-    void readPerformance(db, demoEnabled).then((next) => {
+    void readPerformance(database, demoEnabled).then((next) => {
       if (!cancelled) setView(next)
     })
     return () => {
       cancelled = true
     }
-  }, [demoEnabled, demoReady])
+  }, [database, demoEnabled, demoReady])
 
   return (
     <>

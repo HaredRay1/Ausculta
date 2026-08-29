@@ -11,7 +11,7 @@ import {
   Section,
   Spinner,
 } from '../../../components'
-import { db } from '../../../db/db'
+import { db as defaultDb, type AuscultaDB } from '../../../db/db'
 import { useDemoMode } from '../../demo/useDemoMode'
 import { EMPTY_COUNTS, readResearchCounts, type ResearchCounts } from '../data'
 import { useResearchTranslation } from '../i18n'
@@ -24,21 +24,21 @@ import { useResearchTranslation } from '../i18n'
  * will quote these, and a dashboard that guesses is worse than one that says
  * zero.
  */
-export function ResearchDashboardPage() {
+export function ResearchDashboardPage({ database = defaultDb }: { database?: AuscultaDB } = {}) {
   const { t } = useResearchTranslation()
-  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(db)
+  const { enabled: demoEnabled, ready: demoReady } = useDemoMode(database)
   const [counts, setCounts] = useState<ResearchCounts | null>(null)
 
   useEffect(() => {
     if (!demoReady) return
     let cancelled = false
-    void readResearchCounts(db, demoEnabled).then((next) => {
+    void readResearchCounts(database, demoEnabled).then((next) => {
       if (!cancelled) setCounts(next)
     })
     return () => {
       cancelled = true
     }
-  }, [demoEnabled, demoReady])
+  }, [database, demoEnabled, demoReady])
 
   const value = counts ?? EMPTY_COUNTS
   const hasData = counts !== null && value.recordings > 0
