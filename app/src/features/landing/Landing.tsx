@@ -26,7 +26,8 @@ import {
  *
  * The secondary destinations are rows with icons and chevrons, not a column of
  * underlined text. Four underlined links stacked centrally is what a sitemap
- * looks like; rows are what a phone looks like.
+ * looks like; rows are what a phone looks like. They come after the disclaimer
+ * rather than before it, for the reason set out at that line.
  *
  * And the layout no longer uses `justify-between`, which on a tall phone pushed
  * several hundred pixels of nothing between the brand and the button. Content
@@ -93,6 +94,28 @@ export function Landing() {
           {t('getStarted')}
         </Button>
 
+        {/*
+          Directly under the button, ahead of the secondary rows.
+
+          It sat last until a 360x800 capture showed it cut after two lines —
+          and 360x800 is the Samsung A-series shape, the likeliest phone for a
+          barangay health worker, so 390 is the optimistic case rather than the
+          target. Trimming padding until it fitted would have bought about 80px
+          and left the next narrow phone to fail the same way; four 56px rows
+          ahead of it were the actual reason it was off-screen. Moved up, it
+          clears the fold on anything taller than about 640px without a single
+          measurement depending on the device.
+
+          This reverses the position I argued for one commit ago, and the
+          earlier reasoning was not wrong — above the button it WAS the loudest
+          thing on the page. Below the button is a different place: the call to
+          action has already taken primacy, and the caveat reads as a note about
+          what you are starting rather than a warning gate in front of it. Being
+          cut off is a worse failure than being slightly prominent, and it is
+          the app's stated identity in the validation instruments.
+        */}
+        <DisclaimerBanner i18nKey="common:disclaimer" />
+
         <nav aria-label={t('appName')}>
           <ul className="flex flex-col gap-2">
             {SECONDARY.map(({ to, labelKey, icon: Icon, tone }) => (
@@ -114,13 +137,6 @@ export function Landing() {
             ))}
           </ul>
         </nav>
-
-        {/*
-          Last, and quieter than the brand. It has to be read and it has to be
-          honest, but on the first screen it should not be the loudest thing on
-          the page — which it was when it sat directly above the only button.
-        */}
-        <DisclaimerBanner i18nKey="common:disclaimer" />
       </div>
     </main>
   )

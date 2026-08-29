@@ -47,9 +47,17 @@ export function EmptyState({ title, body, icon, action }: EmptyStateProps) {
         is a harmless sibling when nested inside a Section, so it is right in both
         places whereas h3 was only ever right in one.
       */}
-      <h2 className="font-heading text-xl font-bold text-on-surface">{title}</h2>
+      {/*
+        `text-balance` on the heading and `text-pretty` on the body, because a
+        panel this centred shows its orphans: at 390 the unlinked-record title
+        broke as "Your health record is not linked / yet". Balancing is the fix
+        that works for every empty state and every translation rather than for
+        the one string somebody happened to look at, and it degrades to normal
+        wrapping on a browser that lacks it.
+      */}
+      <h2 className="text-balance font-heading text-xl font-bold text-on-surface">{title}</h2>
       {body !== undefined && (
-        <p className="max-w-sm text-base leading-relaxed text-muted">{body}</p>
+        <p className="max-w-sm text-pretty text-base leading-relaxed text-muted">{body}</p>
       )}
       {action !== undefined && <div className="mt-1 w-full max-w-xs">{action}</div>}
     </div>
