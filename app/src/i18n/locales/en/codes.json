@@ -149,10 +149,10 @@
     "EXERCISE_WARM_UP": "Warm-up before exercise"
   },
   "groundTruth": {
-    "CORRECT": "Model was correct",
-    "MODIFIED": "Model was partly correct",
-    "INCORRECT": "Model was incorrect",
-    "UNCERTAIN": "Cannot tell",
-    "NO_REFERENCE_AVAILABLE": "No reference available"
+    "CORRECT": "Correct — the model’s label matches what I hear",
+    "MODIFIED": "Wrong — and the correct label is…",
+    "INCORRECT": "Wrong — but I cannot say which label is right",
+    "UNCERTAIN": "I cannot tell what this is",
+    "NO_REFERENCE_AVAILABLE": "Nothing to compare against"
   }
 }
