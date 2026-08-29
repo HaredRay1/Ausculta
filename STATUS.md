@@ -112,6 +112,40 @@ documents describe a patient's own asthma self-monitoring app. The specification
 both, but they imply different primary users and the validation instrument is what the
 study is graded against.
 
+## What the user-experience pass found, and why it was needed
+
+The owner installed the APK and within five minutes found two defects that hours of
+automated testing had missed. He was greeted by name as a fictional patient. That is worth
+recording honestly, because the cause was a method failure rather than bad luck.
+
+**Every defect that shipped shared one shape: the app stated something false.** Not a
+crash, not a broken layout — a true-looking sentence that was not true for the person
+reading it. None was caught by a test, because the tests asked whether a component renders,
+never whether what it renders is true.
+
+The sharpest illustration: the test fixture account was literally named "Marisol Agbayani",
+the same as a seeded patient. Every greeting assertion passed whether the app read the
+account or the fictional record. The test sat directly beside the defect and could not have
+caught it.
+
+**Two techniques found what reading code could not**, and both are worth keeping:
+
+- Dump every visible text node in reading order, with its role, and read the screen as a
+  person would. Individually every string was fine; the screen was false.
+- Extract every translation call actually rendered, resolve each against the bundle, and
+  list which are wired to switch and which are not — then re-run it after fixing.
+
+**The falsehoods that were fixed**, as a record of the class rather than a changelog: a
+real user greeted with a fictional patient's name, from two independent causes, one of them
+persisted on the device so it would have survived a reinstall; "This is your own respiratory
+health record" over someone else's data; "Nobody has asked you these questions yet" about a
+record belonging to somebody else; a review queue and an alerts list rendering "Nothing
+waiting" and "No open alerts" when the database read had failed, on clinical screens where
+a practitioner would act on that and go home; a queue heading claiming clinical priority
+directly above a line saying it was not one; a setup screen promising nobody could sign in
+without approval, when patients can; a provenance badge saying a value was "measured by the
+device" when it was computed; and a landing page that never said what the app does.
+
 ## Decisions I made on your behalf
 
 Each is reversible. If any is wrong, it is worth saying so.
