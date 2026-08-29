@@ -1,6 +1,7 @@
 {
   "appName": "Ausculta",
   "tagline": "Listen. Detect. Act.",
+  "whatItIs": "Ausculta records lung sounds with a smart stethoscope and checks them for signs of a breathing problem, so a doctor can look at the result. It works without internet.",
   "disclaimer": "Research prototype — not a medical device. Ausculta is a decision-support research tool and does not provide medical diagnosis.",
   "languageNameEn": "English",
   "languageNameFil": "Filipino",

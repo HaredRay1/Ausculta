@@ -14,6 +14,12 @@ export function Landing() {
           {t('appName')}
         </h1>
         <p className="text-lg text-muted">{t('tagline')}</p>
+        {/*
+          The slogan is not an explanation. Someone opening this for the first
+          time needs to learn what the app is for before being asked to sign in
+          — the setup screen already learned this lesson one step later.
+        */}
+        <p className="mt-2 max-w-xs text-base text-on-surface">{t('whatItIs')}</p>
       </div>
 
       <div className="flex w-full max-w-xs flex-col gap-4">
