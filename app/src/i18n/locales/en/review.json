@@ -9,7 +9,7 @@
   },
   "queue": {
     "title": "Cases to review",
-    "subtitle": "Most in need of attention first",
+    "subtitle": "Cases waiting for your decision",
     "empty": "Nothing waiting",
     "emptyHint": "Assessments needing your review will appear here.",
     "loading": "Loading cases",
