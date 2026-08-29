@@ -16,7 +16,8 @@
     "emptyBody": "Once recordings have been imported and assessed, their counts appear here. Nothing on this screen is estimated — every number is counted from this device.",
     "goLabels": "Label recordings",
     "goPerformance": "Model performance",
-    "goExport": "Export data"
+    "goExport": "Export data",
+    "loading": "Loading the research summary"
   },
   "labels": {
     "title": "Reference labelling",
@@ -35,7 +36,8 @@
     "saving": "Saving…",
     "saved": "Label saved.",
     "labelledBy": "Labelled by {{who}} on {{when}}",
-    "error": "Could not save the label."
+    "error": "Could not save the label.",
+    "loading": "Loading recordings to label"
   },
   "groundTruth": {
     "CORRECT_HINT": "Counted in the model’s score.",
@@ -71,7 +73,8 @@
     "excludedHeading": "Labelled but not scored",
     "excludedBody": "These recordings carry a reference label that cannot be placed in a confusion matrix. They are listed so the denominator above is accounted for.",
     "excludedNoPrediction": "The model gave no classification",
-    "noRegression": "Accuracy, precision, recall, specificity and F1 are the appropriate measures for a classifier. Error statistics such as RMSE and R² are not reported, because these are categorical labels and an error distance between class names has no meaning."
+    "noRegression": "Accuracy, precision, recall, specificity and F1 are the appropriate measures for a classifier. Error statistics such as RMSE and R² are not reported, because these are categorical labels and an error distance between class names has no meaning.",
+    "loading": "Loading model performance"
   },
   "export": {
     "title": "Export study data",
@@ -91,6 +94,7 @@
     "download": "Download export",
     "preparing": "Preparing…",
     "columnsHeading": "Columns",
-    "error": "Could not build the export."
+    "error": "Could not build the export.",
+    "loading": "Preparing the export"
   }
 }
