@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
   AppBar,
   Banner,
@@ -37,6 +37,7 @@ export interface MonitoringPlanPageProps {
 }
 
 export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {}) {
+  const navigate = useNavigate()
   const { t } = useMonitoringTranslation()
   const { patientId = '' } = useParams()
   const { user } = useAuth()
@@ -124,7 +125,7 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
   if (failed) {
     return (
       <Page>
-        <AppBar title={t('plan.title')} />
+        <AppBar onBack={() => navigate(-1)} title={t('plan.title')} />
         <EmptyState
           title={t('plan.loadFailed')}
           body={t('alerts.loadFailedBody')}
@@ -142,7 +143,7 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
   if (plans === null) {
     return (
       <Page>
-        <AppBar title={t('plan.title')} />
+        <AppBar onBack={() => navigate(-1)} title={t('plan.title')} />
         <SkeletonGroup label={t('plan.loading')}>
           <Skeleton className="h-24 w-full" lines={3} />
         </SkeletonGroup>
@@ -152,7 +153,7 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
 
   return (
     <Page>
-      <AppBar title={t('plan.title')} />
+      <AppBar onBack={() => navigate(-1)} title={t('plan.title')} />
 
       {error !== null && <Banner tone="danger">{error}</Banner>}
 

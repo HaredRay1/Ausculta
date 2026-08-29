@@ -39,6 +39,7 @@ export {
   InboxIcon,
   InfoIcon,
   LungsIcon,
+  MenuIcon,
   MicIcon,
   PeopleIcon,
   PersonIcon,

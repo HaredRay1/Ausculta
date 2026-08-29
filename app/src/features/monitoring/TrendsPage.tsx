@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import {
   AppBar,
   Banner,
@@ -23,6 +23,7 @@ export interface TrendsPageProps {
 }
 
 export function TrendsPage({ repository }: TrendsPageProps = {}) {
+  const navigate = useNavigate()
   const { t } = useMonitoringTranslation()
   const { patientId = '' } = useParams()
   const { user } = useAuth()
@@ -56,7 +57,7 @@ export function TrendsPage({ repository }: TrendsPageProps = {}) {
   if (failed) {
     return (
       <Page>
-        <AppBar title={t('trend.title')} />
+        <AppBar onBack={() => navigate(-1)} title={t('trend.title')} />
         <EmptyState
           title={t('trend.loadFailed')}
           body={t('alerts.loadFailedBody')}
@@ -69,7 +70,7 @@ export function TrendsPage({ repository }: TrendsPageProps = {}) {
   if (trend === null) {
     return (
       <Page>
-        <AppBar title={t('trend.title')} />
+        <AppBar onBack={() => navigate(-1)} title={t('trend.title')} />
         <SkeletonGroup label={t('trend.loading')}>
           <Skeleton className="h-32 w-full" lines={4} />
         </SkeletonGroup>
@@ -79,7 +80,7 @@ export function TrendsPage({ repository }: TrendsPageProps = {}) {
 
   return (
     <Page>
-      <AppBar title={t('trend.title')} subtitle={t('trend.subtitle')} />
+      <AppBar onBack={() => navigate(-1)} title={t('trend.title')} subtitle={t('trend.subtitle')} />
 
       {/* Framing first: this is a record of what was reported, not a measure of
           whether the patient is getting better or worse. */}

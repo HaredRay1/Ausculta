@@ -1,4 +1,6 @@
 import type { RouteObject } from 'react-router-dom'
+import { MenuPage } from '../features/staff/MenuPage'
+import { RequireAuth } from './guards'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { SetupAdminPage } from './pages/SetupAdminPage'
@@ -23,6 +25,19 @@ export const authRoutes: RouteObject[] = [
   { path: '/setup-admin', element: <SetupAdminPage /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/register', element: <RegisterPage /> },
+  /*
+   * The account screen: who is signed in, and the only way to sign out.
+   * Any signed-in role reaches it — it is where the staff shell's Menu tab
+   * goes, and the guaranteed exit on a shared phone.
+   */
+  {
+    path: '/menu',
+    element: (
+      <RequireAuth>
+        <MenuPage />
+      </RequireAuth>
+    ),
+  },
 ]
 
 export default authRoutes

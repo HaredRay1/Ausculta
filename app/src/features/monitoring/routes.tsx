@@ -1,3 +1,4 @@
+import { StaffNavFrame } from '../staff/StaffNavFrame'
 import type { RouteObject } from 'react-router-dom'
 import { ROLES } from '../../db/codes'
 import { RequireAuth, RequireRole } from '../../auth/guards'
@@ -34,7 +35,7 @@ export const monitoringRoutes: RouteObject[] = [
     path: '/monitoring/alerts',
     element: (
       <RequireRole roles={REVIEWER_ROLES}>
-        <AlertsPage />
+        <StaffNavFrame><AlertsPage /></StaffNavFrame>
       </RequireRole>
     ),
   },
@@ -42,7 +43,7 @@ export const monitoringRoutes: RouteObject[] = [
     path: '/monitoring/plan/:patientId',
     element: (
       <RequireAuth>
-        <MonitoringPlanPage />
+        <StaffNavFrame><MonitoringPlanPage /></StaffNavFrame>
       </RequireAuth>
     ),
   },
@@ -50,7 +51,7 @@ export const monitoringRoutes: RouteObject[] = [
     path: '/monitoring/trends/:patientId',
     element: (
       <RequireAuth>
-        <TrendsPage />
+        <StaffNavFrame><TrendsPage /></StaffNavFrame>
       </RequireAuth>
     ),
   },

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppBar, Card, DisclaimerBanner, Page, Section } from '../../components'
 
 /**
@@ -65,11 +65,12 @@ function Guide({ file, caption, alt }: GuideProps) {
 }
 
 export function HelpPage() {
+  const navigate = useNavigate()
   const { t } = useTranslation('common')
 
   return (
     <Page>
-      <AppBar title={t('help.title')} />
+      <AppBar onBack={() => navigate(-1)} title={t('help.title')} />
 
       <Section description={t('help.intro')}>
         <DisclaimerBanner i18nKey="common:disclaimer" />

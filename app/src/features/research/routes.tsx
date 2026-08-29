@@ -1,3 +1,4 @@
+import { StaffNavFrame } from '../staff/StaffNavFrame'
 import type { RouteObject } from 'react-router-dom'
 import { ROLES } from '../../db/codes'
 import { RequireRole } from '../../auth/guards'
@@ -24,7 +25,11 @@ import { ResearchDashboardPage } from './pages/ResearchDashboardPage'
 const RESEARCH_ROLES = [ROLES.RESEARCHER, ROLES.ADMIN]
 
 function guarded(element: React.ReactNode) {
-  return <RequireRole roles={RESEARCH_ROLES}>{element}</RequireRole>
+  return (
+    <RequireRole roles={RESEARCH_ROLES}>
+      <StaffNavFrame>{element}</StaffNavFrame>
+    </RequireRole>
+  )
 }
 
 export const researchRoutes: RouteObject[] = [

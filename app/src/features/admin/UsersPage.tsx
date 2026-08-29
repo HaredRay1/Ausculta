@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { USER_STATUSES, type UserStatus } from '../../db/codes'
 import type { User } from '../../db/types'
 import { useAuth } from '../../auth/AuthContext'
-import { AuthScreen, Banner, PasswordField, PrimaryButton } from '../../auth/components/ui'
+import { Banner, PasswordField, PrimaryButton } from '../../auth/components/ui'
+import { StaffShell } from '../staff/StaffShell'
 import { authErrorKey } from '../../auth/errorMessage'
 import { useAuthTranslation } from '../../auth/i18n'
 
@@ -85,9 +86,9 @@ export function UsersPage() {
 
   if (users === null) {
     return (
-      <AuthScreen title={t('users.title')}>
+      <StaffShell activeId="accounts" title={t('users.title')}>
         <p className="text-base text-muted">{t('users.loading')}</p>
-      </AuthScreen>
+      </StaffShell>
     )
   }
 
@@ -96,7 +97,7 @@ export function UsersPage() {
   ).length
 
   return (
-    <AuthScreen title={t('users.title')} subtitle={t('users.subtitle')}>
+    <StaffShell activeId="accounts" title={t('users.title')} subtitle={t('users.subtitle')}>
       {errorKey !== null && <Banner tone="error">{t(errorKey)}</Banner>}
       {notice !== null && <Banner tone="success">{notice}</Banner>}
       {pendingCount > 0 && <Banner tone="warning">{t('users.pendingCount', { count: pendingCount })}</Banner>}
@@ -234,7 +235,7 @@ export function UsersPage() {
           </section>
         )
       })}
-    </AuthScreen>
+    </StaffShell>
   )
 }
 

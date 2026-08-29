@@ -98,9 +98,11 @@ function renderAt(path: string, service: AuthService = auth, idleCheckIntervalMs
 describe('roleHomePath', () => {
   it('gives every role its own landing route', () => {
     expect(roleHomePath(ROLES.ADMIN)).toBe('/admin/users')
-    expect(roleHomePath(ROLES.PRACTITIONER)).toBe('/practitioner')
-    expect(roleHomePath(ROLES.HEALTH_WORKER)).toBe('/health-worker')
-    expect(roleHomePath(ROLES.RESEARCHER)).toBe('/researcher')
+    // Real screens, not the placeholders these used to point at: three of the
+    // five roles signed in and landed on "your dashboard is still being built".
+    expect(roleHomePath(ROLES.PRACTITIONER)).toBe('/review')
+    expect(roleHomePath(ROLES.HEALTH_WORKER)).toBe('/patients')
+    expect(roleHomePath(ROLES.RESEARCHER)).toBe('/research')
     expect(roleHomePath(ROLES.PATIENT)).toBe('/patient')
   })
 

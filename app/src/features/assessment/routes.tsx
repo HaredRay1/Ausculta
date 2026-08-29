@@ -1,3 +1,4 @@
+import { StaffNavFrame } from '../staff/StaffNavFrame'
 import type { RouteObject } from 'react-router-dom'
 import { RequireAuth } from '../../auth/guards'
 import { AssessmentWizard } from './AssessmentWizard'
@@ -31,7 +32,7 @@ export const assessmentRoutes: RouteObject[] = [
     path: '/assessment/new',
     element: (
       <RequireAuth>
-        <AssessmentWizard />
+        <StaffNavFrame><AssessmentWizard /></StaffNavFrame>
       </RequireAuth>
     ),
   },
@@ -39,7 +40,7 @@ export const assessmentRoutes: RouteObject[] = [
     path: '/assessment/:assessmentId',
     element: (
       <RequireAuth>
-        <AssessmentWizard />
+        <StaffNavFrame><AssessmentWizard /></StaffNavFrame>
       </RequireAuth>
     ),
   },

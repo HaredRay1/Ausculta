@@ -16,9 +16,12 @@ export const LOGIN_PATH = '/login'
  */
 export const ROLE_HOME_PATHS: Record<Role, string> = {
   [ROLES.ADMIN]: '/admin/users',
-  [ROLES.PRACTITIONER]: '/practitioner',
-  [ROLES.HEALTH_WORKER]: '/health-worker',
-  [ROLES.RESEARCHER]: '/researcher',
+  // Real screens, not the placeholders these used to point at: signing in and
+  // landing on "your dashboard is still being built" is a dead end for three
+  // of the five roles.
+  [ROLES.PRACTITIONER]: '/review',
+  [ROLES.HEALTH_WORKER]: '/patients',
+  [ROLES.RESEARCHER]: '/research',
   [ROLES.PATIENT]: '/patient',
 }
 

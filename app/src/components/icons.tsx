@@ -246,6 +246,16 @@ export const PersonIcon = makeIcon(
   </>,
 )
 
+/** The "everything else" tab. Three lines is the one glyph everybody knows. */
+export const MenuIcon = makeIcon(
+  'MenuIcon',
+  <>
+    <path d="M4 7h16" />
+    <path d="M4 12h16" />
+    <path d="M4 17h16" />
+  </>,
+)
+
 /* ---- Generic ------------------------------------------------------------ */
 
 export const SearchIcon = makeIcon(

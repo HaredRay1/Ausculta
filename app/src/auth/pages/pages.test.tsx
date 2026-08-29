@@ -46,7 +46,8 @@ function renderApp(path: string) {
               <Route key={route.path} path={route.path} element={route.element} />
             ))}
             <Route path="/patient" element={<p>patient home</p>} />
-            <Route path="/practitioner" element={<p>practitioner home</p>} />
+            {/* A practitioner's home is now the review queue, not a placeholder. */}
+            <Route path="/review" element={<p>practitioner home</p>} />
           </Routes>
         </MemoryRouter>
       </AuthProvider>

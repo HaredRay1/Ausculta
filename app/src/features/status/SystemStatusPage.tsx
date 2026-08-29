@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { AppBar, Banner, Card, DisclaimerBanner, Page, Section } from '../../components'
 
 /**
@@ -46,13 +46,14 @@ const TONE: Record<Availability, 'success' | 'warning' | 'info'> = {
 }
 
 export function SystemStatusPage() {
+  const navigate = useNavigate()
   const { t } = useTranslation('common')
 
   const groups: Availability[] = ['built', 'partial', 'notConnected']
 
   return (
     <Page>
-      <AppBar title={t('systemStatus.title')} />
+      <AppBar onBack={() => navigate(-1)} title={t('systemStatus.title')} />
 
       <Section description={t('systemStatus.intro')}>
         <DisclaimerBanner i18nKey="common:disclaimer" />

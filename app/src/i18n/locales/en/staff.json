@@ -1,0 +1,31 @@
+{
+  "nav": {
+    "label": "Main",
+    "accounts": "Accounts",
+    "settings": "Settings",
+    "activity": "Activity",
+    "cases": "Cases",
+    "patients": "Patients",
+    "alerts": "Alerts",
+    "help": "Help",
+    "overview": "Overview",
+    "labels": "Labels",
+    "results": "Results",
+    "menu": "Menu"
+  },
+
+  "menu": {
+    "title": "Menu",
+    "signedInAs": "Signed in as",
+    "roleLabel": "You are signed in as a {{role}} on this phone.",
+    "signOut": "Sign out",
+    "signOutHint": "You will need your username and password to sign in again.",
+    "moreHeading": "More",
+    "help": "How to use Ausculta",
+    "status": "What works in this version",
+    "demo": "Demonstration data",
+    "language": "Change language",
+    "translations": "Translation worklist",
+    "export": "Export study data"
+  }
+}

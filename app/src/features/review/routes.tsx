@@ -1,3 +1,4 @@
+import { StaffNavFrame } from '../staff/StaffNavFrame'
 import type { RouteObject } from 'react-router-dom'
 import { ROLES } from '../../db/codes'
 import { RequireRole } from '../../auth/guards'
@@ -34,7 +35,7 @@ export const reviewRoutes: RouteObject[] = [
     path: '/review',
     element: (
       <RequireRole roles={REVIEWER_ROLES}>
-        <ReviewQueuePage />
+        <StaffNavFrame><ReviewQueuePage /></StaffNavFrame>
       </RequireRole>
     ),
   },
@@ -42,7 +43,7 @@ export const reviewRoutes: RouteObject[] = [
     path: '/review/:assessmentId/decide',
     element: (
       <RequireRole roles={REVIEWER_ROLES}>
-        <ReviewFormPage />
+        <StaffNavFrame><ReviewFormPage /></StaffNavFrame>
       </RequireRole>
     ),
   },
@@ -50,7 +51,7 @@ export const reviewRoutes: RouteObject[] = [
     path: '/review/:assessmentId/report',
     element: (
       <RequireRole roles={REVIEWER_ROLES}>
-        <ReportPage />
+        <StaffNavFrame><ReportPage /></StaffNavFrame>
       </RequireRole>
     ),
   },
@@ -58,7 +59,7 @@ export const reviewRoutes: RouteObject[] = [
     path: '/review/:assessmentId',
     element: (
       <RequireRole roles={REVIEWER_ROLES}>
-        <ClinicalViewPage />
+        <StaffNavFrame><ClinicalViewPage /></StaffNavFrame>
       </RequireRole>
     ),
   },

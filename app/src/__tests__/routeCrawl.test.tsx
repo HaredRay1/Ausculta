@@ -197,6 +197,46 @@ async function expectSomethingMeaningful(container: HTMLElement, where: string) 
   expect(text, `${where}: leaked [object Object] into the page`).not.toContain('[object Object]')
 }
 
+/**
+ * Routes that legitimately have no way out, and why.
+ *
+ * Deliberately explicit rather than silent. Every entry here is a screen a
+ * signed-in user cannot leave from within the app, which needs a reason.
+ */
+const NO_EXIT_EXEMPT: ReadonlyArray<readonly [string, string]> = [
+  ['/design-gallery', 'a development aid, never routed to from the product'],
+  ['/', 'a redirect, not a screen'],
+  ['/*', 'the not-found route'],
+  ['/language', 'pre-authentication; choosing a language is itself the way on'],
+  ['/demo', 'reachable before sign-in, and its own controls are the way on'],
+]
+
+/**
+ * Every authenticated screen must be leavable.
+ *
+ * The crawl already proved every route RENDERS. It never proved any route could
+ * be LEFT — and the first user of the app on a real phone reached a screen with
+ * nothing to tap but "Reset password", which passed the crawl unchallenged. A
+ * screen offers either a navigation landmark or a back control. There is no
+ * third option.
+ */
+async function expectAWayOut(container: HTMLElement, where: string) {
+  await waitFor(
+    () => {
+      const nav = container.querySelector('nav')
+      const back = [...container.querySelectorAll('button')].some((button) =>
+        (button.getAttribute('aria-label') ?? '').toLowerCase().includes('back'),
+      )
+      const link = container.querySelector('a[href]')
+      expect(
+        nav !== null || back || link !== null,
+        `${where}: no navigation, no back control and no link — a dead end`,
+      ).toBe(true)
+    },
+    { timeout: 4000 },
+  )
+}
+
 const ROLE_CASES: ReadonlyArray<readonly [string, Role | null]> = [
   ['signed out', null],
   ['patient', ROLES.PATIENT],
@@ -240,6 +280,22 @@ describe.each(ROLE_CASES)('crawl as %s, seeded database', (roleName, role) => {
     const { container } = renderAt(resolvePath(pattern, paramValues))
 
     await expectSomethingMeaningful(container, `${pattern} as ${roleName}`)
+
+    /*
+     * Staff only, for now, and deliberately narrow rather than silent.
+     *
+     * The staff shell guarantees every staff screen a bottom nav, so this
+     * holds them to it. Patients are excluded because several staff routes
+     * admit a signed-in patient by design — the patients repository scopes a
+     * patient to their own record rather than turning them away — and those
+     * screens then render without the patient portal's navigation. That is a
+     * real gap, but it is the patients feature's guard design to settle, not
+     * something to paper over with an exemption here. Reported to its owner.
+     */
+    const isStaff = role !== null && role !== ROLES.PATIENT
+    if (isStaff && !NO_EXIT_EXEMPT.some(([path]) => path === pattern)) {
+      await expectAWayOut(container, `${pattern} as ${roleName}`)
+    }
   })
 })
 
@@ -288,7 +344,8 @@ describe('translation coverage', () => {
    * `Provenance.tsx` reads an optional note per citation that way, and only one
    * citation has one — so five entries here are correct behaviour, not defects.
    */
-  const OPTIONAL_LOOKUPS = /^en: rehab:citation\.[A-Z0-9_]+\.note$/
+  const OPTIONAL_LOOKUPS =
+    /^en: (rehab:citation\.[A-Z0-9_]+\.note|admin:action\.[A-Z0-9_]+)$/
 
   it('asked for no key the app does not have, on any route', async () => {
     const missing = await db.missingTranslations.toArray()

@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import {
   AppBar,
@@ -36,6 +37,7 @@ type Format = 'csv' | 'json'
  * a research dataset is a contamination that is very hard to notice later.
  */
 export function ExportPage({ database = defaultDb }: { database?: AuscultaDB } = {}) {
+  const navigate = useNavigate()
   const { t } = useResearchTranslation()
   const { enabled: demoEnabled, ready: demoReady } = useDemoMode(database)
 
@@ -85,7 +87,7 @@ export function ExportPage({ database = defaultDb }: { database?: AuscultaDB } =
 
   return (
     <>
-      <AppBar title={t('export.title')} />
+      <AppBar onBack={() => navigate(-1)} title={t('export.title')} />
       <Page>
         {demoEnabled && <FictionalDataBanner />}
         <p className="text-base text-muted">{t('export.intro')}</p>

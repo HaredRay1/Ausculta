@@ -1,3 +1,4 @@
+import { StaffNavFrame } from '../staff/StaffNavFrame'
 import type { RouteObject } from 'react-router-dom'
 import { ROLES } from '../../db/codes'
 import { RequireAuth, RequireRole } from '../../auth/guards'
@@ -32,7 +33,7 @@ export const patientRoutes: RouteObject[] = [
     path: '/patients',
     element: (
       <RequireAuth>
-        <PatientListPage />
+        <StaffNavFrame><PatientListPage /></StaffNavFrame>
       </RequireAuth>
     ),
   },
@@ -40,7 +41,7 @@ export const patientRoutes: RouteObject[] = [
     path: '/patients/new',
     element: (
       <RequireRole roles={[ROLES.HEALTH_WORKER, ROLES.PRACTITIONER, ROLES.ADMIN]}>
-        <PatientRegistrationPage />
+        <StaffNavFrame><PatientRegistrationPage /></StaffNavFrame>
       </RequireRole>
     ),
   },
@@ -48,7 +49,7 @@ export const patientRoutes: RouteObject[] = [
     path: '/patients/:patientId',
     element: (
       <RequireAuth>
-        <PatientDetailPage />
+        <StaffNavFrame><PatientDetailPage /></StaffNavFrame>
       </RequireAuth>
     ),
   },

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AppBar, Page, Section } from '../../components'
+import { Section } from '../../components'
+import { StaffShell } from '../staff/StaffShell'
 import { useAdminTranslation } from './i18n'
 import { ADMIN_NAV, type AdminNavId } from './navigation'
 
@@ -25,38 +26,35 @@ export function AdminShell({ activeId, title, subtitle, children }: AdminShellPr
   const navigate = useNavigate()
 
   return (
-    <>
-      <AppBar title={title} onBack={() => navigate('/admin/users')} />
-      <Page>
-        <nav aria-label={t('admin:nav.label')}>
-          <ul className="flex flex-wrap gap-2">
-            {ADMIN_NAV.map((entry) => {
-              const active = entry.id === activeId
-              return (
-                <li key={entry.id}>
-                  <button
-                    type="button"
-                    onClick={() => navigate(entry.path)}
-                    aria-current={active ? 'page' : undefined}
-                    className={[
-                      'inline-flex min-h-12 items-center rounded-control border-2 px-4 text-base',
-                      active
-                        ? 'border-primary-strong bg-accent font-bold text-on-accent'
-                        : 'border-border-strong bg-surface-raised font-medium text-on-surface',
-                    ].join(' ')}
-                  >
-                    {t(entry.labelKey)}
-                  </button>
-                </li>
-              )
-            })}
-          </ul>
-        </nav>
+    <StaffShell activeId={activeId === 'translations' ? 'menu' : activeId} title={title}>
+      <nav aria-label={t('admin:nav.label')}>
+        <ul className="flex flex-wrap gap-2">
+          {ADMIN_NAV.map((entry) => {
+            const active = entry.id === activeId
+            return (
+              <li key={entry.id}>
+                <button
+                  type="button"
+                  onClick={() => navigate(entry.path)}
+                  aria-current={active ? 'page' : undefined}
+                  className={[
+                    'inline-flex min-h-12 items-center rounded-control border-2 px-4 text-base',
+                    active
+                      ? 'border-primary-strong bg-accent font-bold text-on-accent'
+                      : 'border-border-strong bg-surface-raised font-medium text-on-surface',
+                  ].join(' ')}
+                >
+                  {t(entry.labelKey)}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </nav>
 
-        <Section title={title} description={subtitle}>
-          {children}
-        </Section>
-      </Page>
-    </>
+      <Section title={title} description={subtitle}>
+        {children}
+      </Section>
+    </StaffShell>
   )
 }
