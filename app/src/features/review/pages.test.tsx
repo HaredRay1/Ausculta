@@ -403,6 +403,12 @@ describe('review queue', () => {
     expect(await screen.findByText(t('queue.orderNote'))).toBeInTheDocument()
   })
 
+  it('offers a way to the alerts queue, which nothing else links to', async () => {
+    await seedCase()
+    renderWithAuth(<ReviewQueuePage repository={repo} />, '/review', '/review')
+    expect(await screen.findByRole('button', { name: t('queue.openAlerts') })).toBeInTheDocument()
+  })
+
   it('shows an honest empty state when nothing is waiting', async () => {
     renderWithAuth(<ReviewQueuePage repository={repo} />, '/review', '/review')
     expect(await screen.findByText(t('queue.empty'))).toBeInTheDocument()

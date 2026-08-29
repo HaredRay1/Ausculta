@@ -102,7 +102,9 @@
     "backToList": "Back to patients",
     "loading": "Loading patient record",
     "startAssessment": "Record an assessment",
-    "startAssessmentHint": "Take lung sound recordings for this patient."
+    "startAssessmentHint": "Take lung sound recordings for this patient.",
+    "monitoringPlan": "Monitoring plan",
+    "trends": "Results over time"
   },
   "care": {
     "practitioners": "Practitioners",

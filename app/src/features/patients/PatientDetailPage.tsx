@@ -194,6 +194,29 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
         emptyLabel={t('detail.noFamilyRecorded')}
       />
 
+      {/*
+        The monitoring screens existed but nothing in the app linked to them,
+        so they were reachable only by typing a URL. A patient record is where
+        both belong: the plan is about this patient and the trend is this
+        patient's history. Secondary, because recording is the primary intent.
+      */}
+      <div className="flex flex-col gap-3">
+        <Button
+          variant="secondary"
+          fullWidth
+          onClick={() => navigate(`/monitoring/plan/${encodeURIComponent(patient.id)}`)}
+        >
+          {t('detail.monitoringPlan')}
+        </Button>
+        <Button
+          variant="secondary"
+          fullWidth
+          onClick={() => navigate(`/monitoring/trends/${encodeURIComponent(patient.id)}`)}
+        >
+          {t('detail.trends')}
+        </Button>
+      </div>
+
       <Section title={t('detail.care')}>
         <Card>
           <dl className="flex flex-col gap-3">

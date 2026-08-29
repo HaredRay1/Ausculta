@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   AppBar,
+  Button,
   Card,
   EmptyState,
   FictionalDataBanner,
@@ -57,7 +58,18 @@ export function ReviewQueuePage({ repository }: ReviewQueuePageProps = {}) {
 
   return (
     <Page>
-      <AppBar title={t('queue.title')} subtitle={t('queue.subtitle')} />
+      {/* The alerts queue had no entry point anywhere in the app. The review
+          queue is the practitioner's home, so it is where the other thing
+          waiting for them belongs. */}
+      <AppBar
+        title={t('queue.title')}
+        subtitle={t('queue.subtitle')}
+        action={
+          <Button size="sm" variant="ghost" onClick={() => navigate('/monitoring/alerts')}>
+            {t('queue.openAlerts')}
+          </Button>
+        }
+      />
 
       <Select
         label={t('queue.filterLabel')}

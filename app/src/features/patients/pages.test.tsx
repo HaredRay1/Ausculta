@@ -384,6 +384,22 @@ describe('patient detail', () => {
     )
   })
 
+  it('offers the monitoring plan and trend, which nothing else links to', async () => {
+    const actor = await signIn()
+    const patient = await repo.create({ demographics, preferredLanguage: 'en' }, actor)
+
+    renderWithAuth(
+      <PatientDetailPage repository={repo} />,
+      `/patients/${patient.id}`,
+      '/patients/:patientId',
+    )
+
+    expect(
+      await screen.findByRole('button', { name: t('detail.monitoringPlan') }),
+    ).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: t('detail.trends') })).toBeInTheDocument()
+  })
+
   it('labels the study number as carrying no personal details', async () => {
     const actor = await signIn()
     const patient = await repo.create({ demographics, preferredLanguage: 'en' }, actor)

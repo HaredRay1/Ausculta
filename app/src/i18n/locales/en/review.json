@@ -29,7 +29,8 @@
     "waitingToday": "Recorded today",
     "orderNote": "Ordered by what the app flagged and how long each case has waited. This is a workload order, not a clinical priority.",
     "notPermitted": "Reviewing is for practitioners",
-    "notPermittedHint": "This queue is not available in your role."
+    "notPermittedHint": "This queue is not available in your role.",
+    "openAlerts": "Alerts"
   },
   "case": {
     "title": "Case review",
