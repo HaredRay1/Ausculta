@@ -38,9 +38,13 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
     <nav
       aria-label={label}
       className="fixed inset-x-0 bottom-0 z-(--z-nav) border-t border-border bg-surface-raised"
-      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+      style={{
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        // Never taller than what Page reserves for it.
+        maxHeight: 'calc(var(--size-bottom-nav) + env(safe-area-inset-bottom))',
+      }}
     >
-      <ul className="mx-auto flex w-full max-w-lg items-stretch justify-around gap-1 px-1 py-1">
+      <ul className="mx-auto flex w-full max-w-lg items-stretch justify-around gap-2 px-1 py-1">
         {visible.map((item) => {
           const active = item.id === activeId
           return (
@@ -62,9 +66,20 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
                     </span>
                   )}
                 </span>
+                {/*
+                  Wraps to two lines rather than truncating.
+                  At 320px — a small Android phone, and the likeliest device a
+                  validator actually owns — five items leave about 58px each,
+                  which is roughly eight characters at this size. "My results"
+                  and "Breathing plan" both clipped; in Filipino "Tungkol sa
+                  akin" and "Plano sa paghinga" clipped to nonsense. A label
+                  truncated to "Plano s…" is worse than a taller bar, because
+                  the label is the only thing making the destination findable
+                  to someone navigating unaided.
+                */}
                 <span
                   className={[
-                    'w-full truncate text-center text-xs',
+                    'line-clamp-2 w-full break-words text-center text-xs leading-tight',
                     active ? 'font-bold' : 'font-medium',
                   ].join(' ')}
                 >

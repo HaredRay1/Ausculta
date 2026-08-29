@@ -140,12 +140,40 @@
   --z-modal: 400;
   --z-toast: 500;
 
+  /*
+   * Height reserved for the fixed bottom navigation.
+   *
+   * One value, read by both BottomNav's minimum height and the padding Page
+   * leaves for it, because the two drifting apart is precisely how content
+   * ends up hidden behind the bar. Sized for a two-line label at 320px, where
+   * five destinations leave about 58px each and a label like "Plano sa
+   * paghinga" needs two lines.
+   */
+  --size-bottom-nav: 5rem;
+
   /* Minimum touch target and the gap between two of them. Users may be
    * wearing gloves; 48dp with 8dp of separation is the floor, not a target. */
   --size-touch-min: 3rem; /* 48px */
   --space-touch-gap: 0.5rem; /* 8px */
 
   color-scheme: light;
+}
+
+/**
+ * A phone turned sideways.
+ *
+ * At 640x360 the bottom bar's upright height is 22% of the whole screen. It
+ * can afford to be shorter here because the constraint has swapped: width is
+ * suddenly plentiful, so five destinations get about 128px each and every
+ * label fits on one line without the second row it needs at 320px.
+ *
+ * Changing the token alone is enough — the bar and the space Page reserves for
+ * it both read it, so they shrink together and content still clears the bar.
+ */
+@media (orientation: landscape) and (max-height: 480px) {
+  :root {
+    --size-bottom-nav: 3.5rem;
+  }
 }
 
 /**
@@ -261,6 +289,18 @@
     font-size: 1rem;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+
+    /*
+     * No single word may force the page sideways.
+     *
+     * This app runs on whatever Android phone a health worker owns, and 320px
+     * is still common. A long study number, an email, or a patient name with
+     * no spaces in it is otherwise enough to make a whole screen scroll
+     * horizontally — and a sideways-scrolling clinical screen reads as broken
+     * rather than as a long value. `break-word` only breaks when the word
+     * genuinely does not fit, so ordinary prose wraps as it always did.
+     */
+    overflow-wrap: break-word;
   }
 
   h1,

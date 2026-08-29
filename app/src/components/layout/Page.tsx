@@ -23,7 +23,7 @@ export function Page({ children, hasBottomNav = false, className = '' }: PagePro
         paddingLeft: 'env(safe-area-inset-left)',
         paddingRight: 'env(safe-area-inset-right)',
         paddingBottom: hasBottomNav
-          ? 'calc(env(safe-area-inset-bottom) + 4.5rem)'
+          ? 'calc(env(safe-area-inset-bottom) + var(--size-bottom-nav))'
           : 'env(safe-area-inset-bottom)',
       }}
     >

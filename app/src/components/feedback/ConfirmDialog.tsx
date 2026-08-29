@@ -52,7 +52,14 @@ export function ConfirmDialog({
       variant="modal"
       dismissOnScrimClick={!destructive}
       footer={
-        <div className="flex flex-col gap-2">
+        /*
+         * Stacked on a phone held upright, side by side once there is width —
+         * which is the case that matters, because a phone turned sideways is
+         * only about 360px tall and two stacked 56px buttons plus a header eat
+         * most of it. DOM order is unchanged, so cancel is still what focus
+         * reaches first while confirm still sits on the right.
+         */
+        <div className="flex flex-col gap-2 sm:flex-row">
           <Button variant="secondary" onClick={onCancel} disabled={busy} fullWidth>
             {cancelLabel ?? t('action.cancel')}
           </Button>

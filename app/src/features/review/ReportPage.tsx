@@ -83,7 +83,9 @@ function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex gap-2 text-sm">
       <span className="shrink-0 font-semibold text-on-surface">{label}:</span>
-      <span className="text-on-surface">{value}</span>
+      {/* min-w-0: a flex child will not shrink below its content width
+          without it, so a long study number pushes the row sideways. */}
+      <span className="min-w-0 break-words text-on-surface">{value}</span>
     </div>
   )
 }

@@ -121,7 +121,9 @@ export function UsersPage() {
                     >
                       <div className="flex flex-col gap-1">
                         <div className="flex items-baseline justify-between gap-2">
-                          <span className="text-lg font-semibold text-on-surface">{row.name}</span>
+                          <span className="min-w-0 break-words text-lg font-semibold text-on-surface">
+                            {row.name}
+                          </span>
                           <span
                             className={`rounded-full px-2 py-0.5 text-sm font-medium ${STATUS_BADGE_CLASSES[row.status]}`}
                           >

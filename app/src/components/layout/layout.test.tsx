@@ -115,7 +115,9 @@ describe('Page and Section', () => {
     )
 
     const main = container.querySelector('main')
-    expect(main?.style.paddingBottom).toContain('4.5rem')
+    // One token, read by both the bar's own maximum height and the space Page
+    // leaves for it, so the two cannot drift apart.
+    expect(main?.style.paddingBottom).toContain('--size-bottom-nav')
     expect(main?.style.paddingBottom).toContain('safe-area-inset-bottom')
   })
 })

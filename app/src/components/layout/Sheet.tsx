@@ -125,8 +125,8 @@ export function Sheet({
 
   const panelPosition =
     variant === 'sheet'
-      ? 'absolute inset-x-0 bottom-0 rounded-t-sheet max-h-[85vh]'
-      : 'absolute left-1/2 top-1/2 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-sheet max-h-[85vh]'
+      ? 'absolute inset-x-0 bottom-0 rounded-t-sheet max-h-[85dvh]'
+      : 'absolute left-1/2 top-1/2 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-sheet max-h-[85dvh]'
 
   return createPortal(
     <div className="fixed inset-0 z-(--z-modal)">
