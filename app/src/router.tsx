@@ -19,6 +19,7 @@ import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
 import { RoleHomePlaceholder } from './features/placeholders/RoleHomePlaceholder'
 import { HelpPage } from './features/help/HelpPage'
+import { NotFoundPage } from './features/status/NotFoundPage'
 import { SystemStatusPage } from './features/status/SystemStatusPage'
 
 /** `/` redirects to `/language` (no device language chosen yet) or `/landing`. */
@@ -142,6 +143,11 @@ export function AppRoutes() {
         />
       ))}
 
+      {/*
+        Must stay last. Without it React Router renders nothing for an unknown
+        path — a blank screen with no way out, and in the installed app there is
+        no address bar or back button to escape with.
+      */}
       <Route
         path="/design-gallery"
         element={
@@ -150,6 +156,7 @@ export function AppRoutes() {
           </Suspense>
         }
       />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

@@ -119,7 +119,31 @@
       "mistake-02-loose-contact": "Hold the whole rim flat against the chest with light, even pressure.",
       "mistake-03-talking-moving": "Stay still and quiet. The patient breathes deeply through an open mouth.",
       "mistake-04-noisy-room": "Record in the quietest place you can find."
+    },
+    "deviceAlt": {
+      "device-01-power-on": "A hand pushing the power switch on the side of the recorder upwards. The display lights up.",
+      "device-02-insert-sd": "A memory card sliding into a slot in the side of the recorder.",
+      "device-03-place-chest": "A person seen from the front, with the round chestpiece held flat against the skin of the chest and a cable running to the recorder.",
+      "device-04-press-record": "A finger pressing the single round button on the front of the recorder.",
+      "device-05-recording": "The recorder with its indicator light lit and a sound wave on the display. Beside it, a face breathing in and out through an open mouth, and a face with a finger held to the lips.",
+      "device-06-stop-save": "A finger pressing the same button again. A tick shows on the display and the recording drops onto the memory card.",
+      "device-07-remove-sd": "The recorder switched off with its display dark, and the memory card sliding out of the side.",
+      "device-08-import-to-app": "A memory card, an arrow, and a phone showing a list of recordings.",
+      "device-09-clean": "A cloth wiping the round chestpiece, with a drop of disinfectant, between one patient and the next.",
+      "device-10-charge-battery": "A USB lead plugged into the socket on the recorder, beside a battery filling up."
+    },
+    "mistakeAlt": {
+      "mistake-01-over-clothing": "Two pictures side by side. On the left, marked with a cross, the chestpiece pressed on top of clothing. On the right, marked with a tick, the clothing folded back and the chestpiece flat on bare skin.",
+      "mistake-02-loose-contact": "Two pictures side by side. On the left, marked with a cross, the chestpiece tilted so only its edge touches, leaving a gap underneath. On the right, marked with a tick, the whole rim flat against the chest.",
+      "mistake-03-talking-moving": "Two pictures side by side. On the left, marked with a cross, a person talking and shifting position. On the right, marked with a tick, a person sitting still and breathing through an open mouth.",
+      "mistake-04-noisy-room": "Two pictures side by side. On the left, marked with a cross, a fan running and someone talking nearby. On the right, marked with a tick, the fan off and nobody talking."
     }
   },
-  "help_link": "How to use Ausculta"
+  "help_link": "How to use Ausculta",
+  "notFound": {
+    "title": "That page does not exist",
+    "body": "The link may be out of date, or the address may have been typed wrong. Nothing has been lost.",
+    "actionSignedIn": "Go to my home screen",
+    "actionSignedOut": "Go to the start"
+  }
 }
