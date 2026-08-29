@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import {
+  BrandMark,
   Button,
   ChevronRightIcon,
   DisclaimerBanner,
@@ -67,19 +68,7 @@ export function Landing() {
     <main className="min-h-dvh bg-surface pb-8">
       {/* The brand band: the mark at a size that reads as identity. */}
       <section className="px-6 pb-6 pt-12 text-center">
-        {/*
-          The brand mark is drawn here rather than through IconTile on purpose.
-          Passing a size in className would have been overriding IconTile's own
-          size utility and relying on which one Tailwind happens to emit last --
-          the same trap the elevation utilities exist to avoid. This is a
-          one-off hero, not a list-row tile, so it owns its own box.
-        */}
-        <span
-          aria-hidden="true"
-          className="mx-auto mb-4 inline-flex size-20 items-center justify-center rounded-[1.75rem] bg-accent text-on-accent"
-        >
-          <LungsIcon className="size-12" />
-        </span>
+        <BrandMark className="mx-auto mb-4" />
         <h1 className="font-heading text-[2.1rem] font-bold uppercase tracking-[0.18em] text-on-surface">
           {t('appName')}
         </h1>

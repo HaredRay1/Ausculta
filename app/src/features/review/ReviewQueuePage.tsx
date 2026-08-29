@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   AppBar,
+  Avatar,
   Button,
-  Card,
+  Chip,
   EmptyState,
   FictionalDataBanner,
   InboxIcon,
+  ListRow,
   WarningIcon,
   Page,
   Select,
@@ -142,51 +144,60 @@ function QueueRow({ item, onOpen }: { item: QueueItem; onOpen: () => void }) {
   const { t } = useReviewTranslation()
   const age = ageInYears(item.patient.birthDate)
 
+  /*
+   * Six stacked sentences became a row with chips.
+   *
+   * Every fact that was on its own full-width line is still here and still
+   * says the same words — the change is that they sit side by side, so a
+   * practitioner scanning twenty cases can compare "3 places flagged" against
+   * the case above it instead of reading twenty short paragraphs.
+   *
+   * WHY THE CHIPS ARE NOT COLOUR-CODED BY FLAG COUNT, since that is the first
+   * thing anyone will want to add: this screen already refuses to imply
+   * triage. `queue.orderNote` exists to say out loud that the ordering is not
+   * severity, and painting the flagged count amber or red would assert through
+   * colour exactly what that sentence is there to deny. The app's machine
+   * finding is a count of places it marked, not a judgement of how ill someone
+   * is, and it has no severity model behind it. Clinical colour in this app
+   * belongs to StatusPill and the verdict vocabulary, which a practitioner
+   * reaches by opening the case.
+   *
+   * `unusable` is the exception and is warning-toned, because it is a
+   * data-quality fact with an unambiguous action — those recordings need
+   * taking again — and it makes no claim about the patient at all.
+   */
   return (
-    <Card as="div" padding="none">
-      <button
-        type="button"
-        onClick={onOpen}
-        className="flex min-h-16 w-full flex-col items-start gap-1 px-4 py-3 text-left active:bg-surface-sunken"
-      >
-        <span className="text-lg font-semibold text-on-surface">{item.patient.name}</span>
-        <span className="text-sm text-muted">
-          {age === null ? t('case.ageUnknown') : t('case.age', { count: age })}
-          {' - '}
-          {t(`codes:sex.${item.patient.sex}`)}
-          {' - '}
-          {t('case.recordedOn', { date: new Date(item.assessment.date).toLocaleDateString() })}
-        </span>
-
-        <span className="text-base text-on-surface">
-          {t('queue.locations', { count: item.recordingCount })}
-        </span>
-
-        {/* What the app reported, always named as the app's doing. */}
-        <span className="text-base text-on-surface">
-          {item.flaggedCount > 0
-            ? t('queue.flagged', { count: item.flaggedCount })
-            : t('queue.nothingFlagged')}
-        </span>
-
-        {item.unusableCount > 0 && (
-          <span className="text-base text-on-surface">
-            {t('queue.unusable', { count: item.unusableCount })}
-          </span>
-        )}
-
+    <ListRow
+      leading={<Avatar name={item.patient.name} />}
+      title={item.patient.name}
+      subtitle={[
+        age === null ? t('case.ageUnknown') : t('case.age', { count: age }),
+        t(`codes:sex.${item.patient.sex}`),
+        t('case.recordedOn', { date: new Date(item.assessment.date).toLocaleDateString() }),
+      ].join(' · ')}
+      trailing={
         <span className="text-sm text-muted">
           {item.waitingDays === 0
             ? t('queue.waitingToday')
             : t('queue.waiting', { count: item.waitingDays })}
         </span>
-      </button>
-
-      {item.assessment.isDemo === 1 && (
-        <div className="px-4 pb-3">
-          <FictionalDataBanner compact />
-        </div>
-      )}
-    </Card>
+      }
+      detail={
+        <>
+          <Chip>{t('queue.locations', { count: item.recordingCount })}</Chip>
+          {/* What the app reported, always named as the app's doing. */}
+          <Chip>
+            {item.flaggedCount > 0
+              ? t('queue.flagged', { count: item.flaggedCount })
+              : t('queue.nothingFlagged')}
+          </Chip>
+          {item.unusableCount > 0 && (
+            <Chip tone="warning">{t('queue.unusable', { count: item.unusableCount })}</Chip>
+          )}
+        </>
+      }
+      {...(item.assessment.isDemo === 1 && { footer: <FictionalDataBanner compact /> })}
+      onClick={onOpen}
+    />
   )
 }

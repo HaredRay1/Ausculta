@@ -63,6 +63,7 @@ export {
   type AvatarProps,
   type AvatarSize,
 } from './primitives/Avatar'
+export { BrandMark, type BrandMarkProps, type BrandMarkSize } from './primitives/BrandMark'
 export { IconTile, type IconTileProps, type TileSize, type TileTone } from './primitives/IconTile'
 export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from './primitives/Button'
 export { Chip, type ChipProps, type ChipTone } from './primitives/Chip'

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import {
   Banner as DesignBanner,
+  BrandMark,
   Button,
   PasswordField as DesignPasswordField,
   TextField as DesignTextField,
@@ -67,6 +68,14 @@ export function PrimaryButton({
  * Not the design system's `Page`: these screens are pre-authentication and
  * carry no app bar or bottom nav, so they centre a narrow column instead of
  * reserving space for chrome that is not there.
+ *
+ * The mark and the card were added after looking at the screens rather than the
+ * code. Sign-in was a bare title on an empty canvas, which is a jarring drop
+ * from a landing page that opens with a large mark and a wordmark — it reads as
+ * a different application, and on a shared clinic phone this is the screen a
+ * validator meets most often. The mark says which app is asking for the
+ * password, and putting the fields on a raised card gives the form an edge, so
+ * it is an object on the page rather than text floating on the background.
  */
 export function AuthScreen({
   title,
@@ -88,12 +97,19 @@ export function AuthScreen({
       }}
     >
       <div className="mx-auto flex w-full max-w-sm flex-col gap-6">
-        <header className="flex flex-col gap-2">
-          <h1 className="font-heading text-2xl font-bold text-on-surface">{title}</h1>
-          {subtitle !== undefined && <p className="text-base text-muted">{subtitle}</p>}
+        <header className="flex flex-col items-center gap-3 text-center">
+          <BrandMark size="md" />
+          <h1 className="text-balance font-heading text-2xl font-bold text-on-surface">
+            {title}
+          </h1>
+          {subtitle !== undefined && (
+            <p className="text-pretty text-base text-muted">{subtitle}</p>
+          )}
         </header>
-        {children}
-        {footer !== undefined && <footer className="pt-2 text-center">{footer}</footer>}
+        <div className="rounded-card border border-card-border bg-surface-raised p-5 elevation-1">
+          {children}
+        </div>
+        {footer !== undefined && <footer className="text-center">{footer}</footer>}
       </div>
     </main>
   )
