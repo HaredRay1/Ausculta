@@ -59,8 +59,6 @@ function fixturePairs(): ScoredPair[] {
   return pairs
 }
 
-const CLOSE = 1e-12
-
 describe('buildConfusionCounts', () => {
   it('tallies rows as actual and columns as predicted', () => {
     const counts = buildConfusionCounts(fixturePairs())
