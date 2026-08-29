@@ -1,0 +1,134 @@
+{
+  "nav": {
+    "label": "Aking kalusugan",
+    "home": "Home",
+    "results": "Mga resulta",
+    "trends": "Mga bisita",
+    "history": "Tungkol sa akin",
+    "rehab": "Plano sa paghinga"
+  },
+  "home": {
+    "title": "Aking kalusugan",
+    "greeting": "Kumusta, {{name}}",
+    "subtitle": "Ito ang inyong sariling rekord ng kalusugan sa paghinga.",
+    "latestHeading": "Pinakahuling check",
+    "latestDescription": "Ito ang pinakahuling beses na na-record ang tunog ng inyong paghinga.",
+    "noLatest": "Wala pa kayong check.",
+    "goToHeading": "Saan kayo pupunta?",
+    "openLatest": "Buksan ang resultang ito",
+    "checkedOn": "Na-check noong {{date}}",
+    "zonesLine": "{{count}} sa {{total}} na bahagi ng inyong dibdib ang na-record.",
+    "quickResults": "Mga resulta ko",
+    "quickResultsBody": "Tingnan ang bawat check sa tunog ng inyong paghinga.",
+    "quickRecordings": "Mga recording ko",
+    "quickRecordingsBody": "Pakinggan ang mga tunog na na-record.",
+    "quickHistory": "Kasaysayan ko",
+    "quickHistoryBody": "Ang inyong mga detalye, ang mga dati ninyong sakit, at ang sa inyong pamilya.",
+    "quickTrends": "Mga bisita",
+    "quickTrendsBody": "Tingnan kung paano naghahambing ang inyong mga check sa bawat bisita.",
+    "quickRehab": "Plano sa paghinga",
+    "quickRehabBody": "Mga breathing exercise na ibinigay sa inyo ng inyong practitioner."
+  },
+  "results": {
+    "title": "Mga resulta ko",
+    "listHeading": "Bawat check, pinakabago muna",
+    "listDescription": "Isang bisita ang bawat linya. Pindutin ang linya para makita ang buong resulta.",
+    "detailTitle": "Resulta ng aking check",
+    "openDetail": "Tingnan ang buong resulta",
+    "recordedPlaces": "Mga bahaging na-record",
+    "placesCounted": "{{count}} sa {{total}} na bahagi",
+    "perLocationHeading": "Bawat bahagi ng inyong dibdib",
+    "modelVersion": "Bersyon ng listening tool ng app: {{version}}",
+    "errorTitle": "May nangyaring mali",
+    "empty": {
+      "title": "Wala pa kayong resulta",
+      "body": "Lalabas dito ang mga resulta pagkatapos i-record ng health worker ang tunog ng inyong paghinga gamit ang Ausculta device. Walang nawawala — unang bisita ninyo pa lang ito.",
+      "action": "Basahin kung ano ang kaya at hindi kaya ng Ausculta"
+    },
+    "notFound": {
+      "title": "Wala sa device na ito ang resultang iyan",
+      "body": "Hindi naka-save dito ang resultang hinahanap ninyo. Maaaring sa ibang device ito na-record.",
+      "action": "Balik sa mga resulta ko"
+    }
+  },
+  "recordings": {
+    "title": "Mga recording ko",
+    "heading": "Bawat recording, pinakabago muna",
+    "description": "Ito ang mga tunog na na-record ng device mula sa inyong dibdib. Pindutin ang play para makinig.",
+    "playerLabel": "Recording mula sa {{location}}",
+    "noAudio": "Hindi naka-save sa device na ito ang sound file ng recording na ito.",
+    "loading": "Inihahanda ang recording…",
+    "openAssessment": "Tingnan ang resulta ng bisitang ito",
+    "empty": {
+      "title": "Wala pa kayong recording",
+      "body": "Lalabas dito ang mga recording pagkatapos gamitin ng health worker ang Ausculta device sa inyong dibdib.",
+      "action": "Balik sa aking kalusugan"
+    }
+  },
+  "history": {
+    "title": "Tungkol sa akin",
+    "profileHeading": "Aking mga detalye",
+    "name": "Pangalan",
+    "birthDate": "Petsa ng kapanganakan",
+    "age": "Edad",
+    "ageValue_one": "{{count}} taong gulang",
+    "ageValue_other": "{{count}} taong gulang",
+    "sex": "Kasarian",
+    "address": "Tirahan",
+    "language": "Piniling wika",
+    "notRecorded": "Walang naitala",
+    "respiratoryHeading": "Kasaysayan ng aking paghinga",
+    "familyHeading": "Kasaysayan ng paghinga ng aking pamilya",
+    "yesHeading": "Oo",
+    "noHeading": "Hindi",
+    "notAskedHeading": "Hindi tinanong",
+    "notAskedNote": "Wala pang nagtatanong sa inyo ng mga ito. Hindi ito katulad ng sagot na hindi — blangko lang talaga ang mga ito.",
+    "noneRecorded": "Wala pang naitala rito.",
+    "readOnlyNote": "Hindi puwedeng baguhin ang pahinang ito. Para maitama ang anuman dito, sabihin sa inyong health worker.",
+    "empty": {
+      "title": "Wala sa device na ito ang inyong mga detalye",
+      "body": "Hindi pa nairerehistro rito ng inyong health worker ang inyong mga detalye."
+    }
+  },
+  "trends": {
+    "title": "Mga bisita",
+    "heading": "Paghahambing ng inyong mga check",
+    "axisVisit": "Bisita",
+    "visitsCounted_one": "{{count}} bisita",
+    "visitsCounted_other": "{{count}} bisita",
+    "empty": {
+      "title": "Kulang pa ang bisita para makapagpakita ng trend",
+      "body": "Kailangan ng hindi bababa sa dalawang bisita para makapaghambing. Kung isang punto lang ang guguhitan ng linya, magmumukhang may direksyon na walang sumukat.",
+      "bodyNone": "Wala pa kayong naitalang bisita, kaya wala pang maihahambing.",
+      "action": "Tingnan ang mga resulta ko"
+    }
+  },
+  "rehab": {
+    "title": "Plano sa paghinga",
+    "heading": "Mga breathing exercise mula sa inyong practitioner",
+    "whatItIs": "Puwedeng magdala ang Ausculta ng mga breathing exercise na pinipili ng practitioner para sa inyo. Galing ang mga ito sa mga nailathalang klinikal na gabay, at practitioner lamang ang puwedeng maglagay ng mga ito sa inyong plano.",
+    "empty": {
+      "title": "Wala pang planong ibinibigay sa inyo ang inyong practitioner"
+    },
+    "askNote": "Kung gusto ninyo ng plano sa paghinga, tanungin ang inyong health worker o doktor sa susunod ninyong bisita.",
+    "openProgramme": "Tingnan ang mga breathing exercise"
+  },
+  "shared": {
+    "loading": "Nilo-load ang inyong impormasyon…",
+    "loadError": "Hindi mabasa ang inyong impormasyon mula sa device na ito.",
+    "retry": "Subukan ulit",
+    "backHome": "Balik sa aking kalusugan",
+    "backToResults": "Balik sa mga resulta ko",
+    "signOut": "Mag-sign out",
+    "aboutTitle": "Ano ang kaya at hindi kaya ng Ausculta",
+    "noRecord": {
+      "title": "Hindi pa naka-link ang inyong health record",
+      "body": "Hindi pa nakakonekta ang inyong account sa isang rekord ng pasyente sa device na ito. Ini-link ito ng health worker kapag nirehistro nila kayo. Hanggang doon, wala pang maipapakitang sa inyo — hindi ito error.",
+      "action": "Ano ang kaya at hindi kaya ng Ausculta"
+    },
+    "demoPreview": {
+      "title": "Halimbawang datos ang tinitingnan ninyo",
+      "body": "Wala pang rekord ng pasyente ang inyong account, kaya nagpapakita ang Ausculta ng gawa-gawang halimbawa para makita ninyo kung paano gumagana ang app. Walang tungkol sa inyo rito at walang tunay dito."
+    }
+  }
+}
