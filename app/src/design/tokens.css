@@ -30,9 +30,9 @@
     Arial, sans-serif;
 
   /* ---- Surfaces and ink (light) ---------------------------------------- */
-  --color-surface: #f3f6f9;
+  --color-surface: #f7f8fa;
   --color-surface-raised: #ffffff;
-  --color-surface-sunken: #edf1f5;
+  --color-surface-sunken: #eef1f4;
   /* The app bar and bottom nav. Distinct from both the page and its cards, so
    * the chrome reads as chrome rather than as more page. */
   --color-chrome: #ffffff;
@@ -110,7 +110,7 @@
    * defaults: screens already shipped by other agents use `rounded-xl`, and
    * silently changing what that means would reshape their UI. */
   --radius-control: 0.875rem; /* 14px — buttons, inputs */
-  --radius-card: 1.25rem; /* 20px — cards, banners, panels */
+  --radius-card: 1.375rem; /* 22px — cards, banners, panels */
   --radius-tile: 0.875rem; /* 14px — the rounded square an icon sits in */
   --radius-sheet: 1.5rem; /* 24px — bottom sheets, modals */
   --radius-pill: 9999px;
@@ -151,7 +151,7 @@
  */
 :root {
   --shadow-e0: none;
-  --shadow-e1: 0 1px 2px rgb(15 23 42 / 0.04), 0 2px 8px rgb(15 23 42 / 0.06);
+  --shadow-e1: 0 1px 2px rgb(15 23 42 / 0.03), 0 2px 6px rgb(15 23 42 / 0.04);
   --shadow-e2: 0 2px 4px rgb(15 23 42 / 0.05), 0 6px 16px rgb(15 23 42 / 0.09);
   --shadow-e3: 0 8px 24px rgb(15 23 42 / 0.14), 0 2px 6px rgb(15 23 42 / 0.08);
 
@@ -215,10 +215,10 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --color-surface: #0b1220;
-    --color-surface-raised: #1a2537;
-    --color-surface-sunken: #070c14;
-    --color-chrome: #131e2d;
+    --color-surface: #0e1013;
+    --color-surface-raised: #1a1d21;
+    --color-surface-sunken: #16181c;
+    --color-chrome: #141719;
     --color-on-chrome: #f1f5f9;
     --color-on-surface: #f1f5f9;
     --color-muted: #cbd5e1;
@@ -275,10 +275,10 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  --color-surface: #0b1220;
-  --color-surface-raised: #1a2537;
-  --color-surface-sunken: #070c14;
-  --color-chrome: #131e2d;
+  --color-surface: #0e1013;
+  --color-surface-raised: #1a1d21;
+  --color-surface-sunken: #16181c;
+  --color-chrome: #141719;
   --color-on-chrome: #f1f5f9;
   --color-on-surface: #f1f5f9;
   --color-muted: #cbd5e1;

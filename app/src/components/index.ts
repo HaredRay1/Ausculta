@@ -67,6 +67,8 @@ export { IconTile, type IconTileProps, type TileSize, type TileTone } from './pr
 export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from './primitives/Button'
 export { Chip, type ChipProps, type ChipTone } from './primitives/Chip'
 export { ListRow, type ListRowProps } from './primitives/ListRow'
+export { ProgressRing, type ProgressRingProps } from './primitives/ProgressRing'
+export { StatTile, type StatTileProps } from './primitives/StatTile'
 export { Card, type CardPadding, type CardProps } from './primitives/Card'
 export { Checkbox, type CheckboxProps } from './primitives/Checkbox'
 export {

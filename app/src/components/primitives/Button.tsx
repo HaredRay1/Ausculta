@@ -31,9 +31,9 @@ const VARIANTS: Record<ButtonVariant, string> = {
  * offer. `sm` is the floor itself, not a compact exception to it.
  */
 const SIZES: Record<ButtonSize, string> = {
-  sm: 'min-h-12 px-4 text-base gap-2',
-  md: 'min-h-14 px-5 text-lg gap-2.5',
-  lg: 'min-h-16 px-6 text-lg gap-3',
+  sm: 'min-h-12 px-5 text-base gap-2',
+  md: 'min-h-13 px-6 text-base gap-2.5',
+  lg: 'min-h-14 px-8 text-lg gap-3',
 }
 
 export function Button({
@@ -58,8 +58,8 @@ export function Button({
       disabled={isDisabled}
       aria-busy={loading || undefined}
       className={[
-        'inline-flex items-center justify-center rounded-control font-semibold',
-        'transition-[background-color,opacity] duration-150',
+        'inline-flex items-center justify-center rounded-pill font-semibold',
+        'transition-[background-color,opacity] duration-150 ease-out',
         'disabled:cursor-not-allowed disabled:opacity-60',
         VARIANTS[variant],
         SIZES[size],

@@ -13,6 +13,8 @@ import {
   StatusPill,
   MicIcon,
   IconTile,
+  ProgressRing,
+  StatTile,
   type IconComponent,
   type TileTone,
 } from '../../../components'
@@ -25,6 +27,9 @@ import { useAuth } from '../../../auth/AuthContext'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS, resultDetailPath } from '../navigation'
 import { exampleCopyFor } from '../components/ExampleCopy'
+
+/** The six auscultation sites. The ring's denominator is this, never a guess. */
+const ALL_CHEST_PLACES = 6
 
 /**
  * The screen a person with asthma opens.
@@ -70,6 +75,15 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
         const exampleCopy = exampleCopyFor(overview.isFictional)
         const latest: AssessmentSummary | undefined = overview.summaries[0]
 
+        /** A real elapsed count, or null when there is no check to count from. */
+        const daysSinceLatest =
+          latest === undefined
+            ? null
+            : Math.max(
+                0,
+                Math.floor((Date.now() - new Date(latest.date).getTime()) / 86_400_000),
+              )
+
         return (
           <>
             {/* The greeting leads with the person, because "is this me?" is a
@@ -99,6 +113,42 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
                 />
               ) : (
                 <LatestCheckCard summary={latest} language={language} />
+              )}
+            </Section>
+
+            {/*
+              The record, as counts. Every figure here is something the
+              database actually holds — how many checks exist, how long since
+              the last one, how many chest places it covered. Nothing derived,
+              nothing scored: a big number reads as authoritative, which is
+              exactly why an invented one would do more damage here than
+              anywhere else on the screen.
+            */}
+            <Section title={t('patient:home.statsHeading')}>
+              <div className="grid grid-cols-2 gap-3">
+                <StatTile
+                  value={overview.summaries.length > 0 ? overview.summaries.length : null}
+                  label={t('patient:home.statChecks')}
+                  emptyText={t('patient:home.statChecksEmpty')}
+                />
+                <StatTile
+                  value={daysSinceLatest}
+                  label={t('patient:home.statDaysSince')}
+                  emptyText={t('patient:home.statDaysSinceEmpty')}
+                />
+              </div>
+
+              {latest !== undefined && (
+                <div className="flex items-center gap-4 rounded-card border border-card-border bg-surface-raised p-4 elevation-1">
+                  <ProgressRing
+                    value={latest.recordedCount}
+                    max={ALL_CHEST_PLACES}
+                    label={t('patient:home.statLocationsAria')}
+                  />
+                  <p className="min-w-0 flex-1 text-sm leading-snug text-muted">
+                    {t('patient:home.statLocations')}
+                  </p>
+                </div>
               )}
             </Section>
 

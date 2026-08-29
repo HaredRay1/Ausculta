@@ -55,7 +55,9 @@ export function BottomNav({ items, activeId, onSelect, label }: BottomNavProps) 
                 aria-current={active ? 'page' : undefined}
                 className={[
                   'flex min-h-14 w-full flex-col items-center justify-center gap-0.5 rounded-control px-1 py-1.5',
-                  active ? 'bg-accent text-on-accent' : 'text-muted active:bg-surface-sunken',
+                  // Teal ink plus a bolder label, never colour alone —
+                  // aria-current carries it for anyone who cannot see either.
+                  active ? 'text-primary' : 'text-muted active:opacity-70',
                 ].join(' ')}
               >
                 <span className="relative">

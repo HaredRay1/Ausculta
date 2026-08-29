@@ -59,15 +59,15 @@ export function Landing() {
   return (
     <main className="min-h-dvh bg-surface pb-10">
       {/* The brand band: the mark at a size that reads as identity. */}
-      <section className="bg-surface-raised px-6 pb-8 pt-14 text-center elevation-1">
-        <IconTile size="lg" className="mx-auto mb-4 size-20">
-          <LungsIcon className="size-12" />
+      <section className="px-6 pb-10 pt-20 text-center">
+        <IconTile size="lg" className="mx-auto mb-5 size-24 rounded-[2rem]">
+          <LungsIcon className="size-14" />
         </IconTile>
-        <h1 className="font-heading text-3xl font-bold uppercase tracking-[0.2em] text-on-surface">
+        <h1 className="font-heading text-[2.1rem] font-bold uppercase tracking-[0.18em] text-on-surface">
           {t('appName')}
         </h1>
-        <p className="mt-1 text-base font-medium text-primary">{t('tagline')}</p>
-        <p className="mx-auto mt-4 max-w-sm text-base leading-relaxed text-on-surface">
+        <p className="mt-2 text-base font-medium text-primary">{t('tagline')}</p>
+        <p className="mx-auto mt-5 max-w-xs text-base leading-relaxed text-muted">
           {t('whatItIs')}
         </p>
       </section>

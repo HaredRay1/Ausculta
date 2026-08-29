@@ -37,7 +37,14 @@
     "latestDescription_example": "This is the most recent time breathing sounds were recorded in this example.",
     "quickResults_example": "Results in this example",
     "quickRecordings_example": "Recordings in this example",
-    "quickHistory_example": "History in this example"
+    "quickHistory_example": "History in this example",
+    "statsHeading": "Your record so far",
+    "statChecks": "Checks recorded",
+    "statChecksEmpty": "None yet",
+    "statDaysSince": "Days since your last check",
+    "statDaysSinceEmpty": "No check yet",
+    "statLocations": "Chest places recorded at your last check",
+    "statLocationsAria": "chest places recorded at your last check"
   },
   "results": {
     "title": "My results",
