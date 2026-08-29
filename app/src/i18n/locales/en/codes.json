@@ -33,17 +33,17 @@
     "DEMO_FICTIONAL": "Demo (fictional)"
   },
   "measurement": {
-    "SPO2": "Oxygen saturation (SpO2)",
-    "RESP_RATE_MANUAL": "Respiratory rate (manual)",
-    "RESP_RATE_AUSC_DERIVED": "Respiratory rate (auscultation-derived)",
+    "SPO2": "Oxygen level (SpO2)",
+    "RESP_RATE_MANUAL": "Breathing rate (counted)",
+    "RESP_RATE_AUSC_DERIVED": "Breathing rate (from the recording)",
     "HEART_RATE": "Heart rate",
     "TEMP": "Temperature",
     "BP_SYS": "Blood pressure (systolic)",
     "BP_DIA": "Blood pressure (diastolic)"
   },
   "measurementSource": {
-    "MANUAL_ENTRY": "Manual entry",
-    "AUSCULTATION_DERIVED": "Auscultation-derived"
+    "MANUAL_ENTRY": "Measured by a person",
+    "AUSCULTATION_DERIVED": "Worked out from the recording"
   },
   "symptom": {
     "COUGH": "Cough",
