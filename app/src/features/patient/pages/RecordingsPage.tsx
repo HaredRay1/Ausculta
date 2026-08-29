@@ -16,6 +16,7 @@ import { toPatientRecordingView } from '../data/resultView'
 import { formatLongDate } from '../format'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS, resultDetailPath } from '../navigation'
+import { exampleCopyFor } from '../components/ExampleCopy'
 
 /**
  * Every recording, flat and newest first.
@@ -49,6 +50,7 @@ export function RecordingsPage({ repository }: RecordingsPageProps) {
       {...(repository !== undefined && { repository })}
     >
       {(overview) => {
+        const exampleCopy = exampleCopyFor(overview.isFictional)
         if (overview.recordings.length === 0) {
           return (
             <>
@@ -75,7 +77,7 @@ export function RecordingsPage({ repository }: RecordingsPageProps) {
           <>
             <Section
               title={t('patient:recordings.heading')}
-              description={t('patient:recordings.description')}
+              description={t('patient:recordings.description', exampleCopy)}
             >
               <AiAttribution>
                 {overview.recordings.map((recording) => {

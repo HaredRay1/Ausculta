@@ -198,6 +198,20 @@ export function createPatientRepository(database: AuscultaDB = defaultDb) {
     }
   }
 
+  /**
+   * The username behind `linkedUserId`, or undefined.
+   *
+   * The detail screen promises a username and was interpolating the raw user
+   * id, so a health worker read an opaque UUID where a name was offered. The
+   * lookup lives here because the screen has no business querying the users
+   * table itself.
+   */
+  async function linkedUsername(patient: Patient): Promise<string | undefined> {
+    if (patient.linkedUserId === undefined) return undefined
+    const user = await database.users.get(patient.linkedUserId)
+    return user?.username
+  }
+
   async function get(id: string, actor: Actor): Promise<Patient | undefined> {
     const patient = await database.patients.get(id)
     if (patient === undefined) return undefined
@@ -539,6 +553,7 @@ export function createPatientRepository(database: AuscultaDB = defaultDb) {
   return {
     create,
     get,
+    linkedUsername,
     list,
     search,
     update,

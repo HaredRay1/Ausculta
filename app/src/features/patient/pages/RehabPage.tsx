@@ -11,6 +11,7 @@ import {
 import { PatientScreen } from '../components/PatientScreen'
 import type { PatientRepository } from '../data/patientRepository'
 import { usePatientTranslation } from '../i18n'
+import { exampleCopyFor } from '../components/ExampleCopy'
 
 /**
  * Rehabilitation support — the shell, deliberately without content.
@@ -41,9 +42,9 @@ export function RehabPage({ repository }: RehabPageProps) {
       title={t('patient:rehab.title')}
       {...(repository !== undefined && { repository })}
     >
-      {() => (
+      {(overview) => (
         <>
-          <Section title={t('patient:rehab.heading')}>
+          <Section title={t('patient:rehab.heading', exampleCopyFor(overview.isFictional))}>
             <Card>
               <p className="text-base text-on-surface">{t('patient:rehab.whatItIs')}</p>
             </Card>

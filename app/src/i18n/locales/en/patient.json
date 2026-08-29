@@ -27,7 +27,12 @@
     "quickTrends": "Over time",
     "quickTrendsBody": "See how your checks compare from visit to visit.",
     "quickRehab": "Breathing plan",
-    "quickRehabBody": "Breathing exercises your practitioner has given you."
+    "quickRehabBody": "Breathing exercises your practitioner has given you.",
+    "subtitle_example": "This is an example record. It is not yours.",
+    "quickResultsBody_example": "See every check of the breathing sounds in this example.",
+    "quickTrendsBody_example": "See how the checks in this example compare from visit to visit.",
+    "quickHistoryBody_example": "The details, past illnesses and family history in this example.",
+    "quickRehabBody_example": "Breathing exercises given to the person in this example."
   },
   "results": {
     "title": "My results",
@@ -80,7 +85,11 @@
       "title": "That result is not on this device",
       "body": "The result you were looking for is not saved here. It may have been recorded on another device.",
       "action": "Back to my results"
-    }
+    },
+    "perLocationHeading_example": "Each place on the chest",
+    "errorBody_example": "The app could not finish checking this recording. Nothing has been decided about anyone from it.",
+    "notAnalysedBody_example": "This recording has not been through the app's listening tool yet. Nothing has been decided about anyone from it.",
+    "modelNotConnectedBody_example": "This recording was saved, but the part of the app that listens to it was not connected at the time. Nothing has been decided about anyone from it."
   },
   "recordings": {
     "title": "My recordings",
@@ -94,7 +103,8 @@
       "title": "You have no recordings yet",
       "body": "Recordings appear here after a health worker uses the Ausculta device on your chest.",
       "action": "Back to my health"
-    }
+    },
+    "description_example": "These are the sounds the device recorded in this example. Tap play to listen."
   },
   "review": {
     "aiHeading": "What the app heard",
@@ -125,7 +135,8 @@
     "pending": {
       "title": "No practitioner has checked this yet",
       "body": "Everything above came from the app by itself. A doctor or health practitioner has not reviewed it."
-    }
+    },
+    "practitionerCaveat_example": "This part was written by a person - a doctor or health practitioner who looked at these recordings."
   },
   "history": {
     "title": "About me",
@@ -184,7 +195,11 @@
       "body": "A trend needs at least two visits to compare. Drawing a line through a single point would suggest a direction that nobody has measured.",
       "bodyNone": "You have no visits recorded yet, so there is nothing to compare.",
       "action": "See my results"
-    }
+    },
+    "heading_example": "How the checks in this example compare",
+    "changeDetected_example": "A change in the recorded breathing sound pattern was noticed between the last two visits in this example.",
+    "noChangeDetected_example": "No change in the recorded breathing sound pattern was noticed between the last two visits in this example.",
+    "changeNote_example": "A change in the sound pattern is not the same as health getting better or worse. Only a practitioner can say what it means."
   },
   "rehab": {
     "title": "Breathing plan",
@@ -199,7 +214,8 @@
     "openProgramme": "See breathing exercises",
     "safetyTitle": "If your breathing gets worse",
     "safetyBody": "Read this before you need it. It explains the warning signs and what to do during an asthma attack.",
-    "safetyAction": "What to do in an attack"
+    "safetyAction": "What to do in an attack",
+    "heading_example": "Breathing exercises from the practitioner in this example"
   },
   "shared": {
     "loading": "Loading your information…",

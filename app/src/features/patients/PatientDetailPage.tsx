@@ -43,6 +43,7 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
   const canAssess = actor !== null && ROLES_THAT_CAN_REGISTER.includes(actor.role)
 
   const [patient, setPatient] = useState<Patient | null>(null)
+  const [linkedUsername, setLinkedUsername] = useState<string | undefined>(undefined)
   const [state, setState] = useState<LoadState>('loading')
 
   useEffect(() => {
@@ -53,6 +54,11 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
       if (cancelled) return
       setPatient(found ?? null)
       setState(found === undefined ? 'missing' : 'found')
+      if (found !== undefined) {
+        void repo.linkedUsername(found).then((name) => {
+          if (!cancelled) setLinkedUsername(name)
+        })
+      }
     })
 
     return () => {
@@ -241,7 +247,12 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
               value={
                 patient.linkedUserId === undefined
                   ? t('account.notLinked')
-                  : t('account.linked', { username: patient.linkedUserId })
+                  : t('account.linked', {
+                      // Falls back to the id only if the account has gone --
+                      // showing something is better than showing nothing, but
+                      // a username is what was promised.
+                      username: linkedUsername ?? patient.linkedUserId,
+                    })
               }
             />
           </dl>

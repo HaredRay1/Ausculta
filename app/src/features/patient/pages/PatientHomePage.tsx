@@ -21,6 +21,7 @@ import { formatLongDate } from '../format'
 import { useAuth } from '../../../auth/AuthContext'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS, resultDetailPath } from '../navigation'
+import { exampleCopyFor } from '../components/ExampleCopy'
 
 /**
  * The screen a person with asthma opens.
@@ -63,6 +64,7 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
       {...(repository !== undefined && { repository })}
     >
       {(overview) => {
+        const exampleCopy = exampleCopyFor(overview.isFictional)
         const latest: AssessmentSummary | undefined = overview.summaries[0]
 
         return (
@@ -71,7 +73,7 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
               <h2 className="font-heading text-2xl font-bold text-on-surface">
                 {t('patient:home.greeting', { name: signedInName })}
               </h2>
-              <p className="mt-1 text-base text-muted">{t('patient:home.subtitle')}</p>
+              <p className="mt-1 text-base text-muted">{t('patient:home.subtitle', exampleCopy)}</p>
             </header>
 
             <Section
@@ -95,7 +97,7 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
                   to={PATIENT_PATHS.results}
                   icon={LungsIcon}
                   title={t('patient:home.quickResults')}
-                  body={t('patient:home.quickResultsBody')}
+                  body={t('patient:home.quickResultsBody', exampleCopy)}
                 />
                 <DestinationCard
                   to={PATIENT_PATHS.recordings}
@@ -107,19 +109,19 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
                   to={PATIENT_PATHS.trends}
                   icon={RefreshIcon}
                   title={t('patient:home.quickTrends')}
-                  body={t('patient:home.quickTrendsBody')}
+                  body={t('patient:home.quickTrendsBody', exampleCopy)}
                 />
                 <DestinationCard
                   to={PATIENT_PATHS.history}
                   icon={PeopleIcon}
                   title={t('patient:home.quickHistory')}
-                  body={t('patient:home.quickHistoryBody')}
+                  body={t('patient:home.quickHistoryBody', exampleCopy)}
                 />
                 <DestinationCard
                   to={PATIENT_PATHS.rehab}
                   icon={InboxIcon}
                   title={t('patient:home.quickRehab')}
-                  body={t('patient:home.quickRehabBody')}
+                  body={t('patient:home.quickRehabBody', exampleCopy)}
                 />
               </ul>
             </Section>

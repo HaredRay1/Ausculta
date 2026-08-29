@@ -57,7 +57,11 @@ beforeEach(async () => {
     username: 'marisol',
     password: PASSWORD,
     role: ROLES.PATIENT,
-    name: 'Marisol Agbayani',
+    // Deliberately NOT any seeded patient's name. The greeting reads
+    // user.name, so a fixture sharing a demo patient's name would pass whether
+    // the greeting were right or wrong, and would read as though greeting-by-
+    // patient-name were intended.
+    name: 'Test Account Holder',
   })
   userId = user.id
   await auth.login('marisol', PASSWORD)
@@ -84,7 +88,7 @@ function patientRow(overrides: Partial<Patient> = {}): Patient {
       presentedAt: '2026-06-01T01:30:00.000Z',
       recordedBy: 'DEMO-STAFF-HW1',
     },
-    name: 'Marisol Agbayani',
+    name: 'Test Account Holder',
     birthDate: '1992-03-14',
     sex: SEX_CODES.FEMALE,
     address: 'Barangay Macarascas',
@@ -226,7 +230,7 @@ describe('finding my results', () => {
    */
   it('offers a one-tap link to results on the home screen', async () => {
     renderAt(PATIENT_PATHS.home)
-    await screen.findByText(t('home.greeting', { name: 'Marisol Agbayani' }))
+    await screen.findByText(t('home.greeting', { name: 'Test Account Holder' }))
 
     const tile = screen.getByRole('link', { name: new RegExp(t('home.quickResults'), 'i') })
     expect(tile).toHaveAttribute('href', PATIENT_PATHS.results)
@@ -234,7 +238,7 @@ describe('finding my results', () => {
 
   it('also offers results in the bottom navigation from every screen', async () => {
     renderAt(PATIENT_PATHS.home)
-    await screen.findByText(t('home.greeting', { name: 'Marisol Agbayani' }))
+    await screen.findByText(t('home.greeting', { name: 'Test Account Holder' }))
 
     const nav = screen.getByRole('navigation', { name: t('nav.label') })
     expect(within(nav).getByText(t('nav.results'))).toBeInTheDocument()
@@ -568,7 +572,7 @@ describe('empty states teach rather than dead-end', () => {
   it('shows the home screen empty state for a patient with no assessments', async () => {
     await seedLinkedPatient()
     renderAt(PATIENT_PATHS.home)
-    await screen.findByText(t('home.greeting', { name: 'Marisol Agbayani' }))
+    await screen.findByText(t('home.greeting', { name: 'Test Account Holder' }))
     expect(screen.getByText(t('results.empty.title'))).toBeInTheDocument()
     // The way onward is still there.
     expect(
@@ -622,6 +626,47 @@ describe('a real account is never given another identity', () => {
     renderAt(PATIENT_PATHS.home)
     expect(await screen.findByText(t('shared.noRecord.title'))).toBeInTheDocument()
     expect(screen.getByText(t('shared.noRecord.body'))).toBeInTheDocument()
+  })
+
+  it('drops the possessive copy while an example is on screen', async () => {
+    // "This is your own respiratory health record" over somebody else's data is
+    // a false statement, and the banner does not rescue it: the copy is the
+    // primary content and reads as fact, the banner reads as a footnote.
+    setExampleRecordShown(true)
+    renderAt(PATIENT_PATHS.home)
+
+    await waitFor(() =>
+      expect(screen.getByText(t('shared.demoPreview.title'))).toBeInTheDocument(),
+    )
+    expect(screen.getByText(t('home.subtitle_example'))).toBeInTheDocument()
+    expect(screen.queryByText(t('home.subtitle'))).not.toBeInTheDocument()
+  })
+
+  it('keeps the possessive copy for a real linked record', async () => {
+    // The second person is right, and warmer, when it really is your record.
+    // Linking a DEMO row would not test this: isFictional would be true and the
+    // copy would correctly switch, which is the opposite of what is asserted.
+    await db.patients.add({
+      id: 'PT-0001-0001',
+      studyId: 'ST-REALPATIENT0001',
+      name: 'Test Account Holder',
+      birthDate: '1990-01-01',
+      sex: SEX_CODES.FEMALE,
+      linkedUserId: userId,
+      assignedPractitionerIds: [],
+      assignedHealthWorkerIds: [],
+      consent: null,
+      respiratoryHistory: [],
+      familyHistory: [],
+      preferredLanguage: 'en',
+      isDemo: 0,
+      createdAt: '2026-08-01T00:00:00.000Z',
+    })
+
+    renderAt(PATIENT_PATHS.home)
+    await waitFor(() => expect(screen.getByText(t('home.subtitle'))).toBeInTheDocument())
+    expect(screen.queryByText(t('home.subtitle_example'))).not.toBeInTheDocument()
+    expect(screen.queryByText(t('shared.demoPreview.title'))).not.toBeInTheDocument()
   })
 
   it('offers an example record, and names whose it is when shown', async () => {

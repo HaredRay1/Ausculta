@@ -400,6 +400,32 @@ describe('patient detail', () => {
     expect(screen.getByRole('button', { name: t('detail.trends') })).toBeInTheDocument()
   })
 
+  it('shows the linked account by username, not by its internal id', async () => {
+    // The string promises a username; it used to interpolate the raw user id,
+    // so a health worker read an opaque identifier where a name was offered.
+    const actor = await signIn()
+    const patient = await repo.create({ demographics, preferredLanguage: 'en' }, actor)
+    const account = await auth.register({
+      username: 'maria',
+      password: PASSWORD,
+      role: ROLES.PATIENT,
+      name: 'Maria Dela Cruz',
+      preferredLanguage: 'en',
+    })
+    await repo.linkAccount(patient.id, 'maria', actor)
+
+    renderWithAuth(
+      <PatientDetailPage repository={repo} />,
+      `/patients/${patient.id}`,
+      '/patients/:patientId',
+    )
+
+    expect(
+      await screen.findByText(t('account.linked', { username: 'maria' })),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(new RegExp(account.id))).not.toBeInTheDocument()
+  })
+
   it('labels the study number as carrying no personal details', async () => {
     const actor = await signIn()
     const patient = await repo.create({ demographics, preferredLanguage: 'en' }, actor)

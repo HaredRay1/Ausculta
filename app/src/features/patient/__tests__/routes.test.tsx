@@ -87,7 +87,7 @@ describe('mounted through the real seam', () => {
       username: 'validator1',
       password: PASSWORD,
       role: ROLES.PATIENT,
-      name: 'Marisol Agbayani',
+      name: 'Test Account Holder',
     })
     await auth.login('validator1', PASSWORD)
 
@@ -104,7 +104,7 @@ describe('mounted through the real seam', () => {
         presentedAt: '2026-06-01T01:30:00.000Z',
         recordedBy: 'DEMO-STAFF-HW1',
       },
-      name: 'Marisol Agbayani',
+      name: 'Test Account Holder',
       birthDate: '1992-03-14',
       sex: SEX_CODES.FEMALE,
       respiratoryHistory: [],
@@ -136,7 +136,7 @@ describe('mounted through the real seam', () => {
     mount(PATIENT_PATHS.home)
     await waitFor(() =>
       expect(
-        screen.getByText(t('home.greeting', { name: 'Marisol Agbayani' })),
+        screen.getByText(t('home.greeting', { name: 'Test Account Holder' })),
       ).toBeInTheDocument(),
     )
   })

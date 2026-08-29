@@ -5,6 +5,7 @@ import type { Assessment } from '../../../db/types'
 import { formatLongDate } from '../format'
 import { usePatientTranslation } from '../i18n'
 import type { StaffDisplay } from '../data/patientRepository'
+import { useExampleCopy } from './ExampleCopy'
 
 /**
  * Who said this: the app, or a person.
@@ -78,6 +79,7 @@ export function PractitionerAttribution({
   language,
 }: PractitionerAttributionProps) {
   const { t } = usePatientTranslation()
+  const exampleCopy = useExampleCopy()
   const severity = assessment.practitionerSeverity
   const reviewed =
     severity !== undefined &&
@@ -118,7 +120,7 @@ export function PractitionerAttribution({
       </div>
 
       <p className="mt-3 rounded-control border border-border-strong bg-surface-sunken p-3 text-base text-on-surface">
-        {t('patient:review.practitionerCaveat')}
+        {t('patient:review.practitionerCaveat', exampleCopy)}
       </p>
 
       <dl className="mt-4 flex flex-col gap-2 text-base">

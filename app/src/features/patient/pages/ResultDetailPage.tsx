@@ -18,6 +18,7 @@ import { BREAKDOWN_KEY, BREAKDOWN_ORDER } from '../data/resultView'
 import { formatLongDate } from '../format'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS } from '../navigation'
+import { exampleCopyFor } from '../components/ExampleCopy'
 
 /**
  * One visit, in full.
@@ -54,6 +55,7 @@ export function ResultDetailPage({ repository }: ResultDetailPageProps) {
       {...(repository !== undefined && { repository })}
     >
       {(overview) => {
+        const exampleCopy = exampleCopyFor(overview.isFictional)
         const summary = overview.summaries.find((row) => row.assessmentId === assessmentId)
         const assessment = overview.assessmentsById[assessmentId]
 
@@ -118,9 +120,9 @@ export function ResultDetailPage({ repository }: ResultDetailPageProps) {
                 </ul>
               </section>
 
-              <section aria-label={t('patient:results.perLocationHeading')}>
+              <section aria-label={t('patient:results.perLocationHeading', exampleCopy)}>
                 <h3 className="font-heading text-base font-bold text-on-surface">
-                  {t('patient:results.perLocationHeading')}
+                  {t('patient:results.perLocationHeading', exampleCopy)}
                 </h3>
                 <div className="mt-2 flex flex-col gap-4">
                   {summary.views.map((view) => (

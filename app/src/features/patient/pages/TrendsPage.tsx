@@ -15,6 +15,7 @@ import type { PatientRepository } from '../data/patientRepository'
 import { buildTrendSeries, MIN_TREND_POINTS } from '../data/trends'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS } from '../navigation'
+import { exampleCopyFor } from '../components/ExampleCopy'
 
 /**
  * How the checks compare, visit to visit.
@@ -44,6 +45,7 @@ export function TrendsPage({ repository }: TrendsPageProps) {
       {...(repository !== undefined && { repository })}
     >
       {(overview) => {
+        const exampleCopy = exampleCopyFor(overview.isFictional)
         const series = buildTrendSeries(overview.summaries)
 
         if (!series.canDrawLine) {
@@ -83,7 +85,7 @@ export function TrendsPage({ repository }: TrendsPageProps) {
         return (
           <>
             <Section
-              title={t('patient:trends.heading')}
+              title={t('patient:trends.heading', exampleCopy)}
               description={t('patient:trends.description')}
             >
               <p className="text-base text-muted">
@@ -94,10 +96,10 @@ export function TrendsPage({ repository }: TrendsPageProps) {
             <Banner tone="info">
               <p>
                 {series.patternChanged === true
-                  ? t('patient:trends.changeDetected')
-                  : t('patient:trends.noChangeDetected')}
+                  ? t('patient:trends.changeDetected', exampleCopy)
+                  : t('patient:trends.noChangeDetected', exampleCopy)}
               </p>
-              <p className="mt-1">{t('patient:trends.changeNote')}</p>
+              <p className="mt-1">{t('patient:trends.changeNote', exampleCopy)}</p>
             </Banner>
 
             <Card>

@@ -4,6 +4,7 @@ import { usePatientTranslation } from '../i18n'
 import type { PatientRecordingView } from '../data/resultView'
 import { RecordingAudio } from './RecordingAudio'
 import type { PatientRepository } from '../data/patientRepository'
+import { useExampleCopy } from './ExampleCopy'
 
 export interface RecordingResultProps {
   view: PatientRecordingView
@@ -34,6 +35,7 @@ export function RecordingResult({
   repository,
 }: RecordingResultProps) {
   const { t } = usePatientTranslation()
+  const exampleCopy = useExampleCopy()
   const locationLabel = t(`codes:location.${view.locationCode}`)
   const meta = `${locationLabel} · ${formatShortDate(view.createdAt, language)}`
 
@@ -56,7 +58,7 @@ export function RecordingResult({
       view.state === 'model-not-connected' ? (
         <NotConnectedPanel
           title={locationLabel}
-          body={t('patient:results.modelNotConnectedBody')}
+          body={t('patient:results.modelNotConnectedBody', exampleCopy)}
         />
       ) : (
         <Banner
@@ -69,8 +71,8 @@ export function RecordingResult({
         >
           <p>
             {view.state === 'error'
-              ? t('patient:results.errorBody')
-              : t('patient:results.notAnalysedBody')}
+              ? t('patient:results.errorBody', exampleCopy)
+              : t('patient:results.notAnalysedBody', exampleCopy)}
           </p>
           <p className="mt-1 text-sm">{meta}</p>
         </Banner>

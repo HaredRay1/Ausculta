@@ -2,6 +2,7 @@ import { useCallback, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Banner, Button, EmptyState, InfoIcon } from '../../../components'
 import { isExampleRecordShown, setExampleRecordShown } from '../data/examplePreview'
+import { ExampleCopyProvider } from './ExampleCopy'
 import { usePatientOverview } from '../data/usePatientOverview'
 import type { LoadedPatientOverview, PatientRepository } from '../data/patientRepository'
 import { usePatientTranslation } from '../i18n'
@@ -94,7 +95,14 @@ export function PatientScreen({
           {t('patient:shared.demoPreview.bodyNamed', { name: patient.name })}
         </Banner>
       )}
-      {children(loaded)}
+      {/*
+        The portal speaks in the second person -- "your breathing sounds",
+        "places on your chest". That is right for someone reading their own
+        record and a false statement over an example, so the copy switches to
+        third person underneath here rather than every screen threading a flag
+        through every string.
+      */}
+      <ExampleCopyProvider example={overview.isFictional}>{children(loaded)}</ExampleCopyProvider>
     </>,
   )
 }
