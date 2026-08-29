@@ -3,12 +3,8 @@ import { ROLES, USER_STATUSES, type Role, type UserStatus } from '../db/codes'
 import type { User } from '../db/types'
 import { ANONYMOUS_ACTOR, AUDIT_ACTIONS, createAuditLogger } from '../audit/audit'
 import { PBKDF2_ITERATIONS, hashPassword, simulateVerifyDelay, verifyPassword } from './crypto'
-import {
-  DEFAULT_IDLE_TIMEOUT_MS,
-  createSessionStore,
-  isSessionExpired,
-  type SessionStore,
-} from './session'
+import { currentIdleTimeoutMs } from './idleTimeout'
+import { createSessionStore, isSessionExpired, type SessionStore } from './session'
 
 /**
  * Offline authentication and account lifecycle.
@@ -129,8 +125,13 @@ function isUniqueConstraintViolation(error: unknown): boolean {
 }
 
 export interface AuthServiceOptions {
-  /** Idle window used when restoring a persisted session. */
-  idleTimeoutMs?: number
+  /**
+   * Idle window used when restoring a persisted session.
+   *
+   * A function is resolved on every check, which is how an administrator's
+   * saved timeout takes effect without rebuilding the service.
+   */
+  idleTimeoutMs?: number | (() => number)
   /** Overridable so tests can drive the clock. */
   now?: () => number
   /**
@@ -153,7 +154,10 @@ export function createAuthService(
   database: AuscultaDB = defaultDb,
   options: AuthServiceOptions = {},
 ) {
-  const idleTimeoutMs = options.idleTimeoutMs ?? DEFAULT_IDLE_TIMEOUT_MS
+  const resolveIdleTimeoutMs = (): number => {
+    if (typeof options.idleTimeoutMs === 'function') return options.idleTimeoutMs()
+    return options.idleTimeoutMs ?? currentIdleTimeoutMs()
+  }
   const now = options.now ?? (() => Date.now())
   const passwordIterations = options.passwordIterations ?? PBKDF2_ITERATIONS
   const sessions: SessionStore = createSessionStore(database)
@@ -413,6 +417,7 @@ export function createAuthService(
     const session = await sessions.read()
     if (session === null) return null
 
+    const idleTimeoutMs = resolveIdleTimeoutMs()
     if (isSessionExpired(session, idleTimeoutMs, now())) {
       await sessions.clear()
       await audit({

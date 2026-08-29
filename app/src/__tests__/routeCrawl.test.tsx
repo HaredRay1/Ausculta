@@ -11,6 +11,7 @@ import type { AuthService } from '../auth/authService'
 import { ROLES, type Role } from '../db/codes'
 import { db } from '../db/db'
 import { i18n as appI18n } from '../i18n'
+import { adminRoutes } from '../features/admin/routes'
 import { assessmentRoutes } from '../features/assessment/routes'
 import { demoRoutes, seedDemoData, setDemoMode, syncDemoAssignments } from '../features/demo'
 import { TECHNIQUES } from '../features/rehab/content/techniques'
@@ -65,6 +66,7 @@ const ALL_PATHS = collectPaths(declaredRoutes()).sort()
 /** Every feature's exported route table, by the name used in a failure message. */
 const FEATURE_ROUTE_TABLES: ReadonlyArray<readonly [string, readonly RouteObject[]]> = [
   ['auth', authRoutes],
+  ['admin', adminRoutes],
   ['patients (clinician)', patientManagementRoutes],
   ['patient portal', patientPortalRoutes],
   ['assessment', assessmentRoutes],

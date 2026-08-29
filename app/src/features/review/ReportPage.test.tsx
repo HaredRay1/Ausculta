@@ -22,6 +22,7 @@ import { i18n as appI18n } from '../../i18n'
 import { AuthProvider } from '../../auth/AuthContext'
 import type { AuthService } from '../../auth/authService'
 import { createTestAuthService } from '../../auth/testing'
+import { RESULT_VERDICTS, verdictTitleKey } from '../../components'
 import { ReportPage } from './ReportPage'
 import { registerReviewResources } from './i18n'
 import { createReviewRepository, type Actor } from './repository'
@@ -260,6 +261,31 @@ describe('ReportPage', () => {
     ).toBeInTheDocument()
     expect(
       screen.getByText(tCodes(`interpretation.${INTERPRETATION_CODES.CONFIRMED}`)),
+    ).toBeInTheDocument()
+  })
+
+  it('prints the model verdict in the same words the screen shows', async () => {
+    await seedCase({ reviewed: true })
+    renderReport()
+
+    // The verdict vocabulary belongs to the design system and is deliberately
+    // un-overridable. An earlier version looked the model's verdict up in
+    // `review:outcome.*`, which is keyed by INTERPRETATION_CODES — what a
+    // practitioner decided, not what the model said. `uncertain` exists in both
+    // with different meanings, so it resolved silently to the wrong wording on
+    // a sheet handed to a hospital.
+    const expected = appI18n.t(`design:${verdictTitleKey(RESULT_VERDICTS.SUGGESTIVE)}`)
+    expect(await screen.findByText(new RegExp(expected))).toBeInTheDocument()
+  })
+
+  it('names the pattern the model reported alongside its verdict', async () => {
+    await seedCase({ reviewed: true })
+    renderReport()
+
+    expect(
+      await screen.findByText(
+        new RegExp(tCodes(`classification.${CLASSIFICATION_CODES.PNEUMONIA}`)),
+      ),
     ).toBeInTheDocument()
   })
 

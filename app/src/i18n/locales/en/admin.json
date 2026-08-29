@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "label": "Administration",
+    "accounts": "Accounts",
+    "config": "Settings",
+    "audit": "Activity log",
+    "translations": "Translations"
+  },
+
+  "config": {
+    "title": "Clinical settings",
+    "subtitle": "Settings an administrator may change. Every change is recorded.",
+    "versionHeading": "Configuration version",
+    "versionValue": "Version {{version}}",
+    "versionExplain": "Records created from now on are stamped with this version, so a result can always be traced back to the settings that produced it.",
+    "lastChanged": "Last changed {{date}} by {{who}}",
+    "neverChanged": "Never changed since this device was set up.",
+
+    "sessionHeading": "Automatic sign-out",
+    "idleLabel": "Sign out after this many minutes of no activity",
+    "idleHint": "Between {{min}} and {{max}} minutes. A shared clinic phone left signed in is how one person's account ends up recording someone else's assessment.",
+
+    "severityHeading": "Severity bands",
+    "severityIntro": "The score at which each severity band begins. Each band must start higher than the one before it.",
+    "bandLabel": "{{name}} starts at",
+    "bandUnit": "score",
+
+    "thresholdsHeading": "Analysis thresholds",
+    "thresholdsReadOnlyTitle": "Fixed in this build",
+    "thresholdsReadOnlyBody": "The thresholds that decide whether a recording is called a possible finding are built into the analysis software and cannot be changed from this screen. Changing them is a code change and a new release. They are shown here so you can see what this build is using.",
+    "thresholdsVersion": "Analysis threshold version {{version}}",
+
+    "save": "Save changes",
+    "saving": "Saving…",
+    "saved": "Saved. Configuration is now version {{version}}.",
+    "noChanges": "Nothing has been changed yet.",
+    "reset": "Undo changes"
+  },
+
+  "audit": {
+    "title": "Activity log",
+    "subtitle": "Everything the app has recorded about who did what, newest first.",
+    "empty": "Nothing has been recorded yet.",
+    "noMatches": "No activity matches these filters.",
+    "filterUser": "Person",
+    "filterAction": "Action",
+    "filterPatient": "Patient",
+    "filterAny": "Anyone",
+    "filterAnyAction": "All actions",
+    "filterAnyPatient": "All patients",
+    "clearFilters": "Clear filters",
+    "showing": "Showing {{from}} to {{to}} of {{total}}",
+    "previous": "Previous",
+    "next": "Next",
+    "unknownUser": "Unknown or deleted account",
+    "anonymous": "Not signed in",
+    "byWhom": "By {{name}}",
+    "aboutPatient": "About {{name}}",
+    "detail": "Details",
+    "loading": "Loading activity…"
+  },
+
+  "translations": {
+    "title": "Translation worklist",
+    "subtitle": "Every text the app looked for and could not find in the chosen language. These fell back to English.",
+    "empty": "Nothing is missing. Every text the app has asked for was available.",
+    "emptyHint": "This list fills up as the app is used in a language other than English.",
+    "key": "Text key",
+    "language": "Language",
+    "count": "Times needed",
+    "lastSeen": "Last needed",
+    "total": "{{count}} missing text",
+    "total_other": "{{count}} missing texts",
+    "sortedNote": "Most needed first — translating the top of this list helps the most people.",
+    "copyHint": "The key is where the text lives in the translation files.",
+    "loading": "Loading…"
+  },
+
+  "action": {
+    "CONFIG_UPDATED": "Settings changed"
+  },
+
+  "error": {
+    "CONFIG_NOT_AUTHORISED": "Only an administrator can change these settings.",
+    "CONFIG_IDLE_TIMEOUT_OUT_OF_RANGE": "Choose a number of minutes between 1 and 480.",
+    "CONFIG_BANDS_NOT_ASCENDING": "Each band must start at a higher score than the one before it.",
+    "CONFIG_BAND_OUT_OF_RANGE": "Each band must start at a score between 0 and 100.",
+    "CONFIG_BANDS_INCOMPLETE": "All five severity bands must be present.",
+    "UNEXPECTED": "Something went wrong. Please try again."
+  }
+}

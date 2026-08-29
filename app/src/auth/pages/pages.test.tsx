@@ -9,6 +9,7 @@ import { AuthProvider } from '../AuthContext'
 import type { AuthService } from '../authService'
 import { registerAuthResources } from '../i18n'
 import { createTestAuthService } from '../testing'
+import { adminRoutes } from '../../features/admin/routes'
 import { authRoutes } from '../routes'
 
 registerAuthResources(appI18n)
@@ -35,7 +36,12 @@ function renderApp(path: string) {
       <AuthProvider service={auth} idleCheckIntervalMs={60_000}>
         <MemoryRouter initialEntries={[path]}>
           <Routes>
-            {authRoutes.map((route) => (
+            {/*
+              Both tables, as the app router mounts them. `/admin/users` moved
+              from authRoutes to adminRoutes when the administration console
+              grew its other three screens.
+            */}
+            {[...authRoutes, ...adminRoutes].map((route) => (
               <Route key={route.path} path={route.path} element={route.element} />
             ))}
             <Route path="/patient" element={<p>patient home</p>} />

@@ -1,0 +1,81 @@
+{
+  "nav": {
+    "label": "Administrasyon",
+    "accounts": "Mga account",
+    "config": "Mga setting",
+    "audit": "Talaan ng aktibidad",
+    "translations": "Mga salin"
+  },
+
+  "config": {
+    "title": "Mga klinikal na setting",
+    "subtitle": "Mga setting na puwedeng baguhin ng administrator. Naitatala ang bawat pagbabago.",
+    "versionHeading": "Bersyon ng configuration",
+    "versionValue": "Bersyon {{version}}",
+    "versionExplain": "Mula ngayon, may tatak ng bersyong ito ang mga bagong rekord, kaya laging matutunton ang resulta pabalik sa setting na gumawa nito.",
+    "lastChanged": "Huling binago noong {{date}} ni {{who}}",
+    "neverChanged": "Hindi pa nababago mula nang i-set up ang device na ito.",
+
+    "sessionHeading": "Awtomatikong pag-sign out",
+    "idleLabel": "Mag-sign out pagkatapos ng ganitong dami ng minutong walang ginagawa",
+    "idleHint": "Sa pagitan ng {{min}} at {{max}} minuto. Ang pinagsasaluhang telepono sa klinika na naiwang naka-sign in ang dahilan kung bakit napupunta sa account ng isang tao ang assessment ng iba.",
+
+    "save": "I-save ang mga pagbabago",
+    "saving": "Sine-save…",
+    "saved": "Na-save. Bersyon {{version}} na ang configuration.",
+    "noChanges": "Wala pang binabago.",
+    "reset": "Bawiin ang mga pagbabago"
+  },
+
+  "audit": {
+    "title": "Talaan ng aktibidad",
+    "subtitle": "Lahat ng naitala ng app tungkol sa kung sino ang gumawa ng ano, pinakabago muna.",
+    "empty": "Wala pang naitatala.",
+    "noMatches": "Walang aktibidad na tumutugma sa mga filter na ito.",
+    "filterUser": "Tao",
+    "filterAction": "Ginawa",
+    "filterPatient": "Pasyente",
+    "filterAny": "Kahit sino",
+    "filterAnyAction": "Lahat ng ginawa",
+    "filterAnyPatient": "Lahat ng pasyente",
+    "clearFilters": "Alisin ang mga filter",
+    "showing": "Ipinapakita ang {{from}} hanggang {{to}} sa {{total}}",
+    "previous": "Nakaraan",
+    "next": "Susunod",
+    "unknownUser": "Hindi kilala o binurang account",
+    "anonymous": "Hindi naka-sign in",
+    "byWhom": "Ni {{name}}",
+    "aboutPatient": "Tungkol kay {{name}}",
+    "detail": "Mga detalye",
+    "loading": "Nilo-load ang aktibidad…"
+  },
+
+  "translations": {
+    "title": "Talaan ng isasalin",
+    "subtitle": "Bawat tekstong hinanap ng app at hindi nakita sa piniling wika. Nag-Ingles ang mga ito.",
+    "empty": "Walang kulang. Available ang bawat tekstong hinanap ng app.",
+    "emptyHint": "Napupuno ang listahang ito habang ginagamit ang app sa wikang hindi Ingles.",
+    "key": "Key ng teksto",
+    "language": "Wika",
+    "count": "Beses na kinailangan",
+    "lastSeen": "Huling kinailangan",
+    "total": "{{count}} kulang na teksto",
+    "total_other": "{{count}} kulang na teksto",
+    "sortedNote": "Pinakakailangan muna — ang pagsasalin sa itaas ng listahang ito ang pinakamakakatulong sa marami.",
+    "copyHint": "Ang key ang kinaroroonan ng teksto sa mga file ng salin.",
+    "loading": "Naglo-load…"
+  },
+
+  "action": {
+    "CONFIG_UPDATED": "Binago ang mga setting"
+  },
+
+  "error": {
+    "CONFIG_NOT_AUTHORISED": "Administrator lang ang puwedeng magbago ng mga setting na ito.",
+    "CONFIG_IDLE_TIMEOUT_OUT_OF_RANGE": "Pumili ng bilang ng minuto mula 1 hanggang 480.",
+    "CONFIG_BANDS_NOT_ASCENDING": "Dapat mas mataas ang simula ng bawat band kaysa sa nauna rito.",
+    "CONFIG_BAND_OUT_OF_RANGE": "Dapat nasa pagitan ng 0 at 100 ang simula ng bawat band.",
+    "CONFIG_BANDS_INCOMPLETE": "Dapat kumpleto ang lahat ng limang severity band.",
+    "UNEXPECTED": "May nangyaring mali. Pakisubukan ulit."
+  }
+}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { AppBar, Button, EmptyState, Page, Spinner } from '../../components'
+import { AppBar, Button, EmptyState, Page, Spinner, verdictTitleKey } from '../../components'
 import { useAuth } from '../../auth/AuthContext'
 import { LOCATION_CODES, type LocationCode } from '../../db/codes'
 import type { Measurement, SymptomEntry } from '../../db/types'
@@ -258,17 +258,33 @@ export function ReportPage({ repository }: ReportPageProps = {}) {
                     <span>{t('review:report.nothingDecided')}</span>
                   ) : (
                     <span>
-                      {`${t(`codes:classification.${finding.classificationCode}`, {
-                        defaultValue: t(`review:outcome.${finding.state}`, {
-                          defaultValue: finding.state,
-                        }),
-                      })} — ${
+                      {[
+                        /*
+                         * The model's verdict, in the design system's own
+                         * wording — the same words the ResultCard shows on
+                         * screen, so a printed referral and the screen it came
+                         * from cannot say different things.
+                         *
+                         * An earlier version looked `finding.state` up in
+                         * `review:outcome.*`, which is keyed by
+                         * INTERPRETATION_CODES: what a PRACTITIONER decided,
+                         * not what the MODEL said. Two of the four states fell
+                         * through to a fallback and `uncertain` — which exists
+                         * in both vocabularies with different meanings —
+                         * silently resolved to the practitioner's wording.
+                         */
+                        t(`design:${verdictTitleKey(finding.verdict)}`),
+                        finding.classificationCode === undefined
+                          ? null
+                          : t(`codes:classification.${finding.classificationCode}`),
                         finding.confidencePercent === undefined
                           ? t('review:report.noConfidence')
                           : t('review:report.confidence', {
                               percent: finding.confidencePercent,
-                            })
-                      }`}
+                            }),
+                      ]
+                        .filter((part) => part !== null)
+                        .join(' — ')}
                     </span>
                   )}
                 </li>

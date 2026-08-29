@@ -1,7 +1,4 @@
 import type { RouteObject } from 'react-router-dom'
-import { ROLES } from '../db/codes'
-import { UsersPage } from '../features/admin/UsersPage'
-import { RequireRole } from './guards'
 import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { SetupAdminPage } from './pages/SetupAdminPage'
@@ -17,21 +14,15 @@ import { SetupAdminPage } from './pages/SetupAdminPage'
  * Whatever wires these up must render them inside an `<AuthProvider>` (see
  * AuthContext.tsx) — every screen here reads the session from it.
  *
- * `/admin/users` carries its own `<RequireRole>` so the guard travels with the
- * route rather than depending on the host router remembering to add it.
+ * These three are the pre-authentication screens. `/admin/users` used to live
+ * here too; it moved to `features/admin/routes.tsx`, because the account queue
+ * belongs to the administration console rather than to authentication, and one
+ * table describing the whole console beats the path being declared in two.
  */
 export const authRoutes: RouteObject[] = [
   { path: '/setup-admin', element: <SetupAdminPage /> },
   { path: '/login', element: <LoginPage /> },
   { path: '/register', element: <RegisterPage /> },
-  {
-    path: '/admin/users',
-    element: (
-      <RequireRole roles={[ROLES.ADMIN]}>
-        <UsersPage />
-      </RequireRole>
-    ),
-  },
 ]
 
 export default authRoutes
