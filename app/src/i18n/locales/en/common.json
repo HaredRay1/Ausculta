@@ -91,5 +91,35 @@
         "detail": "Recordings move by memory card instead."
       }
     }
-  }
+  },
+  "help": {
+    "title": "How to use Ausculta",
+    "intro": "Pictures for every step. You do not need to read the words — the drawings show what to do.",
+    "deviceHeading": "Using the stethoscope",
+    "deviceIntro": "Follow these in order, from switching on to cleaning up afterwards.",
+    "mistakesHeading": "Common mistakes",
+    "mistakesIntro": "Each of these makes a recording the app will refuse. The tick shows the right way.",
+    "placementHeading": "Where to listen",
+    "placementIntro": "Six positions on the chest. The app shows you a close-up of each one when you record.",
+    "placementAlt": "A front view of a torso with the six listening positions marked",
+    "device": {
+      "device-01-power-on": "Switch the device on.",
+      "device-02-insert-sd": "Put the memory card into the slot.",
+      "device-03-place-chest": "Hold the chestpiece flat against bare skin on the chest.",
+      "device-04-press-record": "Press the button once to start recording.",
+      "device-05-recording": "The light shows it is recording. Stay still and quiet. The patient breathes deeply through an open mouth.",
+      "device-06-stop-save": "Press the button again to stop. The recording is saved to the card.",
+      "device-07-remove-sd": "Switch off, then take the memory card out.",
+      "device-08-import-to-app": "Move the recordings from the card into this app.",
+      "device-09-clean": "Wipe and disinfect the chestpiece before the next patient.",
+      "device-10-charge-battery": "Recharge the battery when it runs low."
+    },
+    "mistake": {
+      "mistake-01-over-clothing": "Place the chestpiece directly on bare skin, not on top of clothing.",
+      "mistake-02-loose-contact": "Hold the whole rim flat against the chest with light, even pressure.",
+      "mistake-03-talking-moving": "Stay still and quiet. The patient breathes deeply through an open mouth.",
+      "mistake-04-noisy-room": "Record in the quietest place you can find."
+    }
+  },
+  "help_link": "How to use Ausculta"
 }

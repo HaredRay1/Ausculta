@@ -27,14 +27,17 @@ export function Landing() {
           <Link to="/language" className="text-sm text-primary underline">
             {t('changeLanguage')}
           </Link>
+          <Link to="/help" className="text-sm text-muted underline">
+            {t('help_link')}
+          </Link>
+          <Link to="/status" className="text-sm text-muted underline">
+            {t('systemStatus.title')}
+          </Link>
           {/*
             Demo data normally seeds itself on first launch. This link is the
             recovery path when it did not — an empty app with no visible way to
             populate it is the worst state to hand someone evaluating it.
           */}
-          <Link to="/status" className="text-sm text-muted underline">
-            {t('systemStatus.title')}
-          </Link>
           <Link to="/demo" className="text-sm text-muted underline">
             {t('demoData')}
           </Link>

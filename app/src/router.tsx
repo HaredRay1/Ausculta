@@ -16,6 +16,7 @@ import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
 import { Landing } from './features/landing/Landing'
 import { RoleHomePlaceholder } from './features/placeholders/RoleHomePlaceholder'
+import { HelpPage } from './features/help/HelpPage'
 import { SystemStatusPage } from './features/status/SystemStatusPage'
 
 /** `/` redirects to `/language` (no device language chosen yet) or `/landing`. */
@@ -47,6 +48,8 @@ export function AppRoutes() {
       {/* Unguarded on purpose: a validator must be able to see what is real
           before signing in, and it contains no patient data. */}
       <Route path="/status" element={<SystemStatusPage />} />
+      {/* Unguarded: how to use the device is training material, not patient data. */}
+      <Route path="/help" element={<HelpPage />} />
 
       {/* Each feature owns its own guards; the router only mounts them. */}
       {authRoutes.map((route) => (
