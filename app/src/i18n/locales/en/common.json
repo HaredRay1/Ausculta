@@ -146,5 +146,6 @@
     "body": "The link may be out of date, or the address may have been typed wrong. Nothing has been lost.",
     "actionSignedIn": "Go to my home screen",
     "actionSignedOut": "Go to the start"
-  }
+  },
+  "chooseLanguage": "Choose your language"
 }
