@@ -3,6 +3,7 @@ import type { RouteObject } from 'react-router-dom'
 import { ROLES } from '../../db/codes'
 import { RequireAuth, RequireRole } from '../../auth/guards'
 import { PatientDetailPage } from './PatientDetailPage'
+import { StaffScreen } from './StaffScreen'
 import { PatientListPage } from './PatientListPage'
 import { PatientRegistrationPage } from './PatientRegistrationPage'
 
@@ -19,11 +20,13 @@ import { PatientRegistrationPage } from './PatientRegistrationPage'
  *
  * Each route carries its own guard, so protection travels with the route
  * rather than depending on the host router remembering to add it. `/patients`
- * and `/patients/:patientId` are open to any signed-in user because the
- * repository scopes what they can actually see by role — a patient reaching
- * `/patients` gets their own record and nothing else. Registration is
- * restricted at the route, because it is a write and there is no per-record
- * scoping to fall back on.
+ * and `/patients/:patientId` stay RequireAuth because the repository scopes
+ * what each role can read, and that scoping is the security boundary. But a
+ * PATIENT-role user is redirected to their own portal by `StaffScreen`: the
+ * clinician list is the wrong container for them even when its contents are
+ * correctly scoped, and without staff navigation it is a screen with no way
+ * out. Registration is restricted at the route, because it is a write and
+ * there is no per-record scoping to fall back on.
  *
  * `/patients/new` is declared before `/patients/:patientId` so "new" is never
  * swallowed as a patient id.
@@ -33,7 +36,11 @@ export const patientRoutes: RouteObject[] = [
     path: '/patients',
     element: (
       <RequireAuth>
-        <StaffNavFrame><PatientListPage /></StaffNavFrame>
+        <StaffScreen>
+          <StaffNavFrame>
+            <PatientListPage />
+          </StaffNavFrame>
+        </StaffScreen>
       </RequireAuth>
     ),
   },
@@ -49,7 +56,11 @@ export const patientRoutes: RouteObject[] = [
     path: '/patients/:patientId',
     element: (
       <RequireAuth>
-        <StaffNavFrame><PatientDetailPage /></StaffNavFrame>
+        <StaffScreen>
+          <StaffNavFrame>
+            <PatientDetailPage />
+          </StaffNavFrame>
+        </StaffScreen>
       </RequireAuth>
     ),
   },
