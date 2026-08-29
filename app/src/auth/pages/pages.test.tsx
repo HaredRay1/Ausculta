@@ -67,10 +67,28 @@ describe('SetupAdminPage', () => {
     typeInto(t('field.confirmPassword'), ADMIN_PASSWORD)
     fireEvent.click(screen.getByRole('button', { name: t('action.createAdmin') }))
 
-    expect(await screen.findByText(t('setupAdmin.successBody'))).toBeInTheDocument()
+    // Signed in and landed, not bounced to a sign-in form. Being asked for the
+    // password again thirty seconds after typing it twice is what made a real
+    // first-run install read as "it did not work".
+    expect(await screen.findByText(t('users.subtitle'))).toBeInTheDocument()
+    expect(screen.queryByText(t('login.subtitle'))).not.toBeInTheDocument()
+
     const admin = await db.users.where('username').equals('admin').first()
     expect(admin).toMatchObject({ role: ROLES.ADMIN, status: USER_STATUSES.ACTIVE })
     await expect(auth.isAdminBootstrapped()).resolves.toBe(true)
+    await expect(auth.getCurrentUser()).resolves.toMatchObject({ username: 'admin' })
+  })
+
+  it('says what the account is for before asking for anything', async () => {
+    renderApp('/setup-admin')
+
+    // The first screen anyone ever sees. A real install produced "I don't know
+    // what that admin supposed to be", so the explanation is now part of the
+    // screen rather than assumed knowledge.
+    await screen.findByText(t('setupAdmin.subtitle'))
+    expect(screen.getByText(t('setupAdmin.whatIsAdmin'))).toBeInTheDocument()
+    expect(screen.getByText(t('setupAdmin.usernameNotice'))).toBeInTheDocument()
+    expect(screen.getByText(t('setupAdmin.nextStep'))).toBeInTheDocument()
   })
 
   it('refuses a password under 8 characters', async () => {
