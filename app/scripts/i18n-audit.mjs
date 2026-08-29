@@ -231,17 +231,50 @@ for (const file of walk(SRC)) {
   }
 }
 
+/**
+ * Exemptions, and why the list is empty.
+ *
+ * A key can legitimately sit outside the namespaces its file's `t` is bound to
+ * — a shared component reaching into another feature's bundle, say. There are
+ * none today, which is exactly why this became a test now: it goes in green,
+ * with nothing to argue about.
+ *
+ * To add one, put `path/from/app:key` here with a comment saying WHY the key
+ * belongs where it is. Do not widen the check to make a failure go away; an
+ * entry names one key on one file and a reader can judge it. Dynamic keys need
+ * no entry — they are checked by their literal stem only, which is as far as
+ * this can honestly go.
+ */
+const EXEMPT = new Set([])
+
+const isExempt = (row) => EXEMPT.has(`${row.rel}:${row.key}`)
+const result = {
+  scanned: literalCount,
+  files: walk(SRC).length,
+  misses: misses.filter((m) => !isExempt(m)),
+  unbound: unprefixed,
+  deadPrefixes: deadPrefixes.filter((d) => !isExempt(d)),
+  dynamic: dynamic.length,
+}
+
+// `--json` is what the test consumes, so the test and the CLI run exactly the
+// same code rather than two implementations that can drift apart.
+if (process.argv.includes('--json')) {
+  console.log(JSON.stringify(result, null, 2))
+  process.exit(0)
+}
+
 const report = []
 report.push(`Scanned ${literalCount} literal t() keys across ${walk(SRC).length} files.`)
 report.push('')
-report.push(`MISSES — key resolves in no EN namespace (${misses.length}):`)
-for (const m of misses) report.push(`  ${m.rel}:${m.line}  ${m.key}  (${m.why})`)
+report.push(`MISSES — key resolves in no EN namespace (${result.misses.length}):`)
+for (const m of result.misses) report.push(`  ${m.rel}:${m.line}  ${m.key}  (${m.why})`)
 report.push('')
 report.push(`UNBOUND — file's namespaces undeterminable, so the key was not judged (${unprefixed.length}):`)
 for (const u of unprefixed) report.push(`  ${u.rel}:${u.line}  ${u.key}  -> ${u.ns}`)
 report.push('')
-report.push(`DEAD PREFIXES — template key whose literal stem matches nothing (${deadPrefixes.length}):`)
-for (const d of deadPrefixes) report.push(`  ${d.rel}:${d.line}  \`${d.key}\`  (${d.why})`)
+report.push(`DEAD PREFIXES — template key whose literal stem matches nothing (${result.deadPrefixes.length}):`)
+for (const d of result.deadPrefixes) report.push(`  ${d.rel}:${d.line}  \`${d.key}\`  (${d.why})`)
 report.push('')
 report.push(`DYNAMIC — template keys with a live prefix, per-value unverifiable (${dynamic.length}).`)
 report.push('  Listed only with --verbose; a live prefix is as far as this can honestly go.')
