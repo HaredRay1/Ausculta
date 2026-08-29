@@ -271,7 +271,7 @@ export function PatientRegistrationPage({
               value={demographics.sex ?? ''}
               onChange={(value) => setField('sex', value)}
               options={sexOptions}
-              placeholder={t('field.notAsked')}
+              placeholder={t('field.chooseOne')}
               error={fieldError('sex')}
               required
             />

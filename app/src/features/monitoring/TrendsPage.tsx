@@ -48,7 +48,7 @@ export function TrendsPage({ repository }: TrendsPageProps = {}) {
     return (
       <Page>
         <AppBar title={t('trend.title')} />
-        <SkeletonGroup label={t('trend.title')}>
+        <SkeletonGroup label={t('trend.loading')}>
           <Skeleton className="h-32 w-full" lines={4} />
         </SkeletonGroup>
       </Page>

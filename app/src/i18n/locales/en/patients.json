@@ -14,7 +14,6 @@
     "researcherBlockedHint": "The named patient register is not available in this role. Use the research export instead.",
     "loading": "Loading patients"
   },
-
   "card": {
     "age_one": "{{count}} year old",
     "age_other": "{{count}} years old",
@@ -22,7 +21,6 @@
     "consentMissing": "Consent not recorded",
     "demo": "Demo record"
   },
-
   "register": {
     "title": "Register a patient",
     "demographics": "About the patient",
@@ -46,7 +44,6 @@
     "failed": "The patient could not be saved. Nothing was lost — try again.",
     "fixErrors": "Check the highlighted questions before saving."
   },
-
   "field": {
     "name": "Full name",
     "nameHint": "As written on the patient's own records.",
@@ -60,9 +57,9 @@
     "optional": "optional",
     "yes": "Yes",
     "no": "No",
-    "notAsked": "Not asked"
+    "notAsked": "Not asked",
+    "chooseOne": "Choose one"
   },
-
   "consent": {
     "title": "Informed consent",
     "draftWarningTitle": "This consent text is a draft",
@@ -82,7 +79,6 @@
     "change": "Change consent",
     "languageEnglish": "English"
   },
-
   "detail": {
     "title": "Patient record",
     "demographics": "Details",
@@ -103,9 +99,9 @@
     "edit": "Edit details",
     "notFound": "Patient not found",
     "notFoundHint": "It may belong to another health worker, or the ID may be wrong.",
-    "backToList": "Back to patients"
+    "backToList": "Back to patients",
+    "loading": "Loading patient record"
   },
-
   "care": {
     "practitioners": "Practitioners",
     "healthWorkers": "Health workers",
@@ -115,7 +111,6 @@
     "assignPractitionerLabel": "Refer to a practitioner",
     "assignHint": "The person you choose will see this patient in their own list."
   },
-
   "account": {
     "linked": "Linked to the login {{username}}",
     "notLinked": "No patient login is linked",
@@ -124,7 +119,6 @@
     "link": "Link account",
     "unlink": "Unlink account"
   },
-
   "error": {
     "NAME_REQUIRED": "Enter the patient's name.",
     "NAME_TOO_LONG": "That name is too long.",
@@ -153,7 +147,6 @@
     "PATIENT_USER_NOT_A_PATIENT": "That account is not a patient account.",
     "PATIENT_USER_ALREADY_LINKED": "That account is already linked to another patient."
   },
-
   "auditAction": {
     "PATIENT_CREATED": "Patient registered",
     "PATIENT_UPDATED": "Patient details changed",

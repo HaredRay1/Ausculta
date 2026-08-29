@@ -84,7 +84,7 @@ export function ReviewFormPage({ repository }: ReviewFormPageProps = {}) {
     return (
       <Page>
         <AppBar title={t('form.title')} onBack={() => navigate(`/review/${assessmentId}`)} />
-        <SkeletonGroup label={t('queue.loading')}>
+        <SkeletonGroup label={t('case.loading')}>
           <Skeleton className="h-24 w-full" lines={3} />
         </SkeletonGroup>
       </Page>

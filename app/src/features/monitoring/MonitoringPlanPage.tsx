@@ -115,7 +115,7 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
     return (
       <Page>
         <AppBar title={t('plan.title')} />
-        <SkeletonGroup label={t('plan.title')}>
+        <SkeletonGroup label={t('plan.loading')}>
           <Skeleton className="h-24 w-full" lines={3} />
         </SkeletonGroup>
       </Page>
@@ -235,9 +235,13 @@ function PlanCard({ plan }: { plan: MonitoringPlan }) {
 
   if (details === null) {
     // A plan written by an older build reads as unusable rather than crashing.
+    // NOT "no monitoring plan": this plan exists and a practitioner created it,
+    // so saying there is none would misreport the record. It says what is
+    // actually true and what to do about it.
     return (
       <Card>
-        <p className="text-base text-muted">{t('plan.none')}</p>
+        <p className="text-base font-semibold text-on-surface">{t('plan.unreadable')}</p>
+        <p className="mt-1 text-sm text-muted">{t('plan.unreadableHint')}</p>
       </Card>
     )
   }

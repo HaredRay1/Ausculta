@@ -8,7 +8,6 @@ import {
   FictionalDataBanner,
   InboxIcon,
   Page,
-  Section,
   Skeleton,
   SkeletonGroup,
   Textarea,
@@ -200,17 +199,5 @@ function AlertCard({
         </div>
       )}
     </Card>
-  )
-}
-
-/** Exported for the plan screen, which shows the same explanatory framing. */
-export function ObservationNote() {
-  const { t } = useMonitoringTranslation()
-  return (
-    <Section title={t('alerts.whatThisMeans')}>
-      <Card>
-        <p className="text-base text-muted">{t('alerts.observationNote')}</p>
-      </Card>
-    </Section>
   )
 }

@@ -58,7 +58,7 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
     return (
       <Page>
         <AppBar title={t('detail.title')} onBack={() => navigate('/patients')} />
-        <SkeletonGroup label={t('list.loading')}>
+        <SkeletonGroup label={t('detail.loading')}>
           <Skeleton className="h-24 w-full" lines={4} />
         </SkeletonGroup>
       </Page>

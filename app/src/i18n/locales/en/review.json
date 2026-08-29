@@ -59,7 +59,8 @@
     "reviewedOn": "Reviewed {{date}}",
     "symptomAbsent": "reported as absent",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "loading": "Loading case"
   },
   "location": {
     "quality": "Recording quality",

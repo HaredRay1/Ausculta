@@ -69,7 +69,7 @@ export function ClinicalViewPage({ repository }: ClinicalViewPageProps = {}) {
     return (
       <Page>
         <AppBar title={t('case.title')} onBack={() => navigate('/review')} />
-        <SkeletonGroup label={t('queue.loading')}>
+        <SkeletonGroup label={t('case.loading')}>
           <Skeleton className="h-28 w-full" lines={4} />
         </SkeletonGroup>
       </Page>

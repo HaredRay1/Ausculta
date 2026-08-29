@@ -35,9 +35,11 @@
     "forPatient": "What is expected",
     "forPatientHint": "Your practitioner has asked for these recordings.",
     "notFound": "Patient not available",
-    "notFoundHint": "They may be assigned to another practitioner."
+    "notFoundHint": "They may be assigned to another practitioner.",
+    "loading": "Loading monitoring plan",
+    "unreadable": "This plan cannot be read",
+    "unreadableHint": "It was saved by an older version of the app. Create a new plan to replace it."
   },
-
   "alerts": {
     "title": "Alerts",
     "subtitle": "Things the app noticed that a person should look at",
@@ -59,7 +61,6 @@
     "whatThisMeans": "What this means",
     "observationNote": "The app reports what it observed between recordings. What it means for this patient is for you to decide."
   },
-
   "alertType": {
     "NEW_ABNORMAL": "A pattern was flagged that was not flagged before",
     "NEW_ABNORMAL_body": "At {{location}}, the app reported a respiratory sound pattern worth a closer look. It did not report one there at the previous recording.",
@@ -72,7 +73,6 @@
     "REPEATED_POOR_QUALITY": "Recordings keep coming back unusable",
     "REPEATED_POOR_QUALITY_body": "{{affectedVisits}} of the last {{ofVisits}} visits produced audio the app could not use. This usually means the stethoscope bell is not sealed against the skin, the room is too noisy, or the microphone is failing — it is not a finding about the patient."
   },
-
   "trend": {
     "title": "Trend over time",
     "subtitle": "What was recorded at each visit",
@@ -96,9 +96,9 @@
     "assessmentsCount_other": "{{count}} assessments",
     "observationNote": "This shows what the app reported at each visit. It is not a measure of whether the patient is getting better or worse.",
     "chartLabel": "Results at {{location}} over {{count}} assessments",
-    "noDataAt": "Nothing recorded at this location"
+    "noDataAt": "Nothing recorded at this location",
+    "loading": "Loading trend"
   },
-
   "error": {
     "MONITORING_NOT_FOUND": "That is not available to you.",
     "MONITORING_NOT_PERMITTED": "You do not have permission to do that.",
@@ -109,7 +109,6 @@
     "MONITORING_NOTE_REQUIRED": "Please say why no action is needed.",
     "SAVE_FAILED": "That could not be saved. Nothing was lost — try again."
   },
-
   "auditAction": {
     "MONITORING_PLAN_DRAFTED": "Monitoring plan drafted",
     "MONITORING_PLAN_APPROVED": "Monitoring plan approved",
