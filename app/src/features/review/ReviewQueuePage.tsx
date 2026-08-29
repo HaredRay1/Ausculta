@@ -7,6 +7,7 @@ import {
   EmptyState,
   FictionalDataBanner,
   InboxIcon,
+  WarningIcon,
   Page,
   Select,
   Skeleton,
@@ -37,19 +38,33 @@ export function ReviewQueuePage({ repository }: ReviewQueuePageProps = {}) {
 
   const [status, setStatus] = useState<ReviewStatus>(REVIEW_STATUSES.PENDING_REVIEW)
   const [items, setItems] = useState<QueueItem[] | null>(null)
+  // "Nothing waiting" when the read failed would be a false all-clear on a
+  // clinical queue -- the worst possible direction for this screen to be wrong.
+  const [failed, setFailed] = useState(false)
+  // Setting status to its current value would not re-run the effect: React
+  // bails out on an identical value, so the retry button would do nothing.
+  const [attempt, setAttempt] = useState(0)
 
   useEffect(() => {
     if (actor === null) return
     let cancelled = false
 
-    void repo.queue(actor, { status }).then((rows) => {
-      if (!cancelled) setItems(rows)
-    })
+    setFailed(false)
+    repo
+      .queue(actor, { status })
+      .then((rows) => {
+        if (!cancelled) setItems(rows)
+      })
+      .catch(() => {
+        if (cancelled) return
+        setItems(null)
+        setFailed(true)
+      })
 
     return () => {
       cancelled = true
     }
-  }, [actor?.id, actor?.role, repo, status])
+  }, [actor?.id, actor?.role, repo, status, attempt])
 
   const statusOptions = Object.values(REVIEW_STATUSES).map((code) => ({
     value: code,
@@ -90,7 +105,18 @@ export function ReviewQueuePage({ repository }: ReviewQueuePageProps = {}) {
         </>
       )}
 
-      {items === null ? (
+      {failed ? (
+        <EmptyState
+          title={t('queue.loadFailed')}
+          body={t('queue.loadFailedBody')}
+          icon={<WarningIcon />}
+          action={
+            <Button fullWidth onClick={() => setAttempt((n) => n + 1)}>
+              {t('queue.retry')}
+            </Button>
+          }
+        />
+      ) : items === null ? (
         <SkeletonGroup label={t('queue.loading')}>
           <Skeleton className="h-24 w-full" lines={3} />
         </SkeletonGroup>

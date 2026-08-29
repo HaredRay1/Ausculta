@@ -12,7 +12,10 @@
     "noResultsHint": "Check the spelling, or try just the first few letters of the name.",
     "researcherBlocked": "Researchers work from de-identified data",
     "researcherBlockedHint": "The named patient register is not available in this role. Use the research export instead.",
-    "loading": "Loading patients"
+    "loading": "Loading patients",
+    "loadFailed": "Could not load the patient list",
+    "loadFailedBody": "The information could not be read from this device. Nothing has been lost. This is not the same as there being nothing here.",
+    "retry": "Try again"
   },
   "card": {
     "age_one": "{{count}} year old",
@@ -104,7 +107,8 @@
     "startAssessment": "Record an assessment",
     "startAssessmentHint": "Take lung sound recordings for this patient.",
     "monitoringPlan": "Monitoring plan",
-    "trends": "Results over time"
+    "trends": "Results over time",
+    "loadFailed": "Could not load this patient record"
   },
   "care": {
     "practitioners": "Practitioners",

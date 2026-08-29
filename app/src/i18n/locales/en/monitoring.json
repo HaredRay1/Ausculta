@@ -38,7 +38,8 @@
     "notFoundHint": "They may be assigned to another practitioner.",
     "loading": "Loading monitoring plan",
     "unreadable": "This plan cannot be read",
-    "unreadableHint": "It was saved by an older version of the app. Create a new plan to replace it."
+    "unreadableHint": "It was saved by an older version of the app. Create a new plan to replace it.",
+    "loadFailed": "Could not load the monitoring plan"
   },
   "alerts": {
     "title": "Alerts",
@@ -59,7 +60,10 @@
     "notPermitted": "Alerts are for practitioners",
     "notPermittedHint": "This queue is not available in your role.",
     "whatThisMeans": "What this means",
-    "observationNote": "The app reports what it observed between recordings. What it means for this patient is for you to decide."
+    "observationNote": "The app reports what it observed between recordings. What it means for this patient is for you to decide.",
+    "loadFailed": "Could not load alerts",
+    "loadFailedBody": "The information could not be read from this device. Nothing has been lost. This is not the same as there being nothing here.",
+    "retry": "Try again"
   },
   "alertType": {
     "NEW_ABNORMAL": "A pattern was flagged that was not flagged before",
@@ -97,7 +101,8 @@
     "observationNote": "This shows what the app reported at each visit. It is not a measure of whether the patient is getting better or worse.",
     "chartLabel": "Results at {{location}} over {{count}} assessments",
     "noDataAt": "Nothing recorded at this location",
-    "loading": "Loading trend"
+    "loading": "Loading trend",
+    "loadFailed": "Could not load this history"
   },
   "error": {
     "MONITORING_NOT_FOUND": "That is not available to you.",

@@ -6,6 +6,7 @@ import {
   Card,
   EmptyState,
   InboxIcon,
+  WarningIcon,
   NotConnectedPanel,
   Page,
   Section,
@@ -30,19 +31,40 @@ export function TrendsPage({ repository }: TrendsPageProps = {}) {
   const actor: Actor | null = user === null ? null : { id: user.id, role: user.role }
 
   const [trend, setTrend] = useState<TrendResult | null>(null)
+  // "No assessments recorded" when the read failed would assert something
+  // about this patient's history that has not been established.
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     if (actor === null) return
     let cancelled = false
 
-    void repo.historyFor(patientId).then((history) => {
-      if (!cancelled) setTrend(buildTrend(history))
-    })
+    repo
+      .historyFor(patientId)
+      .then((history) => {
+        if (!cancelled) setTrend(buildTrend(history))
+      })
+      .catch(() => {
+        if (!cancelled) setFailed(true)
+      })
 
     return () => {
       cancelled = true
     }
   }, [patientId, actor?.id, repo])
+
+  if (failed) {
+    return (
+      <Page>
+        <AppBar title={t('trend.title')} />
+        <EmptyState
+          title={t('trend.loadFailed')}
+          body={t('alerts.loadFailedBody')}
+          icon={<WarningIcon />}
+        />
+      </Page>
+    )
+  }
 
   if (trend === null) {
     return (

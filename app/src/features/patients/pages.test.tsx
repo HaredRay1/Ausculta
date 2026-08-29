@@ -202,6 +202,21 @@ describe('patient list', () => {
     expect(screen.queryByText('Someone Elses Patient')).not.toBeInTheDocument()
   })
 
+  it('never says "no patients yet" when the read failed', async () => {
+    // A health worker would conclude the register was empty and re-register
+    // somebody who is already in it.
+    await signIn()
+    const broken = {
+      ...repo,
+      search: () => Promise.reject(new Error('database unavailable')),
+    } as unknown as typeof repo
+
+    renderWithAuth(<PatientListPage repository={broken} />)
+
+    expect(await screen.findByText(t('list.loadFailed'))).toBeInTheDocument()
+    expect(screen.queryByText(t('list.empty'))).not.toBeInTheDocument()
+  })
+
   it('offers a way forward from an empty list rather than a dead end', async () => {
     await signIn()
     renderWithAuth(<PatientListPage repository={repo} />)

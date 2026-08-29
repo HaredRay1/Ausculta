@@ -7,6 +7,7 @@ import {
   Card,
   EmptyState,
   InboxIcon,
+  WarningIcon,
   Page,
   RadioGroup,
   Section,
@@ -32,7 +33,7 @@ import {
   type ReviewRepository,
 } from './repository'
 
-type LoadState = 'loading' | 'found' | 'missing'
+type LoadState = 'loading' | 'found' | 'missing' | 'failed'
 
 /** Outcomes that are statements about one lung location. */
 const LOCATION_SCOPED: readonly InterpretationCode[] = [
@@ -69,11 +70,19 @@ export function ReviewFormPage({ repository }: ReviewFormPageProps = {}) {
     if (actor === null) return
     let cancelled = false
 
-    void repo.getCase(assessmentId, actor).then((found) => {
-      if (cancelled) return
-      setClinicalCase(found ?? null)
-      setState(found === undefined ? 'missing' : 'found')
-    })
+    repo
+      .getCase(assessmentId, actor)
+      .then((found) => {
+        if (cancelled) return
+        setClinicalCase(found ?? null)
+        setState(found === undefined ? 'missing' : 'found')
+      })
+      .catch(() => {
+        // A failed read is NOT a missing case. "Case not available" would say
+        // something false about why, and staying on the skeleton would be a
+        // screen claiming to load after it has given up.
+        if (!cancelled) setState('failed')
+      })
 
     return () => {
       cancelled = true
@@ -87,6 +96,24 @@ export function ReviewFormPage({ repository }: ReviewFormPageProps = {}) {
         <SkeletonGroup label={t('case.loading')}>
           <Skeleton className="h-24 w-full" lines={3} />
         </SkeletonGroup>
+      </Page>
+    )
+  }
+
+  if (state === 'failed') {
+    return (
+      <Page>
+        <AppBar title={t('case.title')} onBack={() => navigate('/review')} />
+        <EmptyState
+          title={t('case.loadFailed')}
+          body={t('queue.loadFailedBody')}
+          icon={<WarningIcon />}
+          action={
+            <Button fullWidth onClick={() => navigate('/review')}>
+              {t('case.backToQueue')}
+            </Button>
+          }
+        />
       </Page>
     )
   }

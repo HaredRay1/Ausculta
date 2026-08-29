@@ -8,6 +8,7 @@ import {
   Checkbox,
   EmptyState,
   InboxIcon,
+  WarningIcon,
   Page,
   Section,
   Skeleton,
@@ -47,6 +48,7 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
   const [plans, setPlans] = useState<MonitoringPlan[] | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
+  const [failed, setFailed] = useState(false)
 
   const [intervalDays, setIntervalDays] = useState('7')
   const [locations, setLocations] = useState<LocationCode[]>([
@@ -59,7 +61,15 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
 
   const load = useCallback(async () => {
     if (actor === null) return
-    setPlans(await repo.plansFor(patientId, actor))
+    setFailed(false)
+    try {
+      setPlans(await repo.plansFor(patientId, actor))
+    } catch {
+      // Not "no monitoring plan" -- that would report a clinical fact that has
+      // not been established.
+      setPlans(null)
+      setFailed(true)
+    }
   }, [patientId, actor?.id, actor?.role, repo])
 
   useEffect(() => {
@@ -109,6 +119,24 @@ export function MonitoringPlanPage({ repository }: MonitoringPlanPageProps = {})
     } finally {
       setBusy(false)
     }
+  }
+
+  if (failed) {
+    return (
+      <Page>
+        <AppBar title={t('plan.title')} />
+        <EmptyState
+          title={t('plan.loadFailed')}
+          body={t('alerts.loadFailedBody')}
+          icon={<WarningIcon />}
+          action={
+            <Button fullWidth onClick={() => void load()}>
+              {t('alerts.retry')}
+            </Button>
+          }
+        />
+      </Page>
+    )
   }
 
   if (plans === null) {

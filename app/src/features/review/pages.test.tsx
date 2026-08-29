@@ -455,6 +455,23 @@ describe('review queue', () => {
     expect(await screen.findByRole('button', { name: t('queue.openAlerts') })).toBeInTheDocument()
   })
 
+  it('never reports an all-clear when the read failed', async () => {
+    // The worst direction for a clinical queue to be wrong: "Nothing waiting"
+    // when the truth is that nothing could be read. A practitioner would go
+    // home. The skeleton was no better -- it claimed to be loading after it
+    // had given up, and offered nothing to do.
+    const broken = {
+      ...repo,
+      queue: () => Promise.reject(new Error('database unavailable')),
+    } as unknown as typeof repo
+
+    renderWithAuth(<ReviewQueuePage repository={broken} />, '/review', '/review')
+
+    expect(await screen.findByText(t('queue.loadFailed'))).toBeInTheDocument()
+    expect(screen.queryByText(t('queue.empty'))).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: t('queue.retry') })).toBeInTheDocument()
+  })
+
   it('shows an honest empty state when nothing is waiting', async () => {
     renderWithAuth(<ReviewQueuePage repository={repo} />, '/review', '/review')
     expect(await screen.findByText(t('queue.empty'))).toBeInTheDocument()

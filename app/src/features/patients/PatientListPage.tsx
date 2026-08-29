@@ -7,6 +7,7 @@ import {
   EmptyState,
   FictionalDataBanner,
   InboxIcon,
+  WarningIcon,
   Page,
   SearchIcon,
   Skeleton,
@@ -41,11 +42,20 @@ export function PatientListPage({ repository }: PatientListPageProps = {}) {
 
   const [query, setQuery] = useState('')
   const [patients, setPatients] = useState<Patient[] | null>(null)
+  // A failed read is NOT an empty list. Without this the skeleton animates
+  // forever and the screen goes on claiming it is loading.
+  const [failed, setFailed] = useState(false)
 
   const load = useCallback(
     async (search: string) => {
       if (actor === null) return
-      setPatients(await repo.search(search, actor))
+      setFailed(false)
+      try {
+        setPatients(await repo.search(search, actor))
+      } catch {
+        setPatients(null)
+        setFailed(true)
+      }
     },
     [actor?.id, actor?.role, repo],
   )
@@ -71,6 +81,21 @@ export function PatientListPage({ repository }: PatientListPageProps = {}) {
           title={t('list.researcherBlocked')}
           body={t('list.researcherBlockedHint')}
           icon={<InboxIcon />}
+        />
+      )
+    }
+
+    if (failed) {
+      return (
+        <EmptyState
+          title={t('list.loadFailed')}
+          body={t('list.loadFailedBody')}
+          icon={<WarningIcon />}
+          action={
+            <Button fullWidth onClick={() => void load(query)}>
+              {t('list.retry')}
+            </Button>
+          }
         />
       )
     }

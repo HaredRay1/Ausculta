@@ -7,6 +7,7 @@ import {
   EmptyState,
   FictionalDataBanner,
   InboxIcon,
+  WarningIcon,
   Page,
   Skeleton,
   SkeletonGroup,
@@ -36,10 +37,19 @@ export function AlertsPage({ repository }: AlertsPageProps = {}) {
 
   const [rows, setRows] = useState<AlertWithPatient[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  // "No open alerts" when the read failed is a false all-clear on a clinical
+  // queue. Failing and being empty must never look the same here.
+  const [failed, setFailed] = useState(false)
 
   const load = useCallback(async () => {
     if (actor === null) return
-    setRows(await repo.openAlerts(actor))
+    setFailed(false)
+    try {
+      setRows(await repo.openAlerts(actor))
+    } catch {
+      setRows(null)
+      setFailed(true)
+    }
   }, [actor?.id, actor?.role, repo])
 
   useEffect(() => {
@@ -59,7 +69,18 @@ export function AlertsPage({ repository }: AlertsPageProps = {}) {
         <p className="text-sm text-muted">{t('alerts.count', { count: rows.length })}</p>
       )}
 
-      {rows === null ? (
+      {failed ? (
+        <EmptyState
+          title={t('alerts.loadFailed')}
+          body={t('alerts.loadFailedBody')}
+          icon={<WarningIcon />}
+          action={
+            <Button fullWidth onClick={() => void load()}>
+              {t('alerts.retry')}
+            </Button>
+          }
+        />
+      ) : rows === null ? (
         <SkeletonGroup label={t('alerts.loading')}>
           <Skeleton className="h-24 w-full" lines={3} />
         </SkeletonGroup>

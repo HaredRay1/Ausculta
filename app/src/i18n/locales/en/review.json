@@ -30,7 +30,10 @@
     "orderNote": "Ordered by what the app flagged and how long each case has waited. This is a workload order, not a clinical priority.",
     "notPermitted": "Reviewing is for practitioners",
     "notPermittedHint": "This queue is not available in your role.",
-    "openAlerts": "Alerts"
+    "openAlerts": "Alerts",
+    "loadFailed": "Could not load the case list",
+    "loadFailedBody": "The information could not be read from this device. Nothing has been lost. This is not the same as there being nothing here.",
+    "retry": "Try again"
   },
   "case": {
     "title": "Case review",
@@ -61,7 +64,8 @@
     "symptomAbsent": "reported as absent",
     "yes": "Yes",
     "no": "No",
-    "loading": "Loading case"
+    "loading": "Loading case",
+    "loadFailed": "Could not load this case"
   },
   "location": {
     "quality": "Recording quality",

@@ -8,6 +8,7 @@ import {
   EmptyState,
   FictionalDataBanner,
   InboxIcon,
+  WarningIcon,
   Page,
   Section,
   Skeleton,
@@ -25,7 +26,7 @@ import {
 } from './repository'
 import { ageInYears } from './validation'
 
-type LoadState = 'loading' | 'found' | 'missing'
+type LoadState = 'loading' | 'found' | 'missing' | 'failed'
 
 export interface PatientDetailPageProps {
   /** Injected in tests so a page can run against an isolated database. */
@@ -50,15 +51,17 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
     if (actor === null) return
     let cancelled = false
 
-    void repo.get(patientId, actor).then((found) => {
-      if (cancelled) return
-      setPatient(found ?? null)
-      setState(found === undefined ? 'missing' : 'found')
-      if (found !== undefined) {
-        void repo.linkedUsername(found).then((name) => {
-          if (!cancelled) setLinkedUsername(name)
-        })
-      }
+    repo
+      .get(patientId, actor)
+      .then((found) => {
+        if (cancelled) return
+        setPatient(found ?? null)
+        setState(found === undefined ? 'missing' : 'found')
+        if (found !== undefined) {
+          void repo.linkedUsername(found).then((name) => {
+            if (!cancelled) setLinkedUsername(name)
+          })
+        }
     })
 
     return () => {
@@ -73,6 +76,24 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
         <SkeletonGroup label={t('detail.loading')}>
           <Skeleton className="h-24 w-full" lines={4} />
         </SkeletonGroup>
+      </Page>
+    )
+  }
+
+  if (state === 'failed') {
+    return (
+      <Page>
+        <AppBar title={t('detail.title')} onBack={() => navigate('/patients')} />
+        <EmptyState
+          title={t('detail.loadFailed')}
+          body={t('list.loadFailedBody')}
+          icon={<WarningIcon />}
+          action={
+            <Button fullWidth onClick={() => navigate('/patients')}>
+              {t('detail.backToList')}
+            </Button>
+          }
+        />
       </Page>
     )
   }
