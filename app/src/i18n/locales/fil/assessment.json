@@ -1,0 +1,95 @@
+{
+  "action": {
+    "back": "Bumalik",
+    "next": "Susunod",
+    "skip": "Laktawan ang gabay",
+    "continue": "Magpatuloy",
+    "start": "Simulan ang assessment",
+    "changeFile": "Pumili ng ibang file",
+    "analyse": "Suriin ang recording na ito",
+    "keepAnyway": "I-save ang recording na ito nang hindi sinusuri",
+    "recordAgain": "Mag-record ulit",
+    "submit": "Tapusin at ipadala para suriin"
+  },
+  "patient": {
+    "title": "Pasyente",
+    "subtitle": "Tiyaking ito ang taong nasa harap ninyo bago magsimula.",
+    "nameLabel": "Pasyente",
+    "missingTitle": "Walang napiling pasyente",
+    "missingBody": "Palaging tungkol sa isang tao ang assessment. Piliin muna ang pasyente, saka mag-record.",
+    "choosePatient": "Pumili ng pasyente",
+    "loading": "Binubuksan ang rekord ng pasyente…"
+  },
+  "deviceGuide": {
+    "title": "Paggamit ng recorder",
+    "subtitle": "Siyam na hakbang, mula sa pag-on ng recorder hanggang sa paglilinis nito para sa susunod na pasyente.",
+    "stepOf": "Hakbang {{current}} sa {{total}}",
+    "dontShowAgain": "Huwag nang ipakita ang gabay na ito",
+    "imageAlt": "Hakbang {{number}} sa paggamit ng recorder."
+  },
+  "location": {
+    "title": "Pumili ng posisyon",
+    "subtitle": "Pindutin ang posisyon para i-record ito. Sundan ang 1 hanggang 6 nang maayos.",
+    "position": "Posisyon {{number}} — {{name}}",
+    "recorded": "Na-record",
+    "notRecorded": "Hindi pa na-record",
+    "progress": "{{done}} sa {{total}} na posisyon ang na-record",
+    "rerecordHint": "Kapag pinindot ang posisyong na-record na, papalitan nito ang nakaimbak doon."
+  },
+  "placement": {
+    "title": "Posisyon {{number}} — {{name}}"
+  },
+  "capture": {
+    "title": "I-import ang recording",
+    "subtitle": "Piliin ang WAV file na na-record ninyo sa posisyon {{number}}.",
+    "hint": "Alisin muna ang memory card sa recorder at kopyahin ang mga recording nito sa teleponong ito. Saka piliin ang para sa posisyong ito.",
+    "fileLabel": "File ng recording",
+    "selected": "Napiling file: {{name}}",
+    "checking": "Binabasa ang recording…",
+    "errorTitle": "Hindi magamit ang file na iyan"
+  },
+  "import": {
+    "error": {
+      "empty": "Walang laman ang file na iyan. Baka hindi ito nakopya nang buo — kopyahin ulit mula sa memory card.",
+      "too-long": "Mahigit dalawang minuto ang recording na iyan, mas mahaba sa kayang suriin ng app. Mag-record ng bago na mga 10 hanggang 30 segundo.",
+      "decode-failed": "Hindi mabasa ng app ang file na iyan. Pumili ng WAV file na na-record ng Ausculta recorder.",
+      "not-riff": "Hindi WAV recording iyan. Pumili ng .wav file mula sa memory card ng recorder.",
+      "missing-fmt": "Walang format header ang WAV file na iyan, kaya hindi alam ng app kung paano ito babasahin. Kopyahin ulit ang orihinal na file mula sa memory card.",
+      "missing-data": "Walang audio ang WAV file na iyan. Baka naputol ang recording — i-record ulit ang posisyong ito.",
+      "no-frames": "Masyadong maliit ang WAV file na iyan para magkaroon ng audio. Baka agad itong nahinto — i-record ulit ang posisyong ito.",
+      "unsupported-format": "Naka-compress ang WAV file na iyan. Uncompressed WAV ang sine-save ng recorder, kaya piliin ang orihinal na file at hindi ang converted na kopya.",
+      "unsupported-bit-depth": "Hindi 16-bit audio ang file na iyan. 16-bit WAV ang sine-save ng recorder, kaya piliin ang orihinal na file mula sa memory card at hindi ang converted na kopya.",
+      "unknown": "Hindi mabasa ng app ang file na iyan. Kopyahin ulit mula sa memory card, o i-record ulit ang posisyong ito."
+    }
+  },
+  "analysis": {
+    "title": "Sinusuri ang recording",
+    "body": "Pinapakinggan ang recording nang tig-isang segundo. Sa telepono, puwede itong tumagal ng ilang segundo.",
+    "keepOpen": "Huwag isara ang app hangga't hindi ito tapos.",
+    "progress": "Sinusuri…"
+  },
+  "result": {
+    "title": "Resulta",
+    "locationHeading": "Posisyon {{number}} — {{name}}",
+    "errorTitle": "May nangyaring mali",
+    "audioHeading": "Ang recording",
+    "audioUnsupported": "Hindi kayang i-play ng device na ito ang recording."
+  },
+  "next": {
+    "title": "Na-save ang posisyon",
+    "body": "{{done}} sa {{total}} na posisyon ang na-record.",
+    "recordAnother": "Mag-record ng ibang posisyon",
+    "submitHint": "Puwede ninyong ipadala ang assessment para suriin anumang oras. Ang anim na posisyon ang nagbibigay sa practitioner ng pinakabuong larawan.",
+    "needsOne": "Mag-record ng kahit isang posisyon bago ipadala ang assessment para suriin."
+  },
+  "submitted": {
+    "title": "Naipadala na para suriin",
+    "body": "Naka-save sa device na ito ang assessment at naghihintay na suriin ito ng practitioner.",
+    "backToStart": "Balik sa simula"
+  },
+  "error": {
+    "saveFailed": "Hindi na-save ang recording sa device na ito. Subukan ulit.",
+    "submitFailed": "Hindi naipadala ang assessment para suriin. Subukan ulit.",
+    "notFound": "Wala na sa device na ito ang assessment na iyan."
+  }
+}

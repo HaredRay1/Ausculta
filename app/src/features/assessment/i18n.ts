@@ -2,6 +2,7 @@ import type { i18n as I18nInstance } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { i18n as appI18n } from '../../i18n'
 import enAssessment from '../../i18n/locales/en/assessment.json'
+import filAssessment from '../../i18n/locales/fil/assessment.json'
 
 /**
  * Registers the `assessment` translation namespace on an i18next instance.
@@ -20,6 +21,16 @@ export const ASSESSMENT_NS = 'assessment'
 export function registerAssessmentResources(instance: I18nInstance): I18nInstance {
   if (!instance.hasResourceBundle('en', ASSESSMENT_NS)) {
     instance.addResourceBundle('en', ASSESSMENT_NS, enAssessment, true, true)
+  }
+  // Filipino is a DRAFT PENDING REVIEW covering step titles, buttons, progress
+  // and the file-import errors. Three blocks are absent on purpose and fall
+  // back to the reviewed English: `guide`, because it is device technique and
+  // chest-placement anatomy and a mistranslated landmark puts the chestpiece in
+  // the wrong place; `quality`, because its flags and advice are a clinical
+  // judgement about whether a recording may be analysed at all; and `verdict`
+  // plus the interpretive half of `result`, which is result wording.
+  if (!instance.hasResourceBundle('fil', ASSESSMENT_NS)) {
+    instance.addResourceBundle('fil', ASSESSMENT_NS, filAssessment, true, true)
   }
   return instance
 }
