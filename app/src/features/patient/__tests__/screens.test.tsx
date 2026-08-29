@@ -21,6 +21,7 @@ import {
 import { AuscultaDB } from '../../../db/db'
 import type { Assessment, Patient, Recording } from '../../../db/types'
 import { i18n as appI18n } from '../../../i18n'
+import { setExampleRecordShown } from '../data/examplePreview'
 import { setDemoMode } from '../../demo/demoMode'
 import { seedDemoData } from '../../demo/seed'
 import { createPatientRepository } from '../data/patientRepository'
@@ -578,6 +579,65 @@ describe('empty states teach rather than dead-end', () => {
 
 // --- the data validators will actually see -----------------------------------
 
+describe('a real account is never given another identity', () => {
+  /**
+   * The defect this guards: on a seeded device, an account with no linked
+   * record was silently given the demo patient with the most visits. The owner
+   * registered, signed in, and was greeted "Hello, Marisol Abbayani".
+   */
+  beforeEach(async () => {
+    await seedDemoData(db, { now: Date.parse('2026-08-29T00:00:00.000Z') })
+    await setDemoMode(true, db)
+    setExampleRecordShown(false)
+  })
+
+  afterEach(() => setExampleRecordShown(false))
+
+  it('greets the signed-in user by their own name, on a fully seeded device', async () => {
+    renderAt(PATIENT_PATHS.home)
+    await waitFor(() => expect(screen.getByText(t('shared.noRecord.title'))).toBeInTheDocument())
+
+    // No seeded patient's name appears anywhere as the user's own.
+    const seeded = await db.patients.filter((p) => p.isDemo === 1).toArray()
+    expect(seeded.length).toBeGreaterThan(0)
+    for (const patient of seeded) {
+      expect(screen.queryByText(new RegExp(patient.name, 'i'))).not.toBeInTheDocument()
+    }
+  })
+
+  it('shows no seeded data on the results screen either', async () => {
+    // Every patient screen loads through the same path, so removing the
+    // substitution removes it everywhere -- but results is the screen the
+    // scored validator task names, so it is worth asserting directly.
+    renderAt(PATIENT_PATHS.results)
+    await waitFor(() => expect(screen.getByText(t('shared.noRecord.title'))).toBeInTheDocument())
+
+    const seeded = await db.patients.filter((p) => p.isDemo === 1).toArray()
+    for (const patient of seeded) {
+      expect(screen.queryByText(new RegExp(patient.name, 'i'))).not.toBeInTheDocument()
+    }
+  })
+
+  it('says plainly that no record is linked, rather than borrowing one', async () => {
+    renderAt(PATIENT_PATHS.home)
+    expect(await screen.findByText(t('shared.noRecord.title'))).toBeInTheDocument()
+    expect(screen.getByText(t('shared.noRecord.body'))).toBeInTheDocument()
+  })
+
+  it('offers an example record, and names whose it is when shown', async () => {
+    // Validators still need something to navigate -- they just have to ask,
+    // and it never arrives wearing their name.
+    renderAt(PATIENT_PATHS.home)
+    const see = await screen.findByRole('button', { name: t('shared.noRecord.seeExample') })
+    see.click()
+
+    await waitFor(() =>
+      expect(screen.getByText(t('shared.demoPreview.title'))).toBeInTheDocument(),
+    )
+    expect(screen.getByRole('button', { name: t('shared.demoPreview.stop') })).toBeInTheDocument()
+  })
+})
+
 describe('against demo-seeded data', () => {
   /**
    * The fictional clinic is what a validator navigates. These assertions run
@@ -588,7 +648,13 @@ describe('against demo-seeded data', () => {
   beforeEach(async () => {
     await seedDemoData(db, { now: Date.parse('2026-08-29T00:00:00.000Z') })
     await setDemoMode(true, db)
+    // The screens no longer substitute a seeded record for an unlinked
+    // account -- doing that greeted a real person as somebody fictional. A
+    // validator now asks to see an example, so these tests ask too.
+    setExampleRecordShown(true)
   })
+
+  afterEach(() => setExampleRecordShown(false))
 
   it('renders a seeded patient home with a real latest result', async () => {
     renderAt(PATIENT_PATHS.home)

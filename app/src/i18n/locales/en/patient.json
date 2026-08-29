@@ -213,11 +213,14 @@
     "noRecord": {
       "title": "Your health record is not linked yet",
       "body": "Your account is not yet connected to a patient record on this device. A health worker links them when they register you. Until then there is nothing of yours to show — this is not an error.",
-      "action": "What Ausculta can and cannot do"
+      "action": "What Ausculta can and cannot do",
+      "seeExample": "See an example record"
     },
     "demoPreview": {
       "title": "You are looking at sample data",
-      "body": "Your account has no patient record yet, so Ausculta is showing a made-up example so you can see how the app works. None of it is about you and none of it is real."
+      "body": "Your account has no patient record yet, so Ausculta is showing a made-up example so you can see how the app works. None of it is about you and none of it is real.",
+      "bodyNamed": "This is a made-up example record for {{name}}, a person who does not exist. You asked to see it so you could look round the app. None of it is about you and none of it is real.",
+      "stop": "Stop showing the example"
     }
   }
 }

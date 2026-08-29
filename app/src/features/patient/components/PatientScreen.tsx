@@ -1,6 +1,7 @@
-import type { ReactNode } from 'react'
+import { useCallback, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Banner, Button, EmptyState, InfoIcon } from '../../../components'
+import { isExampleRecordShown, setExampleRecordShown } from '../data/examplePreview'
 import { usePatientOverview } from '../data/usePatientOverview'
 import type { LoadedPatientOverview, PatientRepository } from '../data/patientRepository'
 import { usePatientTranslation } from '../i18n'
@@ -39,9 +40,18 @@ export function PatientScreen({
   children,
 }: PatientScreenProps) {
   const { t } = usePatientTranslation()
-  const { overview, isLoading, error, reload } = usePatientOverview(
-    repository !== undefined ? { repository } : {},
-  )
+  // Reading a demonstration record is a choice the user makes, not something
+  // the app does for them when their own record is missing.
+  const [showExample, setShowExample] = useState(isExampleRecordShown)
+  const chooseExample = useCallback((shown: boolean) => {
+    setExampleRecordShown(shown)
+    setShowExample(shown)
+  }, [])
+
+  const { overview, isLoading, error, reload } = usePatientOverview({
+    ...(repository !== undefined && { repository }),
+    example: showExample,
+  })
 
   const heading = title ?? t(`patient:nav.${activeId}`)
   const frame = (content: ReactNode) => (
@@ -60,14 +70,28 @@ export function PatientScreen({
   if (error !== null) return frame(<PatientLoadError onRetry={reload} />)
 
   const { patient } = overview
-  if (patient === null) return frame(<NoLinkedRecord />)
+  if (patient === null) {
+    // Either nothing is linked, or the user asked for an example and the
+    // device has no seeded data. Both are the same honest state.
+    return frame(<NoLinkedRecord onSeeExample={() => chooseExample(true)} />)
+  }
   const loaded: LoadedPatientOverview = { ...overview, patient }
 
   return frame(
     <>
       {overview.source === 'demo-preview' && (
-        <Banner tone="info" title={t('patient:shared.demoPreview.title')}>
-          {t('patient:shared.demoPreview.body')}
+        <Banner
+          tone="info"
+          title={t('patient:shared.demoPreview.title')}
+          action={
+            <Button size="sm" variant="ghost" onClick={() => chooseExample(false)}>
+              {t('patient:shared.demoPreview.stop')}
+            </Button>
+          }
+        >
+          {/* Names whose example it is. "Sample data" alone still leaves a
+              reader wondering why an unfamiliar name is on their screen. */}
+          {t('patient:shared.demoPreview.bodyNamed', { name: patient.name })}
         </Banner>
       )}
       {children(loaded)}
@@ -82,7 +106,7 @@ export function PatientScreen({
  * and still offers somewhere to go — the plain-language explanation of what the
  * app is for, which is useful to read while waiting to be registered.
  */
-export function NoLinkedRecord() {
+export function NoLinkedRecord({ onSeeExample }: { onSeeExample?: () => void } = {}) {
   const { t } = usePatientTranslation()
   const navigate = useNavigate()
 
@@ -92,9 +116,20 @@ export function NoLinkedRecord() {
       body={t('patient:shared.noRecord.body')}
       icon={<InfoIcon className="size-10" />}
       action={
-        <Button variant="secondary" fullWidth onClick={() => navigate(PATIENT_PATHS.home)}>
-          {t('patient:shared.backHome')}
-        </Button>
+        <div className="flex w-full flex-col gap-3">
+          {/* The replacement for the substitution that used to happen
+              silently. A validator with no record still has something to
+              navigate — they just have to ask for it, and it never arrives
+              wearing their name. */}
+          {onSeeExample !== undefined && (
+            <Button fullWidth onClick={onSeeExample}>
+              {t('patient:shared.noRecord.seeExample')}
+            </Button>
+          )}
+          <Button variant="secondary" fullWidth onClick={() => navigate(PATIENT_PATHS.home)}>
+            {t('patient:shared.backHome')}
+          </Button>
+        </div>
       }
     />
   )

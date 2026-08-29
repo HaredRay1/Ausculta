@@ -28,12 +28,19 @@ export interface UsePatientOverviewResult {
 export interface UsePatientOverviewOptions {
   /** Injectable for tests; the default is bound to the real database. */
   repository?: PatientRepository
+  /**
+   * Load a demonstration record instead of the signed-in user's own.
+   *
+   * Only ever true because the user asked for it. `loadOverview` never
+   * substitutes one on its own — see patientRepository.loadOverview.
+   */
+  example?: boolean
 }
 
 export function usePatientOverview(
   options: UsePatientOverviewOptions = {},
 ): UsePatientOverviewResult {
-  const { repository = defaultRepository } = options
+  const { repository = defaultRepository, example = false } = options
   const { user, isLoading: authLoading } = useAuth()
   const userId = user?.id ?? null
 
@@ -48,8 +55,11 @@ export function usePatientOverview(
     setIsLoading(true)
     setError(null)
 
-    repository
-      .loadOverview(userId ?? '')
+    const load = example
+      ? repository.loadExampleOverview()
+      : repository.loadOverview(userId ?? '')
+
+    load
       .then((loaded) => {
         if (!cancelled) setOverview(loaded)
       })
@@ -65,7 +75,7 @@ export function usePatientOverview(
     return () => {
       cancelled = true
     }
-  }, [repository, userId, authLoading, attempt])
+  }, [repository, userId, authLoading, attempt, example])
 
   const reload = useCallback(() => setAttempt((n) => n + 1), [])
 

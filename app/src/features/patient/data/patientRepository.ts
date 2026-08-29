@@ -94,6 +94,11 @@ export interface PatientRepository {
   findLinkedPatient(userId: string): Promise<Patient | null>
   /** Everything the patient screens need for `userId`, in one read. */
   loadOverview(userId: string): Promise<PatientOverview>
+  /**
+   * A seeded example record, for a user who explicitly asked to see one.
+   * Never returned by `loadOverview` — demonstration data is opt-in.
+   */
+  loadExampleOverview(): Promise<PatientOverview>
   /** The stored audio for a recording, or null when the blob is gone. */
   readAudio(audioBlobId: string): Promise<Blob | null>
 }
@@ -147,12 +152,43 @@ export function createPatientRepository(database: AuscultaDB = defaultDb): Patie
     })
   }
 
+  /**
+   * Everything the patient screens need for `userId`.
+   *
+   * NEVER substitutes another record when the account has no linked one. It
+   * previously fell back to the seeded demo patient with the most visits, so a
+   * real person who registered and signed in was greeted by name as somebody
+   * fictional and shown their visits as their own. The intent was to give a
+   * validator something to navigate; the effect was the app presenting an
+   * invented PERSON as the signed-in user, which is the one thing its safety
+   * argument says it never does.
+   *
+   * An unlinked account now returns EMPTY_OVERVIEW, which the screens render as
+   * an honest "no record linked yet" state. Demonstration data is still
+   * reachable, but only through `loadExampleOverview` and only when the user
+   * asks for it by name.
+   */
   async function loadOverview(userId: string): Promise<PatientOverview> {
     const linked = await findLinkedPatient(userId)
-    const patient = linked ?? (await findDemoPreviewPatient())
-    if (patient === null) return EMPTY_OVERVIEW
+    if (linked === null) return EMPTY_OVERVIEW
+    return buildOverview(linked, 'linked')
+  }
 
-    const source: PatientRecordSource = linked === null ? 'demo-preview' : 'linked'
+  /**
+   * A seeded example record, shown only when the user explicitly asks to see
+   * one. Carries `source: 'demo-preview'` so every screen keeps saying whose
+   * data it is.
+   */
+  async function loadExampleOverview(): Promise<PatientOverview> {
+    const example = await findDemoPreviewPatient()
+    if (example === null) return EMPTY_OVERVIEW
+    return buildOverview(example, 'demo-preview')
+  }
+
+  async function buildOverview(
+    patient: Patient,
+    source: PatientRecordSource,
+  ): Promise<PatientOverview> {
 
     const [assessments, recordings] = await Promise.all([
       database.assessments.where('patientId').equals(patient.id).toArray(),
@@ -235,7 +271,7 @@ export function createPatientRepository(database: AuscultaDB = defaultDb): Patie
     return (await database.audioBlobs.get(audioBlobId))?.blob ?? null
   }
 
-  return { findLinkedPatient, loadOverview, readAudio }
+  return { findLinkedPatient, loadOverview, loadExampleOverview, readAudio }
 }
 
 /** The repository bound to the app's real database. */

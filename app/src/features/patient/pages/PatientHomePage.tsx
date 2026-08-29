@@ -18,6 +18,7 @@ import { ReviewStatusLine } from '../components/Attribution'
 import type { PatientRepository } from '../data/patientRepository'
 import { BREAKDOWN_KEY, BREAKDOWN_ORDER, type AssessmentSummary } from '../data/resultView'
 import { formatLongDate } from '../format'
+import { useAuth } from '../../../auth/AuthContext'
 import { usePatientTranslation } from '../i18n'
 import { PATIENT_PATHS, resultDetailPath } from '../navigation'
 
@@ -48,6 +49,11 @@ export interface PatientHomePageProps {
 
 export function PatientHomePage({ repository }: PatientHomePageProps) {
   const { t, i18n } = usePatientTranslation()
+  // The signed-in user's OWN name, from their account -- never the patient
+  // record's. When the app showed a seeded record it greeted a real person as
+  // somebody fictional, and the greeting is the first thing anyone reads.
+  const { user } = useAuth()
+  const signedInName = user?.name ?? ''
   const language = i18n.language
 
   return (
@@ -57,14 +63,13 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
       {...(repository !== undefined && { repository })}
     >
       {(overview) => {
-        const patient = overview.patient
         const latest: AssessmentSummary | undefined = overview.summaries[0]
 
         return (
           <>
             <header>
               <h2 className="font-heading text-2xl font-bold text-on-surface">
-                {t('patient:home.greeting', { name: patient?.name ?? '' })}
+                {t('patient:home.greeting', { name: signedInName })}
               </h2>
               <p className="mt-1 text-base text-muted">{t('patient:home.subtitle')}</p>
             </header>
