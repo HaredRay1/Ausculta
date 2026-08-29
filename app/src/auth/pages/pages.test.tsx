@@ -237,6 +237,46 @@ describe('RegisterPage', () => {
     await auth.bootstrapAdmin({ password: ADMIN_PASSWORD, name: 'Site Administrator' })
   })
 
+  it('signs in a role that needs no approval, instead of asking for the password again', async () => {
+    // The behaviour split, asserted against the code that decides it, so the
+    // two paths cannot drift apart: ACTIVE lands signed in, PENDING lands on
+    // the explanation. Retyping a password chosen ten seconds ago reads as
+    // though the registration failed — the same defect the first-run flow had.
+    expect(initialStatusForRole(ROLES.PATIENT)).toBe(USER_STATUSES.ACTIVE)
+
+    renderApp('/register')
+    await screen.findByText(t('register.subtitle'))
+
+    typeInto(t('field.fullName'), 'Juan Dela Cruz')
+    typeInto(t('field.username'), 'juan')
+    typeInto(t('field.password'), PASSWORD)
+    typeInto(t('field.confirmPassword'), PASSWORD)
+    fireEvent.click(screen.getByRole('button', { name: t('action.register') }))
+
+    expect(await screen.findByText('patient home')).toBeInTheDocument()
+    expect(screen.queryByText(t('login.subtitle'))).not.toBeInTheDocument()
+    await expect(auth.getCurrentUser()).resolves.toMatchObject({ username: 'juan' })
+  })
+
+  it('keeps the explanation for a role that does need approval', async () => {
+    expect(initialStatusForRole(ROLES.HEALTH_WORKER)).toBe(USER_STATUSES.PENDING_VERIFICATION)
+
+    renderApp('/register')
+    await screen.findByText(t('register.subtitle'))
+
+    fireEvent.click(screen.getByRole('radio', { name: /Health Worker/ }))
+    typeInto(t('field.fullName'), 'Ana Reyes')
+    typeInto(t('field.username'), 'ana.reyes')
+    typeInto(t('field.password'), PASSWORD)
+    typeInto(t('field.confirmPassword'), PASSWORD)
+    fireEvent.click(screen.getByRole('button', { name: t('action.register') }))
+
+    // Nothing to sign in to yet, so the screen that says who approves them is
+    // correct here — and they must NOT be signed in.
+    expect(await screen.findByText(t('register.pendingTitle'))).toBeInTheDocument()
+    await expect(auth.getCurrentUser()).resolves.toBeNull()
+  })
+
   it('registers a patient as immediately usable', async () => {
     renderApp('/register')
     await screen.findByText(t('register.subtitle'))
@@ -247,7 +287,10 @@ describe('RegisterPage', () => {
     typeInto(t('field.confirmPassword'), PASSWORD)
     fireEvent.click(screen.getByRole('button', { name: t('action.register') }))
 
-    expect(await screen.findByText(t('register.activeBody'))).toBeInTheDocument()
+    // The stored row. Landing signed in is asserted by the test above; this
+    // one pins what was actually written, which is the part a screen cannot
+    // show you.
+    expect(await screen.findByText('patient home')).toBeInTheDocument()
     const created = await db.users.where('username').equals('juan').first()
     expect(created).toMatchObject({ role: ROLES.PATIENT, status: USER_STATUSES.ACTIVE })
   })

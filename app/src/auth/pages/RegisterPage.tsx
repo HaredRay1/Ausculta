@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ROLES, USER_STATUSES, type Role } from '../../db/codes'
 import { useAuth } from '../AuthContext'
 import { SELF_REGISTRABLE_ROLES, initialStatusForRole } from '../authService'
+import { roleHomePath } from '../guards'
 import { AuthScreen, Banner, PasswordField, PrimaryButton, TextField } from '../components/ui'
 import { authErrorKey } from '../errorMessage'
 import { useAuthTranslation } from '../i18n'
@@ -29,7 +30,8 @@ function RoleIcon({ role }: { role: Role }) {
 
 export function RegisterPage() {
   const { t } = useAuthTranslation()
-  const { service } = useAuth()
+  const { service, login } = useAuth()
+  const navigate = useNavigate()
 
   const [role, setRole] = useState<Role>(ROLES.PATIENT)
   const [name, setName] = useState('')
@@ -69,6 +71,28 @@ export function RegisterPage() {
           ? { organization: organization.trim() }
           : {}),
       })
+      /*
+       * An account that is usable straight away should be used straight away.
+       *
+       * Sending someone who just chose a password to a sign-in form to retype
+       * it is the same defect as the first-run flow had: it reads as though the
+       * registration failed. It applies to every PATIENT, which is the largest
+       * group of people who will ever see this screen.
+       *
+       * PENDING_VERIFICATION is different and keeps the current screen: there
+       * is genuinely nothing to sign in to yet, and that copy explains who
+       * approves them and where.
+       */
+      if (created.status === USER_STATUSES.ACTIVE) {
+        try {
+          const user = await login(username, password)
+          navigate(roleHomePath(user.role), { replace: true })
+          return
+        } catch {
+          // The account exists either way; fall through to the confirmation
+          // rather than let success read as failure.
+        }
+      }
       setCreatedStatus(created.status)
     } catch (error) {
       setErrorKey(authErrorKey(error))
