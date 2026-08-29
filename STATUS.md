@@ -24,31 +24,35 @@ the same thing written for validators to read on paper.
 
 ## What is built
 
-Sign-in with five roles and administrator approval of staff accounts. Patient registration
-with respiratory and family history, and consent that records its language and text version.
-The assessment flow: pick a lung position, see where to place the chestpiece, import the
-recording, quality check, on-device analysis, result. The patient's own portal — home,
-results, recordings, trends, history. The practitioner review workflow: queue, clinical
-view, and a decision form with five outcomes. Rehabilitation with safety guidance, an
-action-plan viewer and four techniques. Demo mode. Twenty-two instructional diagrams. The
+Every phase is built and reachable.
+
+Sign-in with five roles and administrator approval. Patient registration with respiratory
+and family history, and consent recording its language and text version. The assessment
+flow: symptoms, optional vitals, lung position, placement guide, import, quality check,
+on-device analysis, result. The patient's own portal — home, results, recordings, trends,
+history. The practitioner review workflow: queue, clinical view, a decision form with five
+outcomes, and a printable referral. Rehabilitation with safety guidance, an action-plan
+viewer and four cited techniques. Monitoring plans, a five-rule alerts engine and clinician
+trends. The researcher module: dashboard, ground-truth labelling, model performance and
+de-identified export. The admin console: accounts, configuration, audit log and a
+translation report. A standalone help page with all twenty-two diagrams. Demo mode. The
 ESP32 recorder firmware.
 
-**1623 tests passing.** Clean typecheck, clean build, installs as an app on Android and
-works fully offline afterwards.
+**1987 tests passing across 67 files.** Clean typecheck, clean build, installs on Android
+and works fully offline afterwards.
 
 ## What is partial
 
 **Rehabilitation content** needs a clinician before any patient reads it (see below).
-**Trends** work but need more than one assessment to show anything. **Filipino** covers
-interface text only.
+**Filipino** covers interface text only, by design — every clinical, consent and safety
+string deliberately falls back to reviewed English.
 
 ## What is not built, deliberately
 
 **Severity score** — no model exists. The app shows no number rather than inventing one.
 **Cloud sync** — nothing leaves the device. **Bluetooth** — recordings move by memory card.
-**Camera-guided placement** — removed in favour of the diagrams. **Researcher module and
-admin console beyond account approval** — not started; they were the lowest priority
-against the validation criteria.
+**Camera-guided placement** — removed in favour of the diagrams. **Live microphone test
+mode** — the device supplies recordings and no validator walks that path.
 
 ## Things a human must do before validation
 
@@ -67,22 +71,27 @@ against the validation criteria.
    is right for a front view), but the anatomy itself needs a clinician's eye.
 5. **The consent text**, which is a clearly-marked draft pending ethics review.
 
-**Ten minutes of your own time, and it is the highest-value thing you can do:** write the
-Filipino strings. None of us are confident Filipino speakers, and a wrong Filipino string
-scores worse on "clarity of information" than an English fallback that at least reads
-correctly — so we deliberately shipped English rather than guessing. You are a Filipino
-speaker in Puerto Princesa; this is yours.
+**Read the Filipino, and start with one string.** A draft translation of the interface now
+exists and is marked as pending review by a native speaker. You are that speaker. Check
+this first, because it is the only translation with a safety consequence — the fictional-data
+banner, in `app/src/i18n/locales/fil/design.json`:
 
-Start with **one string**: the fictional-data banner's "not a real person" text, in the
-`design` namespace. That is the sentence standing between a clinician and mistaking a seeded
-record for a patient, and it is the only translation with a safety consequence. After that,
-the demo namespace is 20 strings in `app/src/i18n/locales/en/demo.json`, of which only
-`audio.body` matters much — it says every demonstration recording is a synthetic tone and
-nothing there is a lung sound. Add a `fil` sibling file and one line to
-`registerDemoResources` in `features/demo/i18n.ts`.
+> **Halimbawang datos**
+> Gawa-gawa lamang ang impormasyong ito para ipakita kung paano gumagana ang app. Hindi ito
+> tunay na tao at hindi ito tunay na recording.
+> *(short form: "Halimbawang datos — hindi tunay na pasyente")*
 
-Clinical, consent and safety wording still needs a qualified translator and practitioner
-review, per your own specification. Interface labels do not.
+That sentence is what stands between a clinician and mistaking demonstration data for a real
+patient. If it reads wrong to you, change it.
+
+The translator flagged its own uncertainties: `patient.nav.trends` rendered as "Mga bisita"
+rather than "Pagbabago", to avoid implying a change in sound means a change in health;
+"Home" left in English; and the polite *kayo/inyong* register used throughout. Those are
+judgement calls a Puerto Princesa speaker should settle.
+
+Clinical, consent and safety wording is deliberately still English and must stay that way
+until a qualified translator and a practitioner review it — that is your own specification's
+rule, and it is why the rehabilitation and clinical-result namespaces are untranslated.
 
 **A finding for the research team, and it is a defect in the specification rather than the
 build:** the master specification's own rehabilitation activities are wrong for asthma. It
