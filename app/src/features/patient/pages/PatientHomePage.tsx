@@ -118,38 +118,66 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
 
             {/*
               The record, as counts. Every figure here is something the
-              database actually holds — how many checks exist, how long since
-              the last one, how many chest places it covered. Nothing derived,
+              database actually holds — how long since the last check, how many
+              chest places it covered, how many checks exist. Nothing derived,
               nothing scored: a big number reads as authoritative, which is
               exactly why an invented one would do more damage here than
               anywhere else on the screen.
+
+              ONE number is dominant, which is the point of the hero. A screen
+              where three figures are all set at tile size has no focus and
+              reads as a spreadsheet; a screen with a single 56px figure has a
+              subject. The elapsed count earns that slot because it is the
+              question a patient actually opens the app with, and because it is
+              honest in a way a score would not be — it is a subtraction of two
+              dates, not a judgement of anybody's health. The verdict stays at
+              its normal size underneath, where it keeps its icon and its
+              words.
             */}
             <Section title={t('patient:home.statsHeading')}>
-              <div className="grid grid-cols-2 gap-3">
-                <StatTile
-                  value={overview.summaries.length > 0 ? overview.summaries.length : null}
-                  label={t('patient:home.statChecks')}
-                  emptyText={t('patient:home.statChecksEmpty')}
-                />
-                <StatTile
-                  value={daysSinceLatest}
-                  label={t('patient:home.statDaysSince')}
-                  emptyText={t('patient:home.statDaysSinceEmpty')}
-                />
-              </div>
+              {latest !== undefined && daysSinceLatest !== null && (
+                <div className="flex items-start gap-4 rounded-hero bg-card p-5">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-overline uppercase text-muted">
+                      {t('patient:home.heroOverline')}
+                    </p>
+                    <p className="mt-1 flex items-baseline gap-2">
+                      <span className="font-heading text-display-hero tabular-nums text-on-surface">
+                        {daysSinceLatest}
+                      </span>
+                      <span className="text-title-m text-muted">
+                        {t('patient:home.heroUnit', { count: daysSinceLatest })}
+                      </span>
+                    </p>
+                    <p className="mt-2 text-body-s text-muted">
+                      {t('patient:home.heroSupport', {
+                        date: formatLongDate(latest.date, language),
+                      })}
+                    </p>
+                  </div>
 
-              {latest !== undefined && (
-                <div className="flex items-center gap-4 rounded-card bg-card p-4">
-                  <ProgressRing
-                    value={latest.recordedCount}
-                    max={ALL_CHEST_PLACES}
-                    label={t('patient:home.statLocationsAria')}
-                  />
-                  <p className="min-w-0 flex-1 text-sm leading-snug text-muted">
-                    {t('patient:home.statLocations')}
-                  </p>
+                  {/* Inner radius 12 against the hero's 28 with 20 padding —
+                      the nesting rule, so the corners are actually concentric
+                      rather than nearly so. */}
+                  <div className="flex shrink-0 flex-col items-center gap-2 rounded-tile bg-nested p-3">
+                    <ProgressRing
+                      value={latest.recordedCount}
+                      max={ALL_CHEST_PLACES}
+                      label={t('patient:home.statLocationsAria')}
+                      size={96}
+                    />
+                    <span className="max-w-24 text-center text-label text-muted">
+                      {t('patient:home.heroRingLabel')}
+                    </span>
+                  </div>
                 </div>
               )}
+
+              <StatTile
+                value={overview.summaries.length > 0 ? overview.summaries.length : null}
+                label={t('patient:home.statChecks')}
+                emptyText={t('patient:home.statChecksEmpty')}
+              />
             </Section>
 
             <Section title={t('patient:home.goToHeading')}>

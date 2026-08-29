@@ -44,7 +44,12 @@
     "statDaysSince": "Days since your last check",
     "statDaysSinceEmpty": "No check yet",
     "statLocations": "Chest places recorded at your last check",
-    "statLocationsAria": "chest places recorded at your last check"
+    "statLocationsAria": "chest places recorded at your last check",
+    "heroOverline": "Since your last check",
+    "heroUnit_one": "day",
+    "heroUnit_other": "days",
+    "heroSupport": "Checked on {{date}}",
+    "heroRingLabel": "chest places"
   },
   "results": {
     "title": "My results",
