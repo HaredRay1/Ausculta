@@ -17,7 +17,9 @@
     "goLabels": "Label recordings",
     "goPerformance": "Model performance",
     "goExport": "Export data",
-    "loading": "Loading the research summary"
+    "loading": "Loading the research summary",
+    "demoCountsTitle": "These counts include demonstration data",
+    "demoCountsBody": "Demonstration mode is on, so every number on this screen counts fictional records alongside any real ones. Turn demonstration mode off to see the study totals on their own."
   },
   "labels": {
     "title": "Reference labelling",

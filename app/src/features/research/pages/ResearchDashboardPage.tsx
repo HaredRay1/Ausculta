@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   AppBar,
+  Banner,
   Card,
   ChevronRightIcon,
   EmptyState,
@@ -48,6 +49,17 @@ export function ResearchDashboardPage({ database = defaultDb }: { database?: Aus
       <AppBar title={t('dashboard.title')} subtitle={t('subtitle')} />
       <Page>
         {demoEnabled && <FictionalDataBanner />}
+        {/*
+          The banner says the DATA is fictional; it does not say the NUMBERS
+          are. A researcher reads "7 patients" as a study total and quotes it.
+          The export screen already warns that seeded rows travel in the file —
+          the counts deserve the same sentence, for the same reason.
+        */}
+        {demoEnabled && (
+          <Banner tone="warning" title={t('dashboard.demoCountsTitle')}>
+            {t('dashboard.demoCountsBody')}
+          </Banner>
+        )}
 
         {counts === null ? (
           <Spinner label={t('dashboard.loading')} />
