@@ -135,6 +135,14 @@ const CONTRAST_PAIRS: ReadonlyArray<{ fg: string; bg: string; min: number; note:
   { fg: '--color-primary', bg: '--color-chrome', min: 4.5, note: 'the mark on the chrome' },
   { fg: '--color-muted', bg: '--color-surface-sunken', min: 4.5, note: 'secondary in a well' },
 
+  // The avatar and icon-tile palette. Five hues, both themes, every one
+  // carrying initials or a glyph — so all ten pairs are text pairs.
+  { fg: '--color-on-tone-1', bg: '--color-tone-1', min: 4.5, note: 'tone 1' },
+  { fg: '--color-on-tone-2', bg: '--color-tone-2', min: 4.5, note: 'tone 2' },
+  { fg: '--color-on-tone-3', bg: '--color-tone-3', min: 4.5, note: 'tone 3' },
+  { fg: '--color-on-tone-4', bg: '--color-tone-4', min: 4.5, note: 'tone 4' },
+  { fg: '--color-on-tone-5', bg: '--color-tone-5', min: 4.5, note: 'tone 5' },
+
   { fg: '--color-focus', bg: '--color-surface', min: 3, note: 'focus ring (non-text UI)' },
   { fg: '--color-border-strong', bg: '--color-surface', min: 3, note: 'input border' },
 ]

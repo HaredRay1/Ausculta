@@ -30,7 +30,7 @@
     Arial, sans-serif;
 
   /* ---- Surfaces and ink (light) ---------------------------------------- */
-  --color-surface: #f6f8fa;
+  --color-surface: #f3f6f9;
   --color-surface-raised: #ffffff;
   --color-surface-sunken: #edf1f5;
   /* The app bar and bottom nav. Distinct from both the page and its cards, so
@@ -41,6 +41,9 @@
   /* Secondary text. 9.9:1 on --color-surface — AAA, not a low-contrast grey. */
   --color-muted: #334155;
   --color-border: #e2e8f0;
+  /* A card's own edge. Transparent in light, where the shadow separates it;
+   * visible in dark, where a shadow on a dark ground does nothing. */
+  --color-card-border: transparent;
   /* Control boundaries, not decorative dividers: WCAG 1.4.11 wants 3:1 for
    * these, and slate-400 only manages 2.45:1 on this surface. */
   --color-border-strong: #64748b;
@@ -59,6 +62,21 @@
   /* A wash of the brand for selected/active states, with its own ink. */
   --color-accent: #ccfbf1;
   --color-on-accent: #115e59;
+
+  /* ---- Tonal palette for avatars and icon tiles -------------------------
+   * Five muted hues, chosen by a hash of the name so one person keeps one
+   * colour. Each is a background and the ink that is legible on it; both are
+   * asserted at AA in tokens.test.ts, in both themes, like every other pair. */
+  --color-tone-1: #ccfbf1;
+  --color-on-tone-1: #115e59;
+  --color-tone-2: #dbeafe;
+  --color-on-tone-2: #1e3a8a;
+  --color-tone-3: #fef3c7;
+  --color-on-tone-3: #78350f;
+  --color-tone-4: #dcfce7;
+  --color-on-tone-4: #14532d;
+  --color-tone-5: #e2e8f0;
+  --color-on-tone-5: #334155;
 
   /* ---- Status ----------------------------------------------------------
    * Never used alone: every status in the UI also carries an icon and a word.
@@ -91,8 +109,9 @@
    * Deliberately new names rather than overriding Tailwind's `--radius-*`
    * defaults: screens already shipped by other agents use `rounded-xl`, and
    * silently changing what that means would reshape their UI. */
-  --radius-control: 0.75rem; /* 12px — buttons, inputs, pills-with-corners */
-  --radius-card: 1rem; /* 16px — cards, banners, panels */
+  --radius-control: 0.875rem; /* 14px — buttons, inputs */
+  --radius-card: 1.25rem; /* 20px — cards, banners, panels */
+  --radius-tile: 0.875rem; /* 14px — the rounded square an icon sits in */
   --radius-sheet: 1.5rem; /* 24px — bottom sheets, modals */
   --radius-pill: 9999px;
 }
@@ -132,9 +151,9 @@
  */
 :root {
   --shadow-e0: none;
-  --shadow-e1: 0 1px 2px rgb(15 23 42 / 0.06), 0 1px 3px rgb(15 23 42 / 0.1);
-  --shadow-e2: 0 2px 4px rgb(15 23 42 / 0.06), 0 4px 8px rgb(15 23 42 / 0.1);
-  --shadow-e3: 0 8px 16px rgb(15 23 42 / 0.12), 0 2px 4px rgb(15 23 42 / 0.08);
+  --shadow-e1: 0 1px 2px rgb(15 23 42 / 0.04), 0 2px 8px rgb(15 23 42 / 0.06);
+  --shadow-e2: 0 2px 4px rgb(15 23 42 / 0.05), 0 6px 16px rgb(15 23 42 / 0.09);
+  --shadow-e3: 0 8px 24px rgb(15 23 42 / 0.14), 0 2px 6px rgb(15 23 42 / 0.08);
 
   --z-base: 0;
   --z-sticky: 100;
@@ -204,6 +223,7 @@
     --color-on-surface: #f1f5f9;
     --color-muted: #cbd5e1;
     --color-border: #3a4a5f;
+    --color-card-border: #3a4a5f;
     --color-border-strong: #94a3b8;
 
     --color-primary: #5eead4;
@@ -212,7 +232,18 @@
     --color-accent: #134e4a;
     --color-on-accent: #99f6e4;
 
-    --color-info: #93c5fd;
+    --color-tone-1: #134e4a;
+    --color-on-tone-1: #99f6e4;
+    --color-tone-2: #172554;
+    --color-on-tone-2: #bfdbfe;
+    --color-tone-3: #451a03;
+    --color-on-tone-3: #fde68a;
+    --color-tone-4: #052e16;
+    --color-on-tone-4: #bbf7d0;
+    --color-tone-5: #1e293b;
+    --color-on-tone-5: #cbd5e1;
+
+  --color-info: #93c5fd;
     --color-on-info: #0f172a;
     --color-info-surface: #172554;
     --color-on-info-surface: #dbeafe;
@@ -252,6 +283,7 @@
   --color-on-surface: #f1f5f9;
   --color-muted: #cbd5e1;
   --color-border: #3a4a5f;
+  --color-card-border: #3a4a5f;
   --color-border-strong: #94a3b8;
 
   --color-primary: #5eead4;
@@ -259,6 +291,17 @@
   --color-on-primary: #0f172a;
   --color-accent: #134e4a;
   --color-on-accent: #99f6e4;
+
+  --color-tone-1: #134e4a;
+  --color-on-tone-1: #99f6e4;
+  --color-tone-2: #172554;
+  --color-on-tone-2: #bfdbfe;
+  --color-tone-3: #451a03;
+  --color-on-tone-3: #fde68a;
+  --color-tone-4: #052e16;
+  --color-on-tone-4: #bbf7d0;
+  --color-tone-5: #1e293b;
+  --color-on-tone-5: #cbd5e1;
 
   --color-info: #93c5fd;
   --color-on-info: #0f172a;

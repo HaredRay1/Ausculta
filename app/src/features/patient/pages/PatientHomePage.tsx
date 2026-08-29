@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import {
+  Avatar,
   Card,
   ChevronRightIcon,
   DisclaimerBanner,
@@ -11,7 +12,9 @@ import {
   Section,
   StatusPill,
   MicIcon,
+  IconTile,
   type IconComponent,
+  type TileTone,
 } from '../../../components'
 import { PatientScreen, WhatAuscultaDoes } from '../components/PatientScreen'
 import { ReviewStatusLine } from '../components/Attribution'
@@ -69,11 +72,19 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
 
         return (
           <>
-            <header>
-              <h2 className="font-heading text-2xl font-bold text-on-surface">
-                {t('patient:home.greeting', { name: signedInName })}
-              </h2>
-              <p className="mt-1 text-base text-muted">{t('patient:home.subtitle', exampleCopy)}</p>
+            {/* The greeting leads with the person, because "is this me?" is a
+                real question on a shared clinic phone and every number below is
+                meaningless until it is answered. */}
+            <header className="flex items-start gap-3">
+              <Avatar name={signedInName} size="lg" />
+              <div className="min-w-0 flex-1">
+                <h2 className="font-heading text-[1.65rem] font-bold leading-tight text-on-surface">
+                  {t('patient:home.greeting', { name: signedInName })}
+                </h2>
+                <p className="mt-1 text-sm leading-snug text-muted">
+                  {t('patient:home.subtitle', exampleCopy)}
+                </p>
+              </div>
             </header>
 
             <Section
@@ -93,31 +104,31 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
 
             <Section title={t('patient:home.goToHeading')}>
               <ul className="flex flex-col gap-3">
-                <DestinationCard
+                <DestinationCard tone="tone-1"
                   to={PATIENT_PATHS.results}
                   icon={LungsIcon}
                   title={t('patient:home.quickResults', exampleCopy)}
                   body={t('patient:home.quickResultsBody', exampleCopy)}
                 />
-                <DestinationCard
+                <DestinationCard tone="tone-2"
                   to={PATIENT_PATHS.recordings}
                   icon={MicIcon}
                   title={t('patient:home.quickRecordings', exampleCopy)}
                   body={t('patient:home.quickRecordingsBody')}
                 />
-                <DestinationCard
+                <DestinationCard tone="tone-3"
                   to={PATIENT_PATHS.trends}
                   icon={RefreshIcon}
                   title={t('patient:home.quickTrends')}
                   body={t('patient:home.quickTrendsBody', exampleCopy)}
                 />
-                <DestinationCard
+                <DestinationCard tone="tone-4"
                   to={PATIENT_PATHS.history}
                   icon={PeopleIcon}
                   title={t('patient:home.quickHistory', exampleCopy)}
                   body={t('patient:home.quickHistoryBody', exampleCopy)}
                 />
-                <DestinationCard
+                <DestinationCard tone="tone-5"
                   to={PATIENT_PATHS.rehab}
                   icon={InboxIcon}
                   title={t('patient:home.quickRehab')}
@@ -199,22 +210,27 @@ function DestinationCard({
   icon: Icon,
   title,
   body,
+  tone = 'accent',
 }: {
   to: string
   icon: IconComponent
   title: string
   body: string
+  /** A different tint per destination, so the four are told apart at a glance. */
+  tone?: TileTone
 }) {
   return (
     <li>
       <Link
         to={to}
-        className="flex min-h-16 items-center gap-3 rounded-card border border-border bg-surface-raised p-4 text-on-surface elevation-1"
+        className="flex min-h-16 items-center gap-3 rounded-card border border-card-border bg-surface-raised p-3 text-on-surface transition-colors duration-150 ease-out elevation-1 active:bg-surface-sunken"
       >
-        <Icon className="size-7 shrink-0 text-primary" />
+        <IconTile tone={tone}>
+          <Icon className="size-6" />
+        </IconTile>
         <span className="min-w-0 flex-1">
-          <span className="block font-heading text-lg font-bold">{title}</span>
-          <span className="mt-0.5 block text-base text-muted">{body}</span>
+          <span className="block font-heading text-base font-bold">{title}</span>
+          <span className="mt-0.5 block text-sm leading-snug text-muted">{body}</span>
         </span>
         <ChevronRightIcon className="size-6 shrink-0 text-muted" />
       </Link>

@@ -56,7 +56,17 @@ export {
 } from './icons'
 
 /* ---- Primitives --------------------------------------------------------- */
+export {
+  Avatar,
+  initialsOf,
+  toneForName,
+  type AvatarProps,
+  type AvatarSize,
+} from './primitives/Avatar'
+export { IconTile, type IconTileProps, type TileSize, type TileTone } from './primitives/IconTile'
 export { Button, type ButtonProps, type ButtonSize, type ButtonVariant } from './primitives/Button'
+export { Chip, type ChipProps, type ChipTone } from './primitives/Chip'
+export { ListRow, type ListRowProps } from './primitives/ListRow'
 export { Card, type CardPadding, type CardProps } from './primitives/Card'
 export { Checkbox, type CheckboxProps } from './primitives/Checkbox'
 export {
@@ -82,6 +92,7 @@ export {
   type BottomNavProps,
 } from './layout/BottomNav'
 export { Page, Section, type PageProps, type SectionProps } from './layout/Page'
+export { PageHeader, type PageHeaderProps } from './layout/PageHeader'
 export { Sheet, type SheetProps, type SheetVariant } from './layout/Sheet'
 
 /* ---- Feedback ----------------------------------------------------------- */

@@ -36,7 +36,7 @@ export function Card({
   return (
     <Tag
       className={[
-        'rounded-card border border-border bg-surface-raised text-on-surface elevation-1',
+        'rounded-card border border-card-border bg-surface-raised text-on-surface elevation-1',
         PADDING[padding],
         className,
       ]
