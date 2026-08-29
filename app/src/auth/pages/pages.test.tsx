@@ -410,6 +410,34 @@ describe('UsersPage', () => {
     )
   })
 
+  it('offers to turn a disabled account back on, not to approve it again', async () => {
+    /**
+     * "Approve" is a first-time decision about a stranger. An account that was
+     * already approved and later switched off needs the word that pairs with
+     * the "Turn off" that switched it — an admin reading "Approve" under
+     * "Turned off" cannot tell whether they are restoring an account or
+     * re-running a decision they already made.
+     *
+     * This also catches the key existing at all. `action.turnOn` was referenced
+     * from UsersPage in one commit and added to the locale in the next, and the
+     * gap was invisible: an i18next key with no namespace prefix renders as
+     * itself, so the button read "turnOn" and every existing test still passed.
+     */
+    const admin = await signedInAdmin()
+    const doctor = await pendingPractitioner()
+    await auth.activateUser({ actingUserId: admin.id, targetUserId: doctor.id })
+    await auth.disableUser({ actingUserId: admin.id, targetUserId: doctor.id })
+
+    renderApp('/admin/users')
+    await screen.findByText('Dr Ricardo')
+
+    const restore = t('action.turnOn')
+    expect(restore).not.toBe('action.turnOn')
+    expect(restore).not.toBe('turnOn')
+    expect(screen.getByRole('button', { name: restore })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: t('action.activate') })).not.toBeInTheDocument()
+  })
+
   it('never offers the admin a way to turn off their own account', async () => {
     await signedInAdmin()
 
