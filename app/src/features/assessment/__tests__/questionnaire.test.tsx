@@ -289,7 +289,7 @@ describe('the vitals screen', () => {
   it('accepts an abnormal but real reading without arguing', () => {
     const props = renderVitals()
 
-    fireEvent.change(screen.getByLabelText(/oxygen saturation/i), { target: { value: '78' } })
+    fireEvent.change(screen.getByLabelText(/oxygen level/i), { target: { value: '78' } })
     fireEvent.click(screen.getByRole('button', { name: /^continue$/i }))
 
     expect(props.onContinue).toHaveBeenCalledTimes(1)
@@ -307,15 +307,15 @@ describe('the vitals screen', () => {
     // The SourceBadge wording, so a reviewer never has to guess whether a
     // person measured the number or the device produced it.
     expect(screen.queryByText(/typed in by a person/i)).not.toBeInTheDocument()
-    fireEvent.change(screen.getByLabelText(/oxygen saturation/i), { target: { value: '95' } })
+    fireEvent.change(screen.getByLabelText(/oxygen level/i), { target: { value: '95' } })
     expect(screen.getByText(/typed in by a person/i)).toBeInTheDocument()
   })
 
   it('offers no box for an auscultation-derived respiratory rate', () => {
     renderVitals()
 
-    expect(screen.getByLabelText(/respiratory rate \(manual\)/i)).toBeInTheDocument()
-    expect(screen.queryByLabelText(/auscultation-derived/i)).not.toBeInTheDocument()
+    expect(screen.getByLabelText(/breathing rate \(counted\)/i)).toBeInTheDocument()
+    expect(screen.queryByLabelText(/from the recording/i)).not.toBeInTheDocument()
   })
 })
 
