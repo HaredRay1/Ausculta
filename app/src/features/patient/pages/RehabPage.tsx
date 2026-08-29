@@ -8,6 +8,7 @@ import {
   InboxIcon,
   Section,
 } from '../../../components'
+import { MonitoringPlanCard } from '../components/MonitoringPlanCard'
 import { PatientScreen } from '../components/PatientScreen'
 import type { PatientRepository } from '../data/patientRepository'
 import { usePatientTranslation } from '../i18n'
@@ -33,7 +34,8 @@ export interface RehabPageProps {
 }
 
 export function RehabPage({ repository }: RehabPageProps) {
-  const { t } = usePatientTranslation()
+  const { t, i18n } = usePatientTranslation()
+  const language = i18n.language
   const navigate = useNavigate()
 
   return (
@@ -49,6 +51,16 @@ export function RehabPage({ repository }: RehabPageProps) {
               <p className="text-base text-on-surface">{t('patient:rehab.whatItIs', exampleCopyFor(overview.isFictional))}</p>
             </Card>
           </Section>
+
+          {/*
+            Above the exercises: what the practitioner has asked of you is the
+            thing you came here to find out, and it exists whether or not any
+            exercises have been assigned. Absent entirely when there is no
+            active plan -- the empty state below already says that honestly.
+          */}
+          {overview.monitoringPlan !== null && (
+            <MonitoringPlanCard plan={overview.monitoringPlan} language={language} />
+          )}
 
           {/*
             The safety page comes first and is reachable whether or not a

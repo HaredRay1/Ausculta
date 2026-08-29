@@ -2,6 +2,7 @@ import { db as defaultDb, type AuscultaDB } from '../../../db/db'
 import type { Assessment, ClinicalReview, Patient, Recording } from '../../../db/types'
 import { readDemoMode } from '../../demo/demoMode'
 import { resolveDemoStaff } from '../../demo/staff'
+import { PLAN_STATUSES, readPlanDetails, type MonitoringPlanDetails } from '../../monitoring/repository'
 import { isDemoRow } from '../../demo/visibility'
 import { summariseAssessment, type AssessmentSummary } from './resultView'
 
@@ -63,6 +64,14 @@ export interface PatientOverview {
   recordings: Recording[]
   /** Practitioner reviews, keyed by assessment id. */
   reviewsByAssessment: Record<string, ClinicalReview[]>
+  /**
+   * The patient's ACTIVE monitoring plan, or null.
+   *
+   * Approved plans only. A draft is the practitioner's working copy, and
+   * showing a patient an unapproved plan invites them to follow instructions
+   * nobody has agreed to yet.
+   */
+  monitoringPlan: MonitoringPlanDetails | null
   /** `true` when what is on screen is seeded fictional data. */
   isFictional: boolean
 }
@@ -86,6 +95,7 @@ export const EMPTY_OVERVIEW: PatientOverview = {
   assessmentsById: {},
   recordings: [],
   reviewsByAssessment: {},
+  monitoringPlan: null,
   isFictional: false,
 }
 
@@ -255,9 +265,17 @@ export function createPatientRepository(database: AuscultaDB = defaultDb): Patie
       // name it cannot resolve would print an internal identifier at a patient.
     }
 
+    // Reuses the monitoring feature's own parser rather than reading the
+    // stored shape a second way. A row this side cannot interpret is treated
+    // as no plan, which is inert -- the same as the practitioner screen.
+    const plans = await database.monitoringPlans.where('patientId').equals(patient.id).toArray()
+    const active = plans.find((plan) => plan.status === PLAN_STATUSES.ACTIVE)
+    const monitoringPlan = active === undefined ? null : readPlanDetails(active)
+
     return {
       source,
       patient,
+      monitoringPlan,
       staffById,
       summaries,
       assessmentsById,

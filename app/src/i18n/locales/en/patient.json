@@ -232,7 +232,28 @@
     "safetyAction": "What to do in an attack",
     "heading_example": "Breathing exercises from the practitioner in this example",
     "askNote_example": "If you would like a breathing plan of your own, ask your health worker or doctor at your next visit.",
-    "whatItIs_example": "Ausculta can carry a set of breathing exercises that a practitioner chooses for a patient. The exercises come from published guidance."
+    "whatItIs_example": "Ausculta can carry a set of breathing exercises that a practitioner chooses for a patient. The exercises come from published guidance.",
+    "plan": {
+      "heading": "What your practitioner has asked for",
+      "heading_example": "What the practitioner has asked for in this example",
+      "intro": "Your practitioner has asked for recordings to be taken regularly, so changes can be noticed early.",
+      "intro_example": "In this example, the practitioner has asked for recordings to be taken regularly.",
+      "everyDay": "Every day",
+      "everyNDays_one": "Every day",
+      "everyNDays_other": "Every {{count}} days",
+      "everyNWeeks_one": "Every week",
+      "everyNWeeks_other": "Every {{count}} weeks",
+      "howOften": "How often",
+      "wherePlural_one": "{{count}} place on the chest",
+      "wherePlural_other": "{{count}} places on the chest",
+      "where": "Where on the chest",
+      "from": "Starting",
+      "until": "Until",
+      "openEnded": "No end date has been set.",
+      "note": "What to watch for",
+      "whoToAsk": "A health worker takes these recordings for you. If you are not sure when your next one is due, ask at your clinic.",
+      "whoToAsk_example": "A health worker takes these recordings. This is an example, so nothing here is expected of you."
+    }
   },
   "shared": {
     "loading": "Loading your information…",
