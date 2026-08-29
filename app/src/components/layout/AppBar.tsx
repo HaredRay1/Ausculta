@@ -46,9 +46,22 @@ export function AppBar({ title, onBack, backLabel, action, subtitle }: AppBarPro
         )}
 
         <div className="min-w-0 flex-1 px-1">
-          <h1 className="truncate font-heading text-xl font-bold text-on-surface">{title}</h1>
+          {/*
+            Wraps rather than truncating, for the same reason BottomNav does.
+            The title is the primary orienting element on every screen, and
+            these were clipping in ENGLISH once the system font size is turned
+            up — "How to use Ausculta" and "What works in this version" both
+            lost their ends at 200%, which older users very often run. Filipino
+            is longer again and clips at normal size. A taller bar costs a few
+            pixels; a title you cannot read costs you the screen.
+            The subtitle is a patient name or a date, so it wraps too — half a
+            patient's name is worse than none.
+          */}
+          <h1 className="font-heading text-xl font-bold text-balance break-words text-on-surface">
+            {title}
+          </h1>
           {subtitle !== undefined && (
-            <p className="truncate text-sm text-muted">{subtitle}</p>
+            <p className="break-words text-sm text-muted">{subtitle}</p>
           )}
         </div>
 
