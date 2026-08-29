@@ -202,6 +202,22 @@ export const REHAB_ACTIVITY_CODES = {
   EXERCISE_WARM_UP: 'EXERCISE_WARM_UP',
 } as const
 
+/**
+ * How a researcher scored the model's prediction against a reference label.
+ *
+ * Here rather than inside the research feature because these values leave the
+ * device in the de-identified export, and anything that leaves belongs in the
+ * same registry as consent status — so the i18n exhaustiveness test polices it
+ * and its display strings live with every other clinical vocabulary.
+ */
+export const GROUND_TRUTH_STATUSES = {
+  CORRECT: 'CORRECT',
+  MODIFIED: 'MODIFIED',
+  INCORRECT: 'INCORRECT',
+  UNCERTAIN: 'UNCERTAIN',
+  NO_REFERENCE_AVAILABLE: 'NO_REFERENCE_AVAILABLE',
+} as const
+
 export const ALERT_STATUSES = {
   NEW: 'NEW',
   ACKNOWLEDGED: 'ACKNOWLEDGED',
@@ -230,6 +246,7 @@ export type RespiratoryHistoryCode =
   (typeof RESPIRATORY_HISTORY_CODES)[keyof typeof RESPIRATORY_HISTORY_CODES]
 export type FamilyHistoryCode = (typeof FAMILY_HISTORY_CODES)[keyof typeof FAMILY_HISTORY_CODES]
 export type RehabActivityCode = (typeof REHAB_ACTIVITY_CODES)[keyof typeof REHAB_ACTIVITY_CODES]
+export type GroundTruthStatus = (typeof GROUND_TRUTH_STATUSES)[keyof typeof GROUND_TRUTH_STATUSES]
 
 /**
  * Namespace key -> its code list. Drives the i18n exhaustiveness test: every
@@ -258,4 +275,5 @@ export const CODE_REGISTRY: Record<string, readonly string[]> = {
   respiratoryHistory: Object.values(RESPIRATORY_HISTORY_CODES),
   familyHistory: Object.values(FAMILY_HISTORY_CODES),
   rehabActivity: Object.values(REHAB_ACTIVITY_CODES),
+  groundTruth: Object.values(GROUND_TRUTH_STATUSES),
 }

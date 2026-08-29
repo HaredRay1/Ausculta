@@ -147,5 +147,12 @@
     "DIAPHRAGMATIC_BREATHING": "Belly breathing",
     "BREATHING_RELAXATION_RETRAINING": "Breathing and relaxation retraining",
     "EXERCISE_WARM_UP": "Warm-up before exercise"
+  },
+  "groundTruth": {
+    "CORRECT": "Model was correct",
+    "MODIFIED": "Model was partly correct",
+    "INCORRECT": "Model was incorrect",
+    "UNCERTAIN": "Cannot tell",
+    "NO_REFERENCE_AVAILABLE": "No reference available"
   }
 }
