@@ -204,7 +204,19 @@ export function ReportPage({ repository }: ReportPageProps = {}) {
 
         <article className="flex flex-col gap-4 text-on-surface">
           <header className="print-keep-together flex flex-col gap-2 border-b-2 border-on-surface pb-3">
-            <h1 className="font-heading text-xl font-bold">{t('review:report.title')}</h1>
+            {/*
+              The document title, on paper only.
+              The AppBar already carries this exact wording as the screen's
+              h1, so rendering it again here was one title twice, not two
+              documents — and a screen reader announced arriving at a second
+              document. On paper the AppBar is hidden, so this is the sheet's
+              only heading and an h1 is right; on screen `print-only` keeps it
+              out of the DOM's accessibility tree entirely, leaving exactly one
+              h1. One per medium, with neither medium compromised.
+            */}
+            <h1 className="print-only font-heading text-xl font-bold">
+              {t('review:report.title')}
+            </h1>
             <div className="flex flex-col gap-0.5">
               <Field label={t('review:report.patientLabel')} value={patient.name} />
               <Field label={t('review:report.studyId')} value={patient.studyId} />

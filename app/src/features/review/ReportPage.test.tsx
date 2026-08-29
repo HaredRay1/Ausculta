@@ -297,6 +297,23 @@ describe('ReportPage', () => {
     expect(screen.queryByText(/72%/)).not.toBeInTheDocument()
   })
 
+  it('exposes exactly one heading per medium, not two documents', async () => {
+    await seedCase({ reviewed: true })
+    const { container } = renderReport()
+    await screen.findByText(t('report.patientReported'))
+
+    // The AppBar and the sheet's document title carry the same words. Rendered
+    // together they announced arriving at a second document; the sheet's title
+    // is print-only, so on screen there is one h1 and on paper — where the
+    // AppBar is hidden — there is also one.
+    const headings = [...container.querySelectorAll('h1')]
+    const onScreen = headings.filter((h) => !h.classList.contains('print-only'))
+    const onPaper = headings.filter((h) => h.classList.contains('print-only'))
+
+    expect(onScreen).toHaveLength(1)
+    expect(onPaper).toHaveLength(1)
+  })
+
   it('keeps the print controls off the printed sheet', async () => {
     await seedCase({ reviewed: true })
     const { container } = renderReport()
