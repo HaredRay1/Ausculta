@@ -6,3 +6,5 @@ __pycache__/
 app/node_modules/
 app/dist/
 app/dev-dist/
+app/android/
+dist-apk/

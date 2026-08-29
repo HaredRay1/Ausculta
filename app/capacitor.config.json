@@ -1,0 +1,8 @@
+{
+  "appId": "ph.edu.ppcnshs.ausculta",
+  "appName": "Ausculta",
+  "webDir": "dist",
+  "android": {
+    "allowMixedContent": false
+  }
+}
