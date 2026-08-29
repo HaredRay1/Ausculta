@@ -1,0 +1,134 @@
+{
+  "list": {
+    "title": "Mga pasyente",
+    "searchLabel": "Maghanap sa pangalan o patient ID",
+    "searchHint": "Puwedeng itipa ang patient ID nang may gitling o wala.",
+    "register": "Magrehistro ng pasyente",
+    "count_one": "{{count}} pasyente",
+    "count_other": "{{count}} pasyente",
+    "empty": "Wala pang pasyente",
+    "emptyHint": "Lalabas dito ang mga pasyenteng irerehistro ninyo.",
+    "noResults": "Walang pasyenteng tumutugma",
+    "noResultsHint": "Tingnan ang baybay, o subukan ang unang ilang letra ng pangalan.",
+    "researcherBlocked": "Sa de-identified na datos nagtatrabaho ang mga researcher",
+    "researcherBlockedHint": "Hindi available sa role na ito ang listahan ng mga pasyenteng may pangalan. Gamitin ang research export.",
+    "loading": "Nilo-load ang mga pasyente"
+  },
+
+  "card": {
+    "age_one": "{{count}} taong gulang",
+    "age_other": "{{count}} taong gulang",
+    "ageUnknown": "Hindi alam ang edad",
+    "demo": "Panghalimbawang rekord"
+  },
+
+  "register": {
+    "title": "Magrehistro ng pasyente",
+    "demographics": "Tungkol sa pasyente",
+    "demographicsHint": "Pangalan, petsa ng kapanganakan at kasarian lang ang kailangan.",
+    "respiratory": "Kasaysayan ng paghinga",
+    "respiratoryHint": "Markahan ang anumang naranasan ng pasyente. Itanong nang malakas ang bawat tanong.",
+    "family": "Kasaysayan ng pamilya at kasambahay",
+    "familyHint": "Itanong ang tungkol sa mga kasama sa bahay ng pasyente, hindi lang ang mga kadugo.",
+    "askedAll": "Naitanong ko ang lahat ng tanong sa listahang ito",
+    "askedAllHint": "Markahan ito para ipakita ng rekord na ang mga hindi namarkahang tanong ay nasagot ng hindi, at hindi basta nilaktawan.",
+    "submit": "Irehistro ang pasyente",
+    "submitting": "Sine-save",
+    "cancel": "Kanselahin",
+    "draftRestored": "Ibinalik namin ang naitipa ninyo na.",
+    "draftDiscard": "Magsimula ulit",
+    "savedTitle": "Nairehistro ang pasyente",
+    "savedBody": "Ang patient ID ay {{id}}. Isulat ito sa form ng pasyente.",
+    "savedContinue": "Buksan ang rekord ng pasyente",
+    "savedAnother": "Magrehistro ng ibang pasyente",
+    "failed": "Hindi na-save ang pasyente. Walang nawala — subukan ulit.",
+    "fixErrors": "Tingnan ang mga naka-highlight na tanong bago mag-save."
+  },
+
+  "field": {
+    "name": "Buong pangalan",
+    "nameHint": "Gaya ng nakasulat sa sariling rekord ng pasyente.",
+    "birthDate": "Petsa ng kapanganakan",
+    "birthDateHint": "Taon, buwan at araw.",
+    "sex": "Kasarian",
+    "address": "Tirahan",
+    "addressHint": "Sapat na ang barangay at munisipyo.",
+    "contactHint": "Puwede ang numero ng kapitbahay kung wala ang pasyente.",
+    "optional": "opsyonal",
+    "yes": "Oo",
+    "no": "Hindi",
+    "notAsked": "Hindi tinanong"
+  },
+
+  "detail": {
+    "title": "Rekord ng pasyente",
+    "demographics": "Mga detalye",
+    "respiratory": "Kasaysayan ng paghinga",
+    "family": "Kasaysayan ng pamilya at kasambahay",
+    "account": "Login ng pasyente",
+    "studyIdHint": "Ginagamit sa pananaliksik. Walang personal na detalye rito.",
+    "registered": "Nairehistro noong {{date}}",
+    "noHistoryRecorded": "Walang naitalang kasaysayan ng paghinga",
+    "noFamilyRecorded": "Walang naitalang kasaysayan ng pamilya",
+    "notAskedNote": "Hindi tinanong ang mga tanong na wala sa listahang ito.",
+    "historyPresent": "Oo",
+    "historyAbsent": "Hindi",
+    "edit": "I-edit ang mga detalye",
+    "notFound": "Hindi nahanap ang pasyente",
+    "notFoundHint": "Maaaring pag-aari ito ng ibang health worker, o mali ang ID.",
+    "backToList": "Balik sa mga pasyente"
+  },
+
+  "care": {
+    "practitioners": "Mga practitioner",
+    "healthWorkers": "Mga health worker",
+    "none": "Wala pang naitatalaga",
+    "assign": "Magtalaga ng tao",
+    "unassign": "Alisin si {{name}}",
+    "assignPractitionerLabel": "I-refer sa practitioner",
+    "assignHint": "Makikita ng taong pipiliin ninyo ang pasyenteng ito sa sarili niyang listahan."
+  },
+
+  "account": {
+    "linked": "Naka-link sa login na {{username}}",
+    "notLinked": "Walang naka-link na login ng pasyente",
+    "notLinkedHint": "Mag-link ng account para makita ng pasyente ang sarili niyang mga resulta.",
+    "linkLabel": "Username ng pasyente",
+    "link": "I-link ang account",
+    "unlink": "I-unlink ang account"
+  },
+
+  "error": {
+    "NAME_REQUIRED": "Ilagay ang pangalan ng pasyente.",
+    "NAME_TOO_LONG": "Masyadong mahaba ang pangalang iyan.",
+    "BIRTH_DATE_REQUIRED": "Ilagay ang petsa ng kapanganakan.",
+    "BIRTH_DATE_MALFORMED": "Ilagay ang petsa bilang taon, buwan at araw.",
+    "BIRTH_DATE_NOT_A_REAL_DATE": "Walang ganyang petsa. Tingnan ang araw at buwan.",
+    "BIRTH_DATE_IN_FUTURE": "Hindi puwedeng nasa hinaharap ang petsa ng kapanganakan.",
+    "BIRTH_DATE_TOO_LONG_AGO": "Masyadong matagal na ang petsa ng kapanganakang iyan. Tingnan ang taon.",
+    "SEX_REQUIRED": "Pumili ng isa.",
+    "SEX_UNKNOWN_CODE": "Pumili sa mga pagpipilian.",
+    "ADDRESS_TOO_LONG": "Masyadong mahaba ang tirahang iyan.",
+    "CONTACT_TOO_LONG": "Masyadong mahaba ang contact number na iyan.",
+    "HISTORY_UNKNOWN_CODE": "Hindi namin nakikilala ang sagot na iyan.",
+    "HISTORY_DUPLICATE_CODE": "Dalawang beses nasagot ang tanong na iyan.",
+    "HISTORY_NOTES_TOO_LONG": "Masyadong mahaba ang notang iyan.",
+    "PATIENT_NOT_FOUND": "Hindi available sa inyo ang rekord ng pasyenteng iyan.",
+    "PATIENT_NOT_PERMITTED": "Wala kayong pahintulot na gawin iyan.",
+    "PATIENT_INVALID_DEMOGRAPHICS": "Tingnan ang mga detalye ng pasyente.",
+    "PATIENT_INVALID_HISTORY": "Tingnan ang mga sagot sa kasaysayan.",
+    "PATIENT_ID_COLLISION": "Hindi makagawa ng patient ID. Subukan ulit.",
+    "PATIENT_USER_NOT_FOUND": "Walang account na ganyan ang username.",
+    "PATIENT_USER_NOT_A_PATIENT": "Hindi patient account ang account na iyan.",
+    "PATIENT_USER_ALREADY_LINKED": "Naka-link na sa ibang pasyente ang account na iyan."
+  },
+
+  "auditAction": {
+    "PATIENT_CREATED": "Nairehistro ang pasyente",
+    "PATIENT_UPDATED": "Binago ang mga detalye ng pasyente",
+    "PATIENT_ASSIGNED": "Naitalaga ang pasyente",
+    "PATIENT_UNASSIGNED": "Inalis ang pagtatalaga ng pasyente",
+    "PATIENT_ACCOUNT_LINKED": "Na-link ang login ng pasyente",
+    "PATIENT_ACCOUNT_UNLINKED": "Na-unlink ang login ng pasyente"
+  }
+}

@@ -2,6 +2,7 @@ import type { i18n as I18nInstance } from 'i18next'
 import { useTranslation } from 'react-i18next'
 import { i18n as appI18n } from '../i18n'
 import enAuth from '../i18n/locales/en/auth.json'
+import filAuth from '../i18n/locales/fil/auth.json'
 
 /**
  * Registers the `auth` translation namespace on an i18next instance.
@@ -21,6 +22,13 @@ export const AUTH_NS = 'auth'
 export function registerAuthResources(instance: I18nInstance): I18nInstance {
   if (!instance.hasResourceBundle('en', AUTH_NS)) {
     instance.addResourceBundle('en', AUTH_NS, enAuth, true, true)
+  }
+  // Filipino is a DRAFT PENDING REVIEW. Nothing in this namespace is clinical,
+  // so it is translated in full apart from the few field labels that Philippine
+  // practice says in English anyway (username, password, patient ID); those are
+  // absent so i18next falls back to the English term people actually use.
+  if (!instance.hasResourceBundle('fil', AUTH_NS)) {
+    instance.addResourceBundle('fil', AUTH_NS, filAuth, true, true)
   }
   return instance
 }
