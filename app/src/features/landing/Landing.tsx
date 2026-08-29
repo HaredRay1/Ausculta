@@ -30,7 +30,13 @@ import {
  *
  * And the layout no longer uses `justify-between`, which on a tall phone pushed
  * several hundred pixels of nothing between the brand and the button. Content
- * flows from the top with a consistent rhythm and the page ends where it ends.
+ * flows from the top with a consistent rhythm.
+ *
+ * The rhythm is then tuned against a real 390x844 screenshot rather than
+ * guessed: at the roomier spacing the page ran about 915px and the fold cut
+ * straight through "Research prototype -- not a medical device". That line is
+ * the app's stated identity in the validation instruments, so it earns the
+ * ~70px this trim takes off the brand band, not the other way round.
  */
 
 interface SecondaryLink {
@@ -57,22 +63,32 @@ export function Landing() {
   const navigate = useNavigate()
 
   return (
-    <main className="min-h-dvh bg-surface pb-10">
+    <main className="min-h-dvh bg-surface pb-8">
       {/* The brand band: the mark at a size that reads as identity. */}
-      <section className="px-6 pb-10 pt-20 text-center">
-        <IconTile size="lg" className="mx-auto mb-5 size-24 rounded-[2rem]">
-          <LungsIcon className="size-14" />
-        </IconTile>
+      <section className="px-6 pb-6 pt-12 text-center">
+        {/*
+          The brand mark is drawn here rather than through IconTile on purpose.
+          Passing a size in className would have been overriding IconTile's own
+          size utility and relying on which one Tailwind happens to emit last --
+          the same trap the elevation utilities exist to avoid. This is a
+          one-off hero, not a list-row tile, so it owns its own box.
+        */}
+        <span
+          aria-hidden="true"
+          className="mx-auto mb-4 inline-flex size-20 items-center justify-center rounded-[1.75rem] bg-accent text-on-accent"
+        >
+          <LungsIcon className="size-12" />
+        </span>
         <h1 className="font-heading text-[2.1rem] font-bold uppercase tracking-[0.18em] text-on-surface">
           {t('appName')}
         </h1>
         <p className="mt-2 text-base font-medium text-primary">{t('tagline')}</p>
-        <p className="mx-auto mt-5 max-w-xs text-base leading-relaxed text-muted">
+        <p className="mx-auto mt-4 max-w-xs text-base leading-relaxed text-muted">
           {t('whatItIs')}
         </p>
       </section>
 
-      <div className="mx-auto flex w-full max-w-sm flex-col gap-5 px-5 pt-6">
+      <div className="mx-auto flex w-full max-w-sm flex-col gap-4 px-5">
         <Button variant="primary" size="lg" fullWidth onClick={() => navigate('/login')}>
           {t('getStarted')}
         </Button>

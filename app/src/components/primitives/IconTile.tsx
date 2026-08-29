@@ -14,12 +14,14 @@ import type { ReactNode } from 'react'
 
 export type TileTone = 'accent' | 'tone-1' | 'tone-2' | 'tone-3' | 'tone-4' | 'tone-5' | 'success' | 'warning' | 'danger'
 
-export type TileSize = 'sm' | 'md' | 'lg'
+export type TileSize = 'sm' | 'md' | 'lg' | 'xl'
 
 const SIZES: Record<TileSize, string> = {
   sm: 'size-9',
   md: 'size-11',
   lg: 'size-14',
+  // Room for the 40px glyphs the empty states and page headers already pass.
+  xl: 'size-16',
 }
 
 const TONES: Record<TileTone, string> = {
