@@ -56,27 +56,52 @@ export function ListRow({
    * shares its line now, at any width, so no future label can take it away.
    */
   const body = (
-    <div className="flex w-full items-start gap-3">
-      {leading !== undefined && <span className="mt-0.5 shrink-0">{leading}</span>}
+    <div className="flex w-full flex-col gap-2">
+      {/*
+        The chips and the footer span the CARD, not the text column.
+        Everything used to live inside the column indented past the avatar, so
+        at 360px they had 218px to share while two chips needed 309 — they could
+        not pack however the flex wrapped, and shorter wording could not have
+        fixed it. Only the identity block owes the avatar an indent.
+      */}
+      <div className="flex w-full items-start gap-3">
+        {leading !== undefined && <span className="mt-0.5 shrink-0">{leading}</span>}
 
-      <span className="min-w-0 flex-1 text-left">
-        <span className="block font-heading text-base font-bold text-on-surface">{title}</span>
+        <span className="min-w-0 flex-1 text-left">
+          {/*
+            The title owns its line. It used to share it with `trailing` as a
+            shrink-0 element, which is fine until the name is long and the phone
+            is 360px. Measured on a real capture: "Waiting 11 days" took its
+            natural width and left 78px for the name, so "Corazon Villaflor"
+            broke across two lines and "Rosalinda Mangubat" on the admin screen
+            shattered into "Rosalind / a / Manguba / t" — single characters
+            orphaned on their own lines. Filipino names are long and this is the
+            row a practitioner identifies a patient by, so that is not a rare
+            case, it is the common one.
 
-        {subtitle !== undefined && (
-          <span className="mt-0.5 block text-sm text-muted">{subtitle}</span>
+            `break-words` was not the culprit and forbidding it would only trade
+            a shattered name for one that overflows its card. The bug was giving
+            the primary identifier whatever width a secondary label left over.
+          */}
+          <span className="block font-heading text-base font-bold text-on-surface">{title}</span>
+
+          {subtitle !== undefined && (
+            <span className="mt-0.5 block text-sm text-muted">{subtitle}</span>
+          )}
+        </span>
+
+        {onClick !== undefined && (
+          <ChevronRightIcon className="mt-1 size-5 shrink-0 text-muted" />
         )}
-        {(detail !== undefined || trailing !== undefined) && (
-          <span className="mt-2 flex flex-wrap items-center gap-1.5">
-            {trailing}
-            {detail}
-          </span>
-        )}
-        {footer !== undefined && <span className="mt-2 block">{footer}</span>}
-      </span>
+      </div>
 
-      {onClick !== undefined && (
-        <ChevronRightIcon className="mt-1 size-5 shrink-0 text-muted" />
+      {(detail !== undefined || trailing !== undefined) && (
+        <span className="flex flex-wrap items-center gap-1.5">
+          {trailing}
+          {detail}
+        </span>
       )}
+      {footer !== undefined && <span className="block">{footer}</span>}
     </div>
   )
 

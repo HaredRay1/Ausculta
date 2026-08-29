@@ -173,6 +173,14 @@ function QueueRow({ item, onOpen }: { item: QueueItem; onOpen: () => void }) {
    * a count with no actor reads as the app's clinical opinion rather than as a
    * record of what it marked, and it is now the first thing in the sentence
    * rather than a trailing qualifier.
+   *
+   * That alone did not make them pack, and the second capture said why: the
+   * chips were living in the text column indented past the avatar, 218px wide,
+   * while the pair needed 309. No wording fits that. ListRow now spans the chip
+   * row across the whole card, and the remaining ~13px came out of the NEUTRAL
+   * chip — "6 places recorded" lost a word it could spare so that the flagged
+   * chip could keep every word of its attribution. When something has to give,
+   * it is not the one naming who made the finding.
    */
   return (
     <ListRow
