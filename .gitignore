@@ -8,3 +8,4 @@ app/dist/
 app/dev-dist/
 app/android/
 dist-apk/
+node_modules/
