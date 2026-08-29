@@ -105,7 +105,7 @@ function SafetyLink() {
   return (
     <Link
       to={REHAB_PATHS.safety}
-      className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-border-strong bg-surface-raised px-4 text-base font-semibold text-on-surface"
+      className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-border-strong bg-card px-4 text-base font-semibold text-on-surface"
     >
       <WarningIcon className="size-5 shrink-0" />
       {t('rehab:nav.safety')}

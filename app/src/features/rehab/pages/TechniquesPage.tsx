@@ -84,7 +84,7 @@ function SafetyLink() {
   return (
     <Link
       to={REHAB_PATHS.safety}
-      className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-border-strong bg-surface-raised px-4 text-base font-semibold text-on-surface"
+      className="inline-flex min-h-12 items-center gap-2 rounded-control border-2 border-border-strong bg-card px-4 text-base font-semibold text-on-surface"
     >
       <WarningIcon className="size-5 shrink-0" />
       {t('rehab:nav.safety')}
@@ -100,7 +100,7 @@ function TechniqueRow({ technique }: { technique: Technique }) {
     <li>
       <Link
         to={techniquePath(technique.code)}
-        className="flex min-h-16 items-start gap-3 rounded-card border border-border bg-surface-raised p-4 text-on-surface elevation-1"
+        className="flex min-h-16 items-start gap-3 rounded-card bg-card p-4 text-on-surface"
       >
         <span className="min-w-0 flex-1">
           <span className="block font-heading text-lg font-bold">

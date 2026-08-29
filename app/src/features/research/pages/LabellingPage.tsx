@@ -100,7 +100,7 @@ export function LabellingPage({ database = defaultDb }: { database?: AuscultaDB 
                         'flex w-full min-h-(--size-touch-min) items-center justify-between gap-3 rounded-control border px-4 py-3 text-left',
                         row.recording.id === selectedId
                           ? 'border-primary bg-accent text-on-accent'
-                          : 'border-border bg-surface-raised text-on-surface',
+                          : 'border-border bg-card text-on-surface',
                       ].join(' ')}
                     >
                       <span className="min-w-0">

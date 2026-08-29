@@ -29,7 +29,7 @@ export function PageHeader({ title, description, icon, action }: PageHeaderProps
       <div className="min-w-0 flex-1">
         {/* Large title, quiet subtitle: the screen gets a face, and the app bar
             above it stays chrome rather than competing. */}
-        <h2 className="font-heading text-[1.65rem] font-bold leading-tight text-on-surface">
+        <h2 className="font-heading text-headline font-bold leading-tight text-on-surface">
           {title}
         </h2>
         {description !== undefined && (

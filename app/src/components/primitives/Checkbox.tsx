@@ -55,7 +55,7 @@ export function Checkbox({
             onChange={(event) => onChange(event.target.checked)}
             aria-describedby={describedBy}
             aria-invalid={error !== undefined || undefined}
-            className="peer size-7 appearance-none rounded-md border-2 border-border-strong bg-surface-raised checked:border-primary-strong checked:bg-primary-strong disabled:bg-surface-sunken"
+            className="peer size-7 appearance-none rounded-md border-2 border-border-strong bg-card checked:border-primary-strong checked:bg-primary-strong disabled:bg-nested"
           />
           <CheckIcon
             className="pointer-events-none absolute inset-0 m-auto size-5 text-on-primary opacity-0 peer-checked:opacity-100"

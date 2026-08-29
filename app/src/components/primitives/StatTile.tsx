@@ -8,6 +8,16 @@ import type { ReactNode } from 'react'
  * glance. A number set large with a quiet label under it is scannable, and it
  * is what a health app looks like.
  *
+ * The value is 32px/700 against a 14px/600 label — 2.29:1, up from the 2.00:1
+ * that was the widest ratio anywhere in this app. 14px is the floor and it is
+ * test-enforced, so size alone cannot buy more than 4:1 here; the rest of the
+ * hierarchy comes from weight and colour, which is what the label's 600 and
+ * muted ink are doing.
+ *
+ * `tabular-nums` is not cosmetic. Figtree's digits are proportional by default
+ * and its `1` is 410 units against its `0` at 638 — a 1.56x spread that makes
+ * a three-digit value jump about 22px in width at this size as it changes.
+ *
  * THE ONLY NUMBERS ALLOWED HERE ARE ONES THE DATABASE ACTUALLY HOLDS — counts,
  * dates, durations. Setting a figure at 30px makes it look authoritative, which
  * is exactly why a fabricated one would be worse here than anywhere else in the
@@ -30,7 +40,7 @@ export function StatTile({ value, label, emptyText, icon, className = '' }: Stat
   return (
     <div
       className={[
-        'flex flex-col gap-1 rounded-card border border-card-border bg-surface-raised p-4 elevation-1',
+        'flex flex-col gap-1 rounded-card bg-card p-4',
         className,
       ]
         .filter(Boolean)
@@ -40,13 +50,13 @@ export function StatTile({ value, label, emptyText, icon, className = '' }: Stat
       <span
         className={
           hasValue
-            ? 'font-heading text-[1.75rem] font-bold leading-none tabular-nums text-on-surface'
-            : 'font-heading text-base font-semibold leading-tight text-muted'
+            ? 'font-heading text-stat tabular-nums text-on-surface'
+            : 'font-heading text-title-s text-muted'
         }
       >
         {hasValue ? value : emptyText}
       </span>
-      <span className="text-sm leading-snug text-muted">{label}</span>
+      <span className="text-label text-muted">{label}</span>
     </div>
   )
 }

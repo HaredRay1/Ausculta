@@ -236,7 +236,7 @@ function AnswerButton({
         'flex min-h-12 w-20 cursor-pointer items-center justify-center gap-1.5 rounded-control border-2 px-2',
         checked
           ? 'border-primary-strong bg-accent text-on-accent font-semibold'
-          : 'border-border-strong bg-surface-raised text-on-surface',
+          : 'border-border-strong bg-card text-on-surface',
       ].join(' ')}
     >
       <input

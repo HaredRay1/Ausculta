@@ -170,7 +170,7 @@ function PatientRow({ patient, onOpen }: { patient: Patient; onOpen: () => void 
       <button
         type="button"
         onClick={onOpen}
-        className="flex min-h-16 w-full flex-col items-start gap-1 px-4 py-3 text-left active:bg-surface-sunken"
+        className="flex min-h-16 w-full flex-col items-start gap-1 px-4 py-3 text-left active:bg-nested"
       >
         <span className="text-lg font-semibold text-on-surface">{patient.name}</span>
         <span className="text-sm text-muted">
@@ -204,7 +204,7 @@ function Tag({ tone, children }: { tone: 'neutral' | 'warning'; children: React.
   const className =
     tone === 'warning'
       ? 'bg-warning-surface text-on-warning-surface'
-      : 'bg-surface-sunken text-muted'
+      : 'bg-nested text-muted'
   return (
     <span className={`rounded-pill px-2.5 py-1 text-sm font-medium ${className}`}>{children}</span>
   )

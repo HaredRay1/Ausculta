@@ -167,7 +167,7 @@ export function AudioPlayer({ blob, label, durationSec, onError }: AudioPlayerPr
   const effectiveDuration = duration > 0 ? duration : (durationSec ?? 0)
 
   return (
-    <div className="flex flex-col gap-2 rounded-card border border-border bg-surface-raised p-3">
+    <div className="flex flex-col gap-2 rounded-card bg-card p-3">
       <audio
         ref={audioRef}
         src={url ?? undefined}
@@ -239,9 +239,9 @@ export function AudioPlayer({ blob, label, durationSec, onError }: AudioPlayerPr
         // A hairline scrubber is unusable one-handed. The track is 8px, the
         // thumb 28px, and the control reserves a 48px row to be hit in.
         className="h-12 w-full cursor-pointer appearance-none bg-transparent
-          [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-pill [&::-webkit-slider-runnable-track]:bg-surface-sunken
+          [&::-webkit-slider-runnable-track]:h-2 [&::-webkit-slider-runnable-track]:rounded-pill [&::-webkit-slider-runnable-track]:bg-nested
           [&::-webkit-slider-thumb]:mt-[-10px] [&::-webkit-slider-thumb]:size-7 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-pill [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-on-primary [&::-webkit-slider-thumb]:bg-primary-strong
-          [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-pill [&::-moz-range-track]:bg-surface-sunken
+          [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-pill [&::-moz-range-track]:bg-nested
           [&::-moz-range-thumb]:size-7 [&::-moz-range-thumb]:rounded-pill [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-on-primary [&::-moz-range-thumb]:bg-primary-strong
           disabled:cursor-not-allowed disabled:opacity-50"
       />

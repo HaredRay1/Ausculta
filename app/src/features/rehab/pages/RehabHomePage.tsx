@@ -60,7 +60,7 @@ export function RehabHomePage({ repository = defaultRepository }: RehabHomePageP
       <Section title={t('rehab:home.safetyFirstHeading')}>
         <Link
           to={REHAB_PATHS.safety}
-          className="flex min-h-16 items-start gap-3 rounded-card border-2 border-destructive bg-destructive-surface p-4 text-on-destructive-surface elevation-1"
+          className="flex min-h-16 items-start gap-3 rounded-card border-2 border-destructive bg-destructive-surface p-4 text-on-destructive-surface"
         >
           <DangerIcon className="mt-0.5 size-7 shrink-0" />
           <span className="min-w-0 flex-1">
@@ -133,7 +133,7 @@ function DestinationCard({
     <li>
       <Link
         to={to}
-        className="flex min-h-16 items-start gap-3 rounded-card border border-border bg-surface-raised p-4 text-on-surface elevation-1"
+        className="flex min-h-16 items-start gap-3 rounded-card bg-card p-4 text-on-surface"
       >
         <Icon className="mt-0.5 size-7 shrink-0 text-primary" />
         <span className="min-w-0 flex-1">
@@ -179,7 +179,7 @@ function AssignedActivities({
         action={
           <Link
             to={REHAB_PATHS.techniques}
-            className="inline-flex min-h-14 w-full items-center justify-center rounded-control border-2 border-border-strong bg-surface-raised px-5 text-lg font-semibold text-on-surface"
+            className="inline-flex min-h-14 w-full items-center justify-center rounded-control border-2 border-border-strong bg-card px-5 text-lg font-semibold text-on-surface"
           >
             {t('rehab:home.techniquesCardTitle')}
           </Link>

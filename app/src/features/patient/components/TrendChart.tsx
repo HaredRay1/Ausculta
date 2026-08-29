@@ -60,7 +60,7 @@ export function TrendChart({
         <p className="mt-0.5 text-sm text-muted">{description}</p>
       </figcaption>
 
-      <div className="rounded-card border border-border bg-surface-sunken p-3 text-primary">
+      <div className="rounded-card border border-border bg-nested p-3 text-primary">
         <svg
           aria-hidden="true"
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}

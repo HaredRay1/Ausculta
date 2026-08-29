@@ -50,7 +50,7 @@ export function AppBar({ title, onBack, backLabel, action, subtitle }: AppBarPro
             type="button"
             onClick={onBack}
             aria-label={backLabel ?? t('action.back')}
-            className="inline-flex size-12 shrink-0 items-center justify-center rounded-control text-on-surface active:bg-surface-sunken"
+            className="inline-flex size-12 shrink-0 items-center justify-center rounded-control text-on-surface active:bg-nested"
           >
             <ChevronLeftIcon />
           </button>

@@ -65,11 +65,11 @@ export function Landing() {
   const navigate = useNavigate()
 
   return (
-    <main className="min-h-dvh bg-surface pb-8">
+    <main className="min-h-dvh bg-page pb-8">
       {/* The brand band: the mark at a size that reads as identity. */}
       <section className="px-6 pb-6 pt-12 text-center">
         <BrandMark className="mx-auto mb-4" />
-        <h1 className="font-heading text-[2.1rem] font-bold uppercase tracking-[0.18em] text-on-surface">
+        <h1 className="font-heading text-display-m uppercase tracking-[0.18em] text-on-surface">
           {t('appName')}
         </h1>
         <p className="mt-2 text-base font-medium text-primary">{t('tagline')}</p>
@@ -112,7 +112,7 @@ export function Landing() {
                 <button
                   type="button"
                   onClick={() => navigate(to)}
-                  className="flex min-h-14 w-full items-center gap-3 rounded-card border border-card-border bg-surface-raised px-3 text-left transition-colors duration-150 ease-out elevation-1 active:bg-surface-sunken"
+                  className="flex min-h-14 w-full items-center gap-3 rounded-card bg-card px-3 text-left transition-colors duration-150 ease-out active:bg-nested"
                 >
                   <IconTile size="sm" tone={tone}>
                     <Icon className="size-5" />

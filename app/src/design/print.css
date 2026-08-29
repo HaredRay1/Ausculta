@@ -34,9 +34,18 @@
     color-scheme: light;
 
     --color-surface: #ffffff;
-    --color-surface-raised: #ffffff;
-    --color-surface-sunken: #ffffff;
-    --color-surface-well: #ffffff;
+    --color-page: #ffffff;
+    --color-card: #ffffff;
+    --color-nested: #ffffff;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #ffffff;
+    --color-surface-container: #ffffff;
+    --color-surface-container-high: #ffffff;
+    --color-surface-container-highest: #ffffff;
+    /* The sample label must survive a tired toner cartridge, so on paper it is
+     * black on white with its border doing the work its fill does on screen. */
+    --color-sample: #ffffff;
+    --color-on-sample: #000000;
     --color-on-surface: #000000;
     --color-muted: #000000;
     --color-border: #000000;

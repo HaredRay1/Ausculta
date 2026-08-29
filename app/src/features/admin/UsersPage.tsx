@@ -123,7 +123,7 @@ export function UsersPage() {
                   return (
                     <li
                       key={row.id}
-                      className="flex flex-col gap-3 rounded-card border border-card-border bg-surface-raised p-4 elevation-1"
+                      className="flex flex-col gap-3 rounded-card bg-card p-4"
                     >
                       <div className="flex items-start gap-3">
                         <Avatar name={row.name} />
@@ -350,7 +350,7 @@ function ResetPasswordForm({
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl bg-surface-sunken p-4" noValidate>
+    <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl bg-nested p-4" noValidate>
       <PasswordField
         label={t('users.resetPasswordFor', { name })}
         hint={t('field.passwordHint')}

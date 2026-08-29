@@ -64,7 +64,7 @@ export function MenuPage() {
               <button
                 type="button"
                 onClick={() => navigate(link.path)}
-                className="flex min-h-14 w-full items-center justify-between gap-3 rounded-control border-2 border-border bg-surface-raised px-4 py-2 text-left text-base font-medium text-on-surface"
+                className="flex min-h-14 w-full items-center justify-between gap-3 rounded-control border-2 border-border bg-card px-4 py-2 text-left text-base font-medium text-on-surface"
               >
                 {t(link.labelKey)}
                 <ChevronRightIcon className="size-5 shrink-0 text-muted" />

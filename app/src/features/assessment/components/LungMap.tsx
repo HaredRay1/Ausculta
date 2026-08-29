@@ -86,7 +86,7 @@ export function LungMap({ recorded, onChoose }: LungMapProps) {
       'rounded-pill border-2 font-heading text-lg font-bold',
       isRecorded
         ? 'border-success bg-success text-on-success'
-        : 'border-primary bg-surface-raised text-primary',
+        : 'border-primary bg-card text-primary',
     ].join(' ')
 
   const markerStyle = (code: LocationCode) => ({
@@ -147,7 +147,7 @@ export function LungMap({ recorded, onChoose }: LungMapProps) {
                 type="button"
                 onClick={() => onChoose(code)}
                 aria-label={`${label(code)} — ${statusLabel(isRecorded)}`}
-                className="flex min-h-12 w-full items-center justify-between gap-3 rounded-control border-2 border-border bg-surface-raised px-4 py-2 text-left text-on-surface"
+                className="flex min-h-12 w-full items-center justify-between gap-3 rounded-control border-2 border-border bg-card px-4 py-2 text-left text-on-surface"
               >
                 <span className="text-base font-medium">{label(code)}</span>
                 <span

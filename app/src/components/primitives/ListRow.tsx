@@ -83,10 +83,10 @@ export function ListRow({
             a shattered name for one that overflows its card. The bug was giving
             the primary identifier whatever width a secondary label left over.
           */}
-          <span className="block font-heading text-base font-bold text-on-surface">{title}</span>
+          <span className="block font-heading text-title-s text-on-surface">{title}</span>
 
           {subtitle !== undefined && (
-            <span className="mt-0.5 block text-sm text-muted">{subtitle}</span>
+            <span className="mt-0.5 block text-body-s text-muted">{subtitle}</span>
           )}
         </span>
 
@@ -107,7 +107,7 @@ export function ListRow({
 
   if (onClick === undefined) {
     return (
-      <div className="rounded-card border border-card-border bg-surface-raised p-3 elevation-1">
+      <div className="rounded-card bg-card p-3">
         {body}
       </div>
     )
@@ -117,7 +117,7 @@ export function ListRow({
     <button
       type="button"
       onClick={onClick}
-      className="w-full rounded-card border border-card-border bg-surface-raised p-3 text-left transition-colors duration-150 ease-out elevation-1 active:bg-surface-sunken"
+      className="w-full rounded-card bg-card p-3 text-left transition-colors duration-150 ease-out active:bg-nested"
     >
       {body}
     </button>

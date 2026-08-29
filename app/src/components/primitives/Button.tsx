@@ -18,7 +18,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 const VARIANTS: Record<ButtonVariant, string> = {
   // Filled with the darkened teal so white sits on it at 7.6:1, not 5.5:1.
   primary: 'bg-primary-strong text-on-primary border-2 border-transparent active:opacity-90',
-  secondary: 'bg-surface-raised text-on-surface border-2 border-border-strong active:bg-surface-sunken',
+  secondary: 'bg-card text-on-surface border-2 border-border-strong active:bg-nested',
   ghost: 'bg-transparent text-primary border-2 border-transparent active:bg-accent',
   destructive:
     'bg-destructive text-on-destructive border-2 border-transparent active:opacity-90',

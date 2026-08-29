@@ -61,7 +61,7 @@ export function MonitoringPlanCard({
           {plan.locationCodes.map((code) => (
             <li
               key={code}
-              className="rounded-pill bg-surface-sunken px-3 py-1 text-sm text-on-surface"
+              className="rounded-pill bg-nested px-3 py-1 text-sm text-on-surface"
             >
               {t(`codes:location.${code}`)}
             </li>

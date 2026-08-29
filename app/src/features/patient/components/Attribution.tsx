@@ -50,7 +50,7 @@ export function AiAttribution({ children }: AttributionBlockProps) {
         </div>
       </div>
 
-      <p className="mt-3 rounded-control border border-border-strong bg-surface-sunken p-3 text-base text-on-surface">
+      <p className="mt-3 rounded-control border border-border-strong bg-nested p-3 text-base text-on-surface">
         {t('patient:review.aiCaveat')}
       </p>
 
@@ -119,7 +119,7 @@ export function PractitionerAttribution({
         </div>
       </div>
 
-      <p className="mt-3 rounded-control border border-border-strong bg-surface-sunken p-3 text-base text-on-surface">
+      <p className="mt-3 rounded-control border border-border-strong bg-nested p-3 text-base text-on-surface">
         {t('patient:review.practitionerCaveat', exampleCopy)}
       </p>
 

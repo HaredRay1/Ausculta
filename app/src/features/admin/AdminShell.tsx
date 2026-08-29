@@ -41,7 +41,7 @@ export function AdminShell({ activeId, title, subtitle, children }: AdminShellPr
                     'inline-flex min-h-12 items-center rounded-control border-2 px-4 text-base',
                     active
                       ? 'border-primary-strong bg-accent font-bold text-on-accent'
-                      : 'border-border-strong bg-surface-raised font-medium text-on-surface',
+                      : 'border-border-strong bg-card font-medium text-on-surface',
                   ].join(' ')}
                 >
                   {t(entry.labelKey)}

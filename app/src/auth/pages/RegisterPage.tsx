@@ -146,7 +146,7 @@ export function RegisterPage() {
                 className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-3 ${
                   selected
                     ? 'border-primary-strong bg-accent text-on-accent'
-                    : 'border-border-strong bg-surface-raised text-on-surface'
+                    : 'border-border-strong bg-card text-on-surface'
                 }`}
               >
                 <input

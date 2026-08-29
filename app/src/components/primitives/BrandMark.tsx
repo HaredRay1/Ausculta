@@ -3,8 +3,8 @@ import { LungsIcon } from '../icons'
 export type BrandMarkSize = 'md' | 'lg'
 
 const SIZES: Record<BrandMarkSize, { box: string; radius: string; glyph: string }> = {
-  md: { box: 'size-14', radius: 'rounded-[1.25rem]', glyph: 'size-8' },
-  lg: { box: 'size-20', radius: 'rounded-[1.75rem]', glyph: 'size-12' },
+  md: { box: 'size-14', radius: 'rounded-card', glyph: 'size-8' },
+  lg: { box: 'size-20', radius: 'rounded-hero', glyph: 'size-12' },
 }
 
 export interface BrandMarkProps {
@@ -19,6 +19,10 @@ export interface BrandMarkProps {
  * size utility overriding another and working only because of which one
  * Tailwind happens to emit last, the same trap the elevation utilities exist to
  * avoid. This owns its own box.
+ *
+ * Its corners come off the shape scale rather than being arbitrary rem values.
+ * 20 at 56px and 28 at 80px both satisfy `inner = outer − padding` against the
+ * glyph they hold, which is why they look concentric rather than nearly so.
  *
  * It exists because the sign-in screens had no identity on them at all. Coming
  * off a landing page that leads with a large mark and a wordmark, "Sign in"

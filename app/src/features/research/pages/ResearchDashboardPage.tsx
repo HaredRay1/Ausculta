@@ -119,7 +119,7 @@ function NavRow({ to, label }: { to: string; label: string }) {
   return (
     <Link
       to={to}
-      className="flex min-h-(--size-touch-min) items-center justify-between rounded-control border border-border bg-surface-raised px-4 py-3 text-base text-on-surface elevation-1"
+      className="flex min-h-(--size-touch-min) items-center justify-between rounded-control bg-card px-4 py-3 text-base text-on-surface"
     >
       {label}
       <ChevronRightIcon className="size-5 text-muted" />

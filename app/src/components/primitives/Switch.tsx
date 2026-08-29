@@ -42,7 +42,7 @@ export function Switch({ label, checked, onChange, hint, disabled, id }: SwitchP
             'relative inline-flex h-8 w-14 shrink-0 items-center rounded-pill border-2 transition-colors',
             checked
               ? 'border-primary-strong bg-primary-strong'
-              : 'border-border-strong bg-surface-sunken',
+              : 'border-border-strong bg-nested',
             disabled === true ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
           ].join(' ')}
         >

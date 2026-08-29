@@ -61,7 +61,7 @@ export function CaptureStep({
             accept="audio/wav,audio/x-wav,.wav"
             onChange={onChange}
             disabled={busy}
-            className="min-h-12 w-full rounded-control border-2 border-border-strong bg-surface-raised px-3 py-2 text-base text-on-surface"
+            className="min-h-12 w-full rounded-control border-2 border-border-strong bg-card px-3 py-2 text-base text-on-surface"
           />
           <p className="text-sm text-muted">{t('capture.hint')}</p>
           {fileName !== null && importErrorKey === null && (

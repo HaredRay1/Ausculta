@@ -23,7 +23,7 @@ export function GuideFigure({ src, alt, caption, eyebrow }: GuideFigureProps) {
       {eyebrow !== undefined && (
         <span className="text-sm font-semibold text-muted uppercase tracking-wide">{eyebrow}</span>
       )}
-      <div className="flex justify-center rounded-card border border-border bg-surface-raised p-3">
+      <div className="flex justify-center rounded-card bg-card p-3">
         <img src={src} alt={alt} className="h-auto w-full max-w-xs" />
       </div>
       <figcaption className="text-base leading-relaxed text-on-surface">{caption}</figcaption>

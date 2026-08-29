@@ -20,11 +20,18 @@ const PADDING: Record<CardPadding, string> = {
 }
 
 /**
- * A raised container.
+ * A card.
  *
- * Carries a real border rather than leaning on the shadow: in bright daylight
- * on a phone, a soft shadow is effectively invisible and the card edge
- * disappears with it.
+ * No border and no shadow, which is the single change that most separates a
+ * 2025 interface from a 2018 one. Both used to be here for a good reason — a
+ * white card on a near-white page is 1.063:1, and in daylight the edge simply
+ * goes, so a border was holding it together.
+ *
+ * The tonal ladder solves it properly instead. The card sits three tiers off
+ * its page (1.166:1 light, 1.295:1 dark), which is separation the surface
+ * itself provides, so the border and the shadow have nothing left to do. An
+ * ordinary card does not float and should not pretend to; `elevation-1` is
+ * kept for the things that genuinely do — sheets, the FAB, a scrolled app bar.
  */
 export function Card({
   children,
@@ -36,7 +43,7 @@ export function Card({
   return (
     <Tag
       className={[
-        'rounded-card border border-card-border bg-surface-raised text-on-surface elevation-1',
+        'rounded-card bg-card text-on-surface',
         PADDING[padding],
         className,
       ]

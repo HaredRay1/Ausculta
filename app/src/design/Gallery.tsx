@@ -114,8 +114,10 @@ export function Gallery() {
           <Section title="Colour tokens" description="Every colour in the system, both themes.">
             <div className="grid grid-cols-3 gap-3">
               <Swatch token="--color-surface" label="surface" />
-              <Swatch token="--color-surface-raised" label="surface-raised" />
-              <Swatch token="--color-surface-sunken" label="surface-sunken" />
+              <Swatch token="--color-page" label="page" />
+              <Swatch token="--color-card" label="card" />
+              <Swatch token="--color-nested" label="nested" />
+              <Swatch token="--color-sample" label="sample" />
               <Swatch token="--color-on-surface" label="on-surface" />
               <Swatch token="--color-muted" label="muted" />
               <Swatch token="--color-border" label="border" />

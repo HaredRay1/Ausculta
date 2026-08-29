@@ -33,7 +33,7 @@ export function NotConnectedPanel({ title, body }: NotConnectedPanelProps) {
     <section
       role="note"
       aria-label={`${title}: ${t('notConnected.label')}`}
-      className="flex flex-col gap-3 rounded-card border-2 border-dashed border-border-strong bg-surface-sunken p-4 text-muted"
+      className="flex flex-col gap-3 rounded-card border-2 border-dashed border-border-strong bg-nested p-4 text-muted"
     >
       <div className="flex items-start gap-3">
         <UnavailableIcon className="mt-0.5 size-7 shrink-0" />

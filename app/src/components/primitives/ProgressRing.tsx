@@ -48,7 +48,7 @@ export function ProgressRing({ value, max, label, size = 88 }: ProgressRingProps
           r={radius}
           fill="none"
           strokeWidth={7}
-          className="stroke-surface-sunken"
+          className="stroke-nested"
         />
         <circle
           cx={size / 2}

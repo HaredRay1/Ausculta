@@ -92,7 +92,7 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
             <header className="flex items-start gap-3">
               <Avatar name={signedInName} size="lg" />
               <div className="min-w-0 flex-1">
-                <h2 className="font-heading text-[1.65rem] font-bold leading-tight text-on-surface">
+                <h2 className="font-heading text-headline text-on-surface">
                   {t('patient:home.greeting', { name: signedInName })}
                 </h2>
                 <p className="mt-1 text-sm leading-snug text-muted">
@@ -139,7 +139,7 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
               </div>
 
               {latest !== undefined && (
-                <div className="flex items-center gap-4 rounded-card border border-card-border bg-surface-raised p-4 elevation-1">
+                <div className="flex items-center gap-4 rounded-card bg-card p-4">
                   <ProgressRing
                     value={latest.recordedCount}
                     max={ALL_CHEST_PLACES}
@@ -273,7 +273,7 @@ function DestinationCard({
     <li>
       <Link
         to={to}
-        className="flex min-h-16 items-center gap-3 rounded-card border border-card-border bg-surface-raised p-3 text-on-surface transition-colors duration-150 ease-out elevation-1 active:bg-surface-sunken"
+        className="flex min-h-16 items-center gap-3 rounded-card bg-card p-3 text-on-surface transition-colors duration-150 ease-out active:bg-nested"
       >
         <IconTile tone={tone}>
           <Icon className="size-6" />

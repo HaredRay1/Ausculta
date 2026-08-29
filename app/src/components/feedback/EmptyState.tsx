@@ -34,7 +34,7 @@ export interface EmptyStateProps {
  */
 export function EmptyState({ title, body, icon, action }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center gap-4 rounded-card border border-card-border bg-surface-raised px-6 py-12 text-center elevation-1">
+    <div className="flex flex-col items-center gap-4 rounded-card bg-card px-6 py-12 text-center">
       <IconTile size="xl" tone="tone-5">
         {icon ?? <InboxIcon className="size-8" />}
       </IconTile>
@@ -55,9 +55,9 @@ export function EmptyState({ title, body, icon, action }: EmptyStateProps) {
         the one string somebody happened to look at, and it degrades to normal
         wrapping on a browser that lacks it.
       */}
-      <h2 className="text-balance font-heading text-xl font-bold text-on-surface">{title}</h2>
+      <h2 className="text-balance font-heading text-title-l text-on-surface">{title}</h2>
       {body !== undefined && (
-        <p className="max-w-sm text-pretty text-base leading-relaxed text-muted">{body}</p>
+        <p className="max-w-sm text-pretty text-body text-muted">{body}</p>
       )}
       {action !== undefined && <div className="mt-1 w-full max-w-xs">{action}</div>}
     </div>

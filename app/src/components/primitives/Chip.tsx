@@ -12,7 +12,7 @@ import type { ReactNode } from 'react'
 export type ChipTone = 'neutral' | 'accent' | 'success' | 'warning' | 'danger'
 
 const TONES: Record<ChipTone, string> = {
-  neutral: 'bg-surface-sunken text-muted border-border',
+  neutral: 'bg-nested text-muted border-border',
   accent: 'bg-accent text-on-accent border-transparent',
   success: 'bg-success-surface text-on-success-surface border-success/40',
   warning: 'bg-warning-surface text-on-warning-surface border-warning/40',
@@ -31,7 +31,7 @@ export function Chip({ children, tone = 'neutral', icon, className = '' }: ChipP
   return (
     <span
       className={[
-        'inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 text-sm font-medium',
+        'inline-flex items-center gap-1.5 rounded-pill border px-2.5 py-1 text-label',
         TONES[tone],
         className,
       ]

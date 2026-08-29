@@ -62,12 +62,12 @@ export const VERDICT_PRESENTATION: Record<ResultVerdict, VerdictPresentation> = 
   },
   [RESULT_VERDICTS.UNCERTAIN]: {
     icon: QuestionIcon,
-    surface: 'bg-surface-sunken text-on-surface border-border-strong',
+    surface: 'bg-nested text-on-surface border-border-strong',
     iconClass: 'text-muted',
   },
   [RESULT_VERDICTS.INSUFFICIENT_QUALITY]: {
     icon: MicIcon,
-    surface: 'bg-surface-sunken text-on-surface border-border-strong',
+    surface: 'bg-nested text-on-surface border-border-strong',
     iconClass: 'text-muted',
   },
 }

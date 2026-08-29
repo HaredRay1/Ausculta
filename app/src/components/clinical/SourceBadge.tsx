@@ -45,7 +45,7 @@ export function SourceBadge({ source, className = '' }: SourceBadgeProps) {
   return (
     <span
       className={[
-        'inline-flex items-center gap-1.5 rounded-pill border border-border bg-surface-sunken px-2.5 py-1 text-sm text-muted',
+        'inline-flex items-center gap-1.5 rounded-pill border border-border bg-nested px-2.5 py-1 text-sm text-muted',
         className,
       ]
         .filter(Boolean)

@@ -137,9 +137,9 @@ export function FieldShell({
  */
 export function controlClassName(hasError: boolean, extra = ''): string {
   return [
-    'w-full min-h-14 rounded-control border-2 bg-surface-raised px-4 py-3',
+    'w-full min-h-14 rounded-control border-2 bg-card px-4 py-3',
     'text-lg text-on-surface placeholder:text-muted',
-    'disabled:cursor-not-allowed disabled:bg-surface-sunken disabled:text-muted',
+    'disabled:cursor-not-allowed disabled:bg-nested disabled:text-muted',
     hasError ? 'border-destructive' : 'border-border-strong',
     extra,
   ]

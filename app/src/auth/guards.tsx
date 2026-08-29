@@ -35,7 +35,7 @@ function CheckingSession() {
   const { t } = useAuthTranslation()
   return (
     <main
-      className="flex min-h-dvh items-center justify-center bg-surface-raised px-6 text-center"
+      className="flex min-h-dvh items-center justify-center bg-card px-6 text-center"
       aria-busy="true"
     >
       <p className="text-lg text-muted">{t('guard.checking')}</p>
@@ -46,7 +46,7 @@ function CheckingSession() {
 function NotAuthorised() {
   const { t } = useAuthTranslation()
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-surface-raised px-6 text-center">
+    <main className="flex min-h-dvh items-center justify-center bg-card px-6 text-center">
       <p className="text-lg font-medium text-on-surface">{t('error.NOT_AUTHORISED')}</p>
     </main>
   )

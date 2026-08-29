@@ -22,7 +22,7 @@ export function Skeleton({ className = 'h-5 w-full', lines = 1 }: SkeletonProps)
         <span
           key={index}
           aria-hidden="true"
-          className={`block animate-pulse rounded-control bg-surface-sunken ${className}`}
+          className={`block animate-pulse rounded-control bg-nested ${className}`}
         />
       ))}
     </>

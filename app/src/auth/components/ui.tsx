@@ -69,11 +69,10 @@ export function PrimaryButton({
  * carry no app bar or bottom nav, so they centre a narrow column instead of
  * reserving space for chrome that is not there.
  *
- * The page sits on `surface-well` rather than the ordinary page colour, so its
- * one white card has a 1.13 tint step under it instead of 1.06. Everywhere else
- * a card has neighbours and chrome to establish that it is a card; here it is
- * the only object on the screen, and if the step is lost in daylight on a cheap
- * LCD the form is just fields floating on a background. See tokens.css.
+ * The one-off `surface-well` this screen used to sit on is gone, and it is not
+ * a loss: it existed because a white card on a near-white page was 1.063:1 and
+ * a lone card had nothing else to establish it. The ladder gives every card
+ * three tiers of separation, so the exception has nothing left to fix.
  *
  * The mark and the card were added after looking at the screens rather than the
  * code. Sign-in was a bare title on an empty canvas, which is a jarring drop
@@ -96,7 +95,7 @@ export function AuthScreen({
 }) {
   return (
     <main
-      className="min-h-dvh bg-surface-well px-5 py-8 text-on-surface"
+      className="min-h-dvh bg-page px-5 py-8 text-on-surface"
       style={{
         paddingTop: 'calc(env(safe-area-inset-top) + 2rem)',
         paddingBottom: 'calc(env(safe-area-inset-bottom) + 2rem)',
@@ -112,7 +111,7 @@ export function AuthScreen({
             <p className="text-pretty text-base text-muted">{subtitle}</p>
           )}
         </header>
-        <div className="rounded-card border border-card-border bg-surface-raised p-5 elevation-1">
+        <div className="rounded-card bg-card p-5">
           {children}
         </div>
         {footer !== undefined && <footer className="text-center">{footer}</footer>}

@@ -145,7 +145,7 @@ export function Sheet({
         aria-modal="true"
         aria-labelledby={titleId}
         tabIndex={-1}
-        className={`${panelPosition} flex flex-col overflow-hidden border border-border bg-surface-raised text-on-surface elevation-3`}
+        className={`${panelPosition} flex flex-col overflow-hidden border border-border bg-card text-on-surface elevation-3`}
       >
         <div className="flex items-start justify-between gap-3 border-b border-border p-4">
           <h2 id={titleId} className="font-heading text-xl font-bold text-on-surface">
@@ -155,7 +155,7 @@ export function Sheet({
             type="button"
             onClick={onClose}
             aria-label={t('action.close')}
-            className="-m-1 inline-flex size-12 shrink-0 items-center justify-center rounded-control text-on-surface active:bg-surface-sunken"
+            className="-m-1 inline-flex size-12 shrink-0 items-center justify-center rounded-control text-on-surface active:bg-nested"
           >
             <CloseIcon />
           </button>

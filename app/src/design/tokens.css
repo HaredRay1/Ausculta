@@ -30,24 +30,65 @@
     Arial, sans-serif;
 
   /* ---- Surfaces and ink (light) ---------------------------------------- */
-  --color-surface: #f7f8fa;
-  --color-surface-raised: #ffffff;
-  --color-surface-sunken: #eef1f4;
-  /* The ground under a screen whose whole content is ONE card — sign-in,
-   * registration, first-run setup.
+  /* ---- The surface ladder ----------------------------------------------
+   * Six tonal tiers, one ink. This replaces separating a card from its page
+   * with a border and a shadow — the thing that most dates an interface.
    *
-   * A white card on the ordinary page is a 1.06 tint step, which reads fine on
-   * this display and is the first thing a cheap LCD loses in daylight. Anywhere
-   * else that hardly matters: there are neighbouring cards, chrome and content
-   * establishing the language. On sign-in the card is the only object on the
-   * screen, so if the step is lost the form is just fields floating on a page.
-   * Deepening the well takes it to 1.13, which is what dark already has.
+   * THE RULE THAT MAKES IT WORK, and it is counter-intuitive: adjacent tiers
+   * are only 1.04-1.09:1 apart. One step is a 4-9% luminance change. It reads
+   * on a good screen and dies on a cheap LCD in daylight, which is this
+   * project's actual deployment. So a card is never ONE tier from its page.
+   * Cards take three, heroes four. Confirmed the hard way: a white card on
+   * this page is 1.063:1, and that is exactly the separation a 390px capture
+   * showed disappearing.
    *
-   * Per-theme rather than reusing surface-sunken, because dark needs the
-   * opposite: its card sits at 1.13 on the page and only 1.05 on the sunken
-   * well, so deepening it there would flatten exactly what it fixes in light.
-   * Dark keeps the page. */
-  --color-surface-well: #eef1f4;
+   * The ink is the same #0f172a on all six and clears AA on every one
+   * (17.85 down to 13.69:1), so a tier can be chosen for depth without
+   * anybody having to re-check contrast. */
+  --color-surface-container-lowest: #ffffff; /* 17.85:1 */
+  --color-surface: #f7f8fa; /* 16.80:1 — the page */
+  --color-surface-container-low: #f1f3f6; /* 16.06:1 */
+  --color-surface-container: #eaeef2; /* 15.31:1 — chrome */
+  --color-surface-container-high: #e3e8ee; /* 14.49:1 — ordinary card */
+  --color-surface-container-highest: #dce2e9; /* 13.69:1 — hero card */
+
+
+  /* ---- The three roles the ladder is actually used through --------------
+   * The ladder above is the palette. These three are what components name,
+   * and they exist because the right tier is NOT the same tier in both
+   * themes.
+   *
+   * The rule underneath is one sentence: a card is lighter than its page, in
+   * both themes. In dark that means the card climbs the ladder. In light it
+   * means the PAGE descends it, because the card is already white and there
+   * is nowhere above white to go.
+   *
+   * That asymmetry is forced, not stylistic, and the numbers say so. The
+   * status inks — destructive #dc2626 at 4.83:1, success and warning at
+   * 5.02:1 — were chosen against white and have almost no headroom. Move a
+   * light-mode card one tier down the ladder to #f1f3f6 and destructive falls
+   * to 4.34:1; at #e3e8ee it is 3.92:1. Four AA assertions went red when I
+   * tried exactly that, which is the test doing its job: in light mode, cards
+   * stay white and the page moves instead.
+   *
+   * Separation, page to card: 1.166:1 light, 1.295:1 dark [computed]. Both
+   * clear the two-tier minimum with margin — one tier is a 4-9% luminance
+   * change that survives a good screen and dies on a cheap LCD in daylight,
+   * which is this project's deployment. */
+  --color-page: #eaeef2;
+  --color-card: #ffffff;
+  /* Wells, inputs, tracks and tiles nested INSIDE a card. Carries muted and
+   * tonal ink only — never the status inks, which need white under them. */
+  --color-nested: #e3e8ee;
+
+  /* The sample-data pill, and the only token in this file chosen to SHOUT.
+   * At 2.02:1 against the page it is the most conspicuous object in either
+   * theme. For a label whose job is "nobody may mistake this for a real
+   * patient", being the loudest thing on the screen is the requirement, not a
+   * side effect. */
+  --color-sample: #f59e0b;
+  --color-on-sample: #3d2600; /* 6.63:1 */
+
   /* The app bar and bottom nav. Distinct from both the page and its cards, so
    * the chrome reads as chrome rather than as more page. */
   --color-chrome: #ffffff;
@@ -123,12 +164,97 @@
   /* ---- Radius ----------------------------------------------------------
    * Deliberately new names rather than overriding Tailwind's `--radius-*`
    * defaults: screens already shipped by other agents use `rounded-xl`, and
-   * silently changing what that means would reshape their UI. */
-  --radius-control: 0.875rem; /* 14px — buttons, inputs */
-  --radius-card: 1.375rem; /* 22px — cards, banners, panels */
-  --radius-tile: 0.875rem; /* 14px — the rounded square an icon sits in */
-  --radius-sheet: 1.5rem; /* 24px — bottom sheets, modals */
+   * silently changing what that means would reshape their UI.
+   *
+   * Snapped to the M3 Expressive shape stops. 22 and 14 sat off every
+   * published scale, which is the kind of thing nobody can name and everybody
+   * can feel. The set is also self-consistent under the nesting rule
+   * `inner = outer − padding`: a 28 hero with 16 padding gives 12, a 20 card
+   * with 8 inset gives 12 — which is why 12/20/28 with 8/16 padding works and
+   * an arbitrary 22 never quite did. */
+  --radius-chip: 0.5rem; /* 8px — M3 CornerSmall; badges, the sample pill */
+  --radius-tile: 0.75rem; /* 12px — CornerMedium; icon containers, nested blocks */
+  --radius-control: 1rem; /* 16px — CornerLarge; inputs, small controls */
+  --radius-card: 1.25rem; /* 20px — CornerLargeIncreased; cards, banners */
+  --radius-hero: 1.75rem; /* 28px — CornerExtraLarge; the one hero card */
+  --radius-sheet: 1.75rem; /* 28px — CornerExtraLarge; sheets, modals */
   --radius-pill: 9999px;
+
+  /* ---- Type ramp -------------------------------------------------------
+   * The first tier of a design system, and this file had none of it: 421
+   * lines of colour, radius and shadow, and not one size, weight or
+   * line-height. The measured consequence was that 84% of all type in the app
+   * sat between 14 and 16px and the loudest thing on any screen was 2.0x the
+   * quietest. A 2:1 spread is not a hierarchy; it is one grey mass, and no
+   * amount of good colour rescues it.
+   *
+   * Every line-height is divisible by 4 so type sits on the 4px baseline grid.
+   *
+   * WEIGHT 700 WHERE M3 USES 400, on purpose. M3's display weights assume
+   * Roboto, which is optically heavier at size than a geometric sans. Figtree
+   * at 400 goes thin and weightless at 44-56px; 700 is the equivalent density.
+   *
+   * AND THE FLOOR IS THE REAL CONSTRAINT: 14px is the smallest text this
+   * project allows, and it is test-enforced. That caps the largest:smallest
+   * ratio at 4:1 for a 56px value — M3's own 4.75:1 would need a 66px number.
+   * So this ramp cannot buy hierarchy with size alone and does not try; the
+   * rest comes from weight and colour, which is what iOS guidance recommends
+   * regardless. */
+  --text-display-hero: 3.5rem; /* 56 — THE one number on a screen */
+  --text-display-hero--line-height: 3.5rem;
+  --text-display-hero--font-weight: 700;
+  --text-display-hero--letter-spacing: -0.02em;
+
+  --text-display-l: 2.75rem; /* 44 — secondary hero */
+  --text-display-l--line-height: 3rem;
+  --text-display-l--font-weight: 700;
+  --text-display-l--letter-spacing: -0.02em;
+
+  --text-display-m: 2.25rem; /* 36 — large tile value */
+  --text-display-m--line-height: 2.5rem;
+  --text-display-m--font-weight: 700;
+  --text-display-m--letter-spacing: -0.015em;
+
+  --text-stat: 2rem; /* 32 — stat-tile value */
+  --text-stat--line-height: 2.25rem;
+  --text-stat--font-weight: 700;
+  --text-stat--letter-spacing: -0.01em;
+
+  --text-headline: 1.75rem; /* 28 — screen title, large app bar */
+  --text-headline--line-height: 2.25rem;
+  --text-headline--font-weight: 700;
+  --text-headline--letter-spacing: -0.01em;
+
+  --text-title-l: 1.375rem; /* 22 — card title */
+  --text-title-l--line-height: 1.75rem;
+  --text-title-l--font-weight: 600;
+  --text-title-l--letter-spacing: -0.005em;
+
+  --text-title-m: 1.125rem; /* 18 — section heading */
+  --text-title-m--line-height: 1.5rem;
+  --text-title-m--font-weight: 600;
+
+  --text-title-s: 1rem; /* 16 — list row title, emphasis body */
+  --text-title-s--line-height: 1.5rem;
+  --text-title-s--font-weight: 600;
+
+  --text-body: 1rem; /* 16 — body */
+  --text-body--line-height: 1.5rem;
+  --text-body--font-weight: 400;
+
+  --text-body-s: 0.875rem; /* 14 — supporting text; the floor */
+  --text-body-s--line-height: 1.25rem;
+  --text-body-s--font-weight: 400;
+
+  --text-label: 0.875rem; /* 14 — buttons, tile labels, nav */
+  --text-label--line-height: 1.25rem;
+  --text-label--font-weight: 600;
+  --text-label--letter-spacing: 0.01em;
+
+  --text-overline: 0.875rem; /* 14 — eyebrow, metric name */
+  --text-overline--line-height: 1rem;
+  --text-overline--font-weight: 700;
+  --text-overline--letter-spacing: 0.06em;
 }
 
 /**
@@ -231,10 +357,16 @@
     color-scheme: dark;
 
     --color-surface: #0e1013;
-    --color-surface-raised: #1a1d21;
-    --color-surface-sunken: #16181c;
-    /* Deliberately the page colour. See the light definition. */
-    --color-surface-well: #0e1013;
+    --color-surface-container-lowest: #090b0e; /* 17.99:1 */
+    --color-surface-container-low: #16181c; /* 16.22:1 */
+    --color-surface-container: #1a1d21; /* 15.44:1 — chrome */
+    --color-surface-container-high: #212429; /* 14.21:1 — ordinary card */
+    --color-surface-container-highest: #282c32; /* 12.81:1 — hero card */
+    --color-page: #0e1013;
+    --color-card: #212429;
+    --color-nested: #16181c;
+    --color-sample: #ffb74d;
+    --color-on-sample: #000000; /* 12.13:1 */
     --color-chrome: #141719;
     --color-on-chrome: #f1f5f9;
     --color-on-surface: #f1f5f9;
@@ -293,10 +425,16 @@
   color-scheme: dark;
 
   --color-surface: #0e1013;
-  --color-surface-raised: #1a1d21;
-  --color-surface-sunken: #16181c;
-  /* Deliberately the page colour. See the light definition. */
-  --color-surface-well: #0e1013;
+  --color-surface-container-lowest: #090b0e; /* 17.99:1 */
+  --color-surface-container-low: #16181c; /* 16.22:1 */
+  --color-surface-container: #1a1d21; /* 15.44:1 — chrome */
+  --color-surface-container-high: #212429; /* 14.21:1 — ordinary card */
+  --color-surface-container-highest: #282c32; /* 12.81:1 — hero card */
+  --color-page: #0e1013;
+  --color-card: #212429;
+  --color-nested: #16181c;
+  --color-sample: #ffb74d;
+  --color-on-sample: #000000; /* 12.13:1 */
   --color-chrome: #141719;
   --color-on-chrome: #f1f5f9;
   --color-on-surface: #f1f5f9;

@@ -18,7 +18,7 @@ export interface PageProps {
 export function Page({ children, hasBottomNav = false, className = '' }: PageProps) {
   return (
     <main
-      className={['min-h-dvh bg-surface text-on-surface', className].filter(Boolean).join(' ')}
+      className={['min-h-dvh bg-page text-on-surface', className].filter(Boolean).join(' ')}
       style={{
         paddingLeft: 'env(safe-area-inset-left)',
         paddingRight: 'env(safe-area-inset-right)',
@@ -51,12 +51,12 @@ export function Section({ children, title, description, action, className = '' }
       {(title !== undefined || action !== undefined) && (
         <div className="flex items-baseline justify-between gap-3">
           {title !== undefined && (
-            <h2 className="font-heading text-lg font-bold text-on-surface">{title}</h2>
+            <h2 className="font-heading text-title-m text-on-surface">{title}</h2>
           )}
           {action}
         </div>
       )}
-      {description !== undefined && <p className="text-base text-muted">{description}</p>}
+      {description !== undefined && <p className="text-body text-muted">{description}</p>}
       {children}
     </section>
   )
