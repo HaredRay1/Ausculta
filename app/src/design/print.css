@@ -1,0 +1,108 @@
+/**
+ * Print rules.
+ *
+ * These clinics refer patients to hospitals on paper, so a printed page is a
+ * real deliverable rather than a courtesy. It has to survive an old mono laser
+ * printer with a tired toner cartridge.
+ *
+ * The central trick: redefine the colour tokens inside `@media print`. Because
+ * every component is token-driven, the whole app becomes black-on-white on
+ * paper without a single component knowing about printing — and, importantly,
+ * a user who has their phone in dark mode does not print white text on a black
+ * background, or waste a cartridge on a full-bleed dark page.
+ *
+ * It also makes "never rely on colour alone" structural here rather than
+ * aspirational: on paper there is no colour left to rely on, so any distinction
+ * that survives is carried by a rule, a label, or a word.
+ */
+
+@media print {
+  :root,
+  :root[data-theme='dark'],
+  :root[data-theme='light'] {
+    color-scheme: light;
+
+    --color-surface: #ffffff;
+    --color-surface-raised: #ffffff;
+    --color-surface-sunken: #ffffff;
+    --color-on-surface: #000000;
+    --color-muted: #000000;
+    --color-border: #000000;
+    --color-border-strong: #000000;
+
+    --color-primary: #000000;
+    --color-primary-strong: #000000;
+    --color-on-primary: #ffffff;
+    --color-accent: #ffffff;
+    --color-on-accent: #000000;
+
+    --color-info: #000000;
+    --color-on-info: #ffffff;
+    --color-info-surface: #ffffff;
+    --color-on-info-surface: #000000;
+    --color-success: #000000;
+    --color-on-success: #ffffff;
+    --color-success-surface: #ffffff;
+    --color-on-success-surface: #000000;
+    --color-warning: #000000;
+    --color-on-warning: #ffffff;
+    --color-warning-surface: #ffffff;
+    --color-on-warning-surface: #000000;
+    --color-destructive: #000000;
+    --color-on-destructive: #ffffff;
+    --color-destructive-surface: #ffffff;
+    --color-on-destructive-surface: #000000;
+
+    /* Toner, and legibility: a grey fill prints as muddy halftone. */
+    --shadow-e0: none;
+    --shadow-e1: none;
+    --shadow-e2: none;
+    --shadow-e3: none;
+  }
+
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  /* Screen furniture that means nothing on paper. */
+  .no-print {
+    display: none !important;
+  }
+
+  /* A block that only makes sense once printed, e.g. a signature line. */
+  .print-only {
+    display: block !important;
+  }
+
+  /*
+   * A section split across a page break is how a reader ends up with the
+   * automatic result on one sheet and the practitioner's conclusion on
+   * another — the exact two things that must never be confused.
+   */
+  .print-keep-together {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Hairlines vanish on a worn printer; 1pt is the floor that survives. */
+  .print-rule {
+    border-color: #000000 !important;
+    border-width: 1pt !important;
+  }
+
+  a[href]::after {
+    content: '';
+  }
+}
+
+/** Off-screen but readable by a screen reader; also printed. */
+.print-only {
+  display: none;
+}

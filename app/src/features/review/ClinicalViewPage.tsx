@@ -143,18 +143,25 @@ export function ClinicalViewPage({ repository }: ClinicalViewPageProps = {}) {
       </Section>
 
       {/*
-        One primary action. The printable summary is not built yet, and a
-        button leading nowhere is scored as a navigation failure by the
-        validation protocol -- validators navigate unaided, so a dead end reads
-        as a broken app rather than an unbuilt feature.
+        Reviewing is the primary action; the printable summary is secondary but
+        real — these clinics refer to hospitals on paper, so a practitioner
+        needs a way off the screen and onto a sheet.
       */}
-      <div className="pb-4">
+      <div className="flex flex-col gap-2 pb-4">
         <Button
           size="lg"
           fullWidth
           onClick={() => navigate(`/review/${assessment.id}/decide`)}
         >
           {t('case.startReview')}
+        </Button>
+        <Button
+          variant="secondary"
+          size="lg"
+          fullWidth
+          onClick={() => navigate(`/review/${assessment.id}/report`)}
+        >
+          {t('case.openReport')}
         </Button>
       </div>
     </Page>

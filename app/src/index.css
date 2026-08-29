@@ -1,3 +1,4 @@
 @import 'tailwindcss';
 @import './design/fonts.css';
 @import './design/tokens.css';
+@import './design/print.css';

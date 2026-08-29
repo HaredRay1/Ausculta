@@ -4,6 +4,7 @@ import { RequireRole } from '../../auth/guards'
 import { ClinicalViewPage } from './ClinicalViewPage'
 import { ReviewQueuePage } from './ReviewQueuePage'
 import { ReviewFormPage } from './ReviewFormPage'
+import { ReportPage } from './ReportPage'
 
 /**
  * The review feature's routes, as data for whoever owns the app router.
@@ -42,6 +43,14 @@ export const reviewRoutes: RouteObject[] = [
     element: (
       <RequireRole roles={REVIEWER_ROLES}>
         <ReviewFormPage />
+      </RequireRole>
+    ),
+  },
+  {
+    path: '/review/:assessmentId/report',
+    element: (
+      <RequireRole roles={REVIEWER_ROLES}>
+        <ReportPage />
       </RequireRole>
     ),
   },
