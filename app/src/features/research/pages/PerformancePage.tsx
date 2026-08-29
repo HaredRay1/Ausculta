@@ -283,9 +283,10 @@ function ConfusionMatrix({ view }: { view: PerformanceView }) {
 /** Every labelled recording that did not reach the matrix, and why. */
 function ExcludedSummary({ view }: { view: PerformanceView }) {
   const { t } = useResearchTranslation()
+  const { t: tc } = useTranslation('codes', { useSuspense: false })
   const entries: { label: string; count: number }[] = [
     ...GROUND_TRUTH_STATUS_LIST.map((code) => ({
-      label: t(`groundTruth.${code}`),
+      label: tc(`groundTruth.${code}`),
       count: view.excluded[code] ?? 0,
     })),
     { label: t('performance.excludedNoPrediction'), count: view.excluded.NO_PREDICTION },

@@ -230,7 +230,11 @@ function LabelEditor({
           }}
           options={GROUND_TRUTH_STATUS_LIST.map((code) => ({
             value: code,
-            label: t(`groundTruth.${code}`),
+            // Label from the shared registry, so the wording cannot drift from
+            // the export. The hint stays local: it says whether choosing this
+            // puts the recording into the model's score, which is a property
+            // of this screen rather than of the code.
+            label: tc(`groundTruth.${code}`),
             description: t(`groundTruth.${code}_HINT`),
           }))}
         />

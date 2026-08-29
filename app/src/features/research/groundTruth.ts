@@ -1,48 +1,43 @@
-import type { ClassificationCode } from '../../db/codes'
+import {
+  GROUND_TRUTH_STATUSES,
+  type ClassificationCode,
+  type GroundTruthStatus,
+} from '../../db/codes'
 import type { ResearchLabel } from '../../db/types'
 
 /**
- * Ground-truth label vocabulary.
+ * Ground-truth labelling rules.
  *
- * `ResearchLabel.groundTruthStatus` is typed as a bare `string` and there is no
- * corresponding list in `db/codes.ts` — unlike every other clinical vocabulary
- * in the app. The registry is a frozen contract owned elsewhere, so this list
- * lives here rather than being bolted onto it. That is a gap worth closing
- * upstream: a research variable that leaves the device in an export belongs in
- * the same registry as `CONSENT_STATUSES`, and being defined in a feature
- * module means the i18n exhaustiveness test does not police it.
+ * The vocabulary itself now lives in `db/codes.ts` alongside every other
+ * clinical code list, which is where it belongs: these five values leave the
+ * device in a research export, so they need the same registry membership that
+ * makes the i18n exhaustiveness test police their display strings. Re-exported
+ * here so this module stays the one place to import ground-truth concepts
+ * from, without becoming a second source of truth for the codes.
  *
- * The five statuses are deliberately non-overlapping on one axis: **does this
- * row supply a true class the model can be scored against?**
+ * What this file still owns is the *rule* the codes obey, which is not
+ * expressible in a code list: the five split on one axis, **does this row
+ * supply a true class the model can be scored against?**
  *
  * - `CORRECT` — the reference agrees with the model. `labelCode` is stored
- *   anyway, copied from the prediction, so the row can be scored without
- *   having to re-read what the model said at labelling time.
+ *   anyway, copied from the prediction, so the row can be scored later without
+ *   re-reading what the model said at labelling time.
  * - `MODIFIED` — the reference disagrees and the researcher names the true
  *   class. `labelCode` required.
  * - `INCORRECT` — the reference disagrees but the researcher will not commit to
- *   what it actually was ("not asthma, but I cannot say what"). No `labelCode`.
- *   Real information, and genuinely unusable for a confusion matrix, which has
- *   no cell for "something else".
+ *   what it actually was. Real information, and genuinely unusable for a
+ *   confusion matrix, which has no cell for "something else".
  * - `UNCERTAIN` — the recording cannot be judged.
- * - `NO_REFERENCE_AVAILABLE` — no gold standard exists for this patient: no
- *   chest film, no spirometry, nothing to be right or wrong against. Distinct
- *   from `UNCERTAIN`, which is about the recording rather than the evidence.
+ * - `NO_REFERENCE_AVAILABLE` — no gold standard exists for this patient.
+ *   Distinct from `UNCERTAIN`, which is about the recording rather than the
+ *   evidence.
  *
- * Only `CORRECT` and `MODIFIED` carry a true class, so only those two reach the
- * performance screen. The other three are counted and shown, never silently
- * dropped — a labelled recording that vanished from the denominator with no
- * explanation is how a performance figure quietly becomes a lie.
+ * Only the first two reach the performance screen. The other three are counted
+ * and displayed, never silently dropped — a labelled recording that vanished
+ * from the denominator with no explanation is how a performance figure quietly
+ * stops meaning what it says.
  */
-export const GROUND_TRUTH_STATUSES = {
-  CORRECT: 'CORRECT',
-  MODIFIED: 'MODIFIED',
-  INCORRECT: 'INCORRECT',
-  UNCERTAIN: 'UNCERTAIN',
-  NO_REFERENCE_AVAILABLE: 'NO_REFERENCE_AVAILABLE',
-} as const
-
-export type GroundTruthStatus = (typeof GROUND_TRUTH_STATUSES)[keyof typeof GROUND_TRUTH_STATUSES]
+export { GROUND_TRUTH_STATUSES, type GroundTruthStatus }
 
 export const GROUND_TRUTH_STATUS_LIST: readonly GroundTruthStatus[] =
   Object.values(GROUND_TRUTH_STATUSES)
@@ -65,7 +60,9 @@ export function isGroundTruthStatus(value: string): value is GroundTruthStatus {
 }
 
 /** `true` when this label supplies a true class the model can be scored against. */
-export function suppliesTrueClass(label: Pick<ResearchLabel, 'groundTruthStatus' | 'labelCode'>): boolean {
+export function suppliesTrueClass(
+  label: Pick<ResearchLabel, 'groundTruthStatus' | 'labelCode'>,
+): boolean {
   return (
     (STATUSES_REQUIRING_LABEL as readonly string[]).includes(label.groundTruthStatus) &&
     label.labelCode !== undefined

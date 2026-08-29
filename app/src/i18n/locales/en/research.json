@@ -38,16 +38,11 @@
     "error": "Could not save the label."
   },
   "groundTruth": {
-    "CORRECT": "The model was right",
-    "CORRECT_HINT": "The reference agrees with the model's classification.",
-    "MODIFIED": "It is actually something else",
-    "MODIFIED_HINT": "You are naming the true class, which differs from the model's.",
-    "INCORRECT": "The model was wrong, class unknown",
-    "INCORRECT_HINT": "You can tell the model is wrong but not what this actually is. Counted, but it cannot be scored.",
-    "UNCERTAIN": "Cannot tell from this recording",
-    "UNCERTAIN_HINT": "The recording itself does not support a judgement.",
-    "NO_REFERENCE_AVAILABLE": "No reference standard exists",
-    "NO_REFERENCE_AVAILABLE_HINT": "There is no chest film, spirometry or other gold standard for this patient to compare against."
+    "CORRECT_HINT": "Counted in the model’s score.",
+    "MODIFIED_HINT": "Counted in the model’s score, against the label you choose.",
+    "INCORRECT_HINT": "Recorded, but not counted in the model’s score — a confusion matrix has no cell for “something else”.",
+    "UNCERTAIN_HINT": "Recorded, but not counted in the model’s score.",
+    "NO_REFERENCE_AVAILABLE_HINT": "No chest film, spirometry or other gold standard exists for this patient. Recorded, but not counted in the model’s score."
   },
   "performance": {
     "title": "Model performance",
