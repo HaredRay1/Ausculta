@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { AuscultaDB } from '../../../db/db'
-import { AI_STATUS, AUDIO_SOURCES, CONSENT_STATUSES } from '../../../db/codes'
+import {
+  AI_STATUS,
+  AUDIO_SOURCES,
+  CONSENT_STATUSES,
+  REHAB_ACTIVITY_CODES,
+} from '../../../db/codes'
 import type { Patient } from '../../../db/types'
 import { DEMO_PATIENTS, walkthroughPatientSpec } from '../dataset'
 import { readDemoMode, setDemoMode } from '../demoMode'
@@ -176,6 +181,79 @@ describe('seeded clinical content', () => {
       expect(recording.originalFileName).toContain('demo')
       expect(recording.quality).toBeNull()
     }
+  })
+})
+
+describe('the example breathing plan', () => {
+  it('gives the walkthrough patient an approved plan, so the screen is not a dead end', async () => {
+    await seedDemoData(db, { now: NOW })
+
+    const plans = await db.rehabPlans.toArray()
+    expect(plans).toHaveLength(1)
+    expect(plans[0].patientId).toBe(demoPatientId(1))
+    expect(plans[0].approvalStatus).toBe('APPROVED')
+  })
+
+  it('names activities but invents no clinical dosing', async () => {
+    await seedDemoData(db, { now: NOW })
+    const details = (await db.rehabPlans.toArray())[0].details as {
+      activities: { code: string; frequency?: string; duration?: string; instructions?: string }[]
+      actionPlan: unknown
+      notes?: string
+    }
+
+    // A subset, so it reads as a plan a practitioner chose.
+    expect(details.activities.length).toBeGreaterThanOrEqual(2)
+    expect(details.activities.length).toBeLessThan(4)
+    // Huff coughing is contraindicated in bronchospasm and is not in the code
+    // list at all; nothing outside the vetted set may appear here.
+    for (const activity of details.activities) {
+      expect(Object.values(REHAB_ACTIVITY_CODES)).toContain(activity.code)
+      // Frequencies and durations are free text a practitioner writes. Invented
+      // ones would be made-up clinical dosing on a screen a patient reads.
+      expect(activity.frequency).toBeUndefined()
+      expect(activity.duration).toBeUndefined()
+      expect(activity.instructions).toBeUndefined()
+    }
+    // An emergency action plan carries zones, contacts and thresholds. None of
+    // those may be invented either.
+    expect(details.actionPlan).toBeNull()
+    expect(details.notes).toMatch(/not advice/i)
+  })
+
+  it('is removed by a reset, along with anything logged against it', async () => {
+    await seedDemoData(db, { now: NOW })
+    const plan = (await db.rehabPlans.toArray())[0]
+    await db.rehabCompletions.put({
+      id: 'RC-1',
+      rehabPlanId: plan.id,
+      patientId: plan.patientId,
+      completedAt: '2026-08-20T00:00:00.000Z',
+      details: null,
+    })
+
+    await resetDemoData(db)
+
+    expect(await db.rehabPlans.count()).toBe(0)
+    expect(await db.rehabCompletions.count()).toBe(0)
+  })
+
+  it('leaves a real patient’s plan alone', async () => {
+    await db.patients.put(realPatient())
+    await db.rehabPlans.put({
+      id: 'RP-REAL-1',
+      patientId: 'PT-REAL-0001',
+      practitionerId: 'user-2',
+      approvalStatus: 'APPROVED',
+      createdAt: '2026-08-01T00:00:00.000Z',
+      details: null,
+    })
+    await seedDemoData(db, { now: NOW })
+
+    await resetDemoData(db)
+
+    expect(await db.rehabPlans.count()).toBe(1)
+    await expect(db.rehabPlans.get('RP-REAL-1')).resolves.toBeDefined()
   })
 })
 

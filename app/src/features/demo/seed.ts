@@ -5,14 +5,17 @@ import {
   AUDIO_SOURCES,
   CONSENT_STATUSES,
   MEASUREMENT_SOURCES,
+  REHAB_ACTIVITY_CODES,
   REVIEW_STATUSES,
 } from '../../db/codes'
+import { REHAB_PLAN_SCHEMA_VERSION } from '../rehab/data/planModel'
 import type {
   Assessment,
   AudioBlobRecord,
   ClinicalReview,
   Patient,
   Recording,
+  RehabPlan,
 } from '../../db/types'
 import {
   DEMO_AUDIO_DURATION_SEC,
@@ -73,6 +76,7 @@ export interface DemoCounts {
   recordings: number
   audioBlobs: number
   clinicalReviews: number
+  rehabPlans: number
 }
 
 const EMPTY_COUNTS: DemoCounts = {
@@ -81,6 +85,7 @@ const EMPTY_COUNTS: DemoCounts = {
   recordings: 0,
   audioBlobs: 0,
   clinicalReviews: 0,
+  rehabPlans: 0,
 }
 
 // --- deterministic identifiers ---------------------------------------------
@@ -106,6 +111,56 @@ export function demoAssessmentId(seq: number, visitIndex: number): string {
 
 export function demoRecordingId(seq: number, visitIndex: number, location: string): string {
   return `DEMO-RC-${seq}-${visitIndex + 1}-${location}`
+}
+
+export const DEMO_REHAB_PLAN_ID = 'DEMO-RP-1'
+
+/**
+ * A breathing plan for the walkthrough patient.
+ *
+ * Without one, "Breathing plan" is a dead end even in the example record, and
+ * the screen contradicted itself — telling a reader this was an example while
+ * also telling them their own practitioner had not prescribed anything.
+ *
+ * The three activities are a subset of REHAB_ACTIVITY_CODES, which is itself
+ * the asthma-safe shortlist the rehab feature ships with its citations; huff
+ * coughing is excluded there because it is contraindicated in bronchospasm.
+ * Assigning three of the four to a fictional patient demonstrates the feature
+ * rather than prescribing anything.
+ *
+ * `frequency`, `duration` and `instructions` are deliberately LEFT OFF. They
+ * are free text a practitioner writes, and inventing "twice a day" for a
+ * fictional patient would put made-up clinical dosing on a screen a real
+ * patient reads. The rehab screens render a not-filled-in message for each,
+ * which is the honest thing for a plan nobody actually wrote.
+ *
+ * `actionPlan` is null for the same reason: an emergency action plan carries
+ * zones, contacts and thresholds, none of which should be invented.
+ */
+function buildDemoRehabPlan(now: number): RehabPlan {
+  const approvedAt = visitIso(now, 60)
+  return {
+    id: DEMO_REHAB_PLAN_ID,
+    patientId: demoPatientId(1),
+    practitionerId: DEMO_REVIEWER_ID,
+    approvalStatus: REVIEW_STATUSES.APPROVED,
+    createdAt: approvedAt,
+    details: {
+      schemaVersion: REHAB_PLAN_SCHEMA_VERSION,
+      actionPlan: null,
+      activities: [
+        { code: REHAB_ACTIVITY_CODES.PURSED_LIP_BREATHING },
+        { code: REHAB_ACTIVITY_CODES.DIAPHRAGMATIC_BREATHING },
+        { code: REHAB_ACTIVITY_CODES.BREATHING_RELAXATION_RETRAINING },
+      ],
+      notes:
+        'Example plan for a fictional patient, to show how this screen looks. ' +
+        'It is not advice and not a pattern to copy — a practitioner chooses ' +
+        'activities for one person at a time.',
+      approvedAt,
+      approvedBy: DEMO_REVIEWER_ID,
+    },
+  }
 }
 
 export function demoReviewId(seq: number, visitIndex: number): string {
@@ -236,6 +291,7 @@ export interface DemoRows {
   recordings: Recording[]
   audioBlobs: AudioBlobRecord[]
   clinicalReviews: ClinicalReview[]
+  rehabPlans: RehabPlan[]
 }
 
 function buildPatient(spec: DemoPatientSpec, now: number): Patient {
@@ -326,6 +382,7 @@ export function buildDemoRows(now: number = Date.now()): DemoRows {
     recordings: [],
     audioBlobs: buildDemoAudioBlobs(),
     clinicalReviews: [],
+    rehabPlans: [buildDemoRehabPlan(now)],
   }
   let recordingCounter = 0
 
@@ -386,6 +443,7 @@ function countOf(rows: DemoRows): DemoCounts {
     recordings: rows.recordings.length,
     audioBlobs: rows.audioBlobs.length,
     clinicalReviews: rows.clinicalReviews.length,
+    rehabPlans: rows.rehabPlans.length,
   }
 }
 
@@ -447,13 +505,22 @@ export async function seedDemoData(
 
   await db.transaction(
     'rw',
-    [db.patients, db.assessments, db.recordings, db.audioBlobs, db.clinicalReviews, db.appMeta],
+    [
+      db.patients,
+      db.assessments,
+      db.recordings,
+      db.audioBlobs,
+      db.clinicalReviews,
+      db.rehabPlans,
+      db.appMeta,
+    ],
     async () => {
       await db.patients.bulkPut(rows.patients)
       await db.assessments.bulkPut(rows.assessments)
       await db.recordings.bulkPut(rows.recordings)
       await db.audioBlobs.bulkPut(rows.audioBlobs)
       await db.clinicalReviews.bulkPut(rows.clinicalReviews)
+      await db.rehabPlans.bulkPut(rows.rehabPlans)
       const marker: DemoSeedMarker = {
         version: DEMO_DATASET_VERSION,
         seededAt: new Date(now).toISOString(),
@@ -514,6 +581,8 @@ export async function resetDemoData(
       db.recordings,
       db.audioBlobs,
       db.clinicalReviews,
+      db.rehabPlans,
+      db.rehabCompletions,
       db.alerts,
       db.appMeta,
     ],
@@ -530,6 +599,17 @@ export async function resetDemoData(
       }
       if (patientIds.length > 0) {
         await db.alerts.where('patientId').anyOf(patientIds).delete()
+        // rehabPlans carries no isDemo of its own, so a plan is demo because
+        // its PATIENT is. Completions are reached through the plan, since a
+        // patient may have logged one against the example.
+        const planIds = (await db.rehabPlans
+          .where('patientId')
+          .anyOf(patientIds)
+          .primaryKeys()) as string[]
+        if (planIds.length > 0) {
+          await db.rehabCompletions.where('rehabPlanId').anyOf(planIds).delete()
+        }
+        deleted.rehabPlans = await db.rehabPlans.where('patientId').anyOf(patientIds).delete()
       }
 
       // Blobs only when nothing real still points at them.
