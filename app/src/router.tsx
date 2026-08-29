@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { authRoutes } from './auth/routes'
 import { RequireAuth } from './auth/guards'
+import { adminRoutes } from './features/admin/routes'
 import { assessmentRoutes } from './features/assessment/routes'
 import { demoRoutes } from './features/demo'
 // Two different features, deliberately named apart: `features/patient` (singular)
@@ -9,6 +10,7 @@ import { demoRoutes } from './features/demo'
 // patient management. Both export `patientRoutes`, hence the alias.
 import { patientRoutes as patientPortalRoutes } from './features/patient/routes'
 import { patientRoutes as patientManagementRoutes } from './features/patients/routes'
+import { monitoringRoutes } from './features/monitoring/routes'
 import { rehabRoutes } from './features/rehab/routes'
 import { researchRoutes } from './features/research/routes'
 import { reviewRoutes } from './features/review/routes'
@@ -93,6 +95,20 @@ export function AppRoutes() {
       ))}
 
       {researchRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {monitoringRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {/*
+        The admin console. `/admin/users` also appears in authRoutes above and
+        is being removed from there — the account queue belongs to the console
+        rather than to authentication. Until then react-router takes the first
+        match, so the duplicate is harmless.
+      */}
+      {adminRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
 
