@@ -10,6 +10,7 @@ import { demoRoutes } from './features/demo'
 import { patientRoutes as patientPortalRoutes } from './features/patient/routes'
 import { patientRoutes as patientManagementRoutes } from './features/patients/routes'
 import { rehabRoutes } from './features/rehab/routes'
+import { researchRoutes } from './features/research/routes'
 import { reviewRoutes } from './features/review/routes'
 import { getStoredDeviceLanguage } from './lib/deviceLanguage'
 import { LanguageSelect } from './features/landing/LanguageSelect'
@@ -28,7 +29,7 @@ function Root() {
  * absent — the patient portal now provides it — and `/admin/users` comes from
  * the auth routes.
  */
-const ROLE_HOME_ROUTES = ['/practitioner', '/health-worker', '/researcher']
+const ROLE_HOME_ROUTES = ['/practitioner', '/health-worker']
 
 /**
  * The component gallery renders every design-system component in every state.
@@ -87,6 +88,19 @@ export function AppRoutes() {
       {rehabRoutes.map((route) => (
         <Route key={route.path} path={route.path} element={route.element} />
       ))}
+
+      {researchRoutes.map((route) => (
+        <Route key={route.path} path={route.path} element={route.element} />
+      ))}
+
+      {/*
+        `roleHomePath()` sends a researcher to /researcher, but the dashboard
+        lives at /research. Redirect rather than renaming either: the role home
+        map is another feature's, and a researcher landing on a placeholder
+        while their real dashboard sits one letter away is the kind of thing
+        nobody notices until a validator does.
+      */}
+      <Route path="/researcher" element={<Navigate to="/research" replace />} />
 
       {/*
         Deliberately unguarded: a device that has not finished admin setup still
