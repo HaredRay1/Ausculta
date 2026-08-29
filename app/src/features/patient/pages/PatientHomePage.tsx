@@ -77,8 +77,8 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
             </header>
 
             <Section
-              title={t('patient:home.latestHeading')}
-              description={t('patient:home.latestDescription')}
+              title={t('patient:home.latestHeading', exampleCopy)}
+              description={t('patient:home.latestDescription', exampleCopy)}
             >
               {latest === undefined ? (
                 <EmptyState
@@ -96,13 +96,13 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
                 <DestinationCard
                   to={PATIENT_PATHS.results}
                   icon={LungsIcon}
-                  title={t('patient:home.quickResults')}
+                  title={t('patient:home.quickResults', exampleCopy)}
                   body={t('patient:home.quickResultsBody', exampleCopy)}
                 />
                 <DestinationCard
                   to={PATIENT_PATHS.recordings}
                   icon={MicIcon}
-                  title={t('patient:home.quickRecordings')}
+                  title={t('patient:home.quickRecordings', exampleCopy)}
                   body={t('patient:home.quickRecordingsBody')}
                 />
                 <DestinationCard
@@ -114,7 +114,7 @@ export function PatientHomePage({ repository }: PatientHomePageProps) {
                 <DestinationCard
                   to={PATIENT_PATHS.history}
                   icon={PeopleIcon}
-                  title={t('patient:home.quickHistory')}
+                  title={t('patient:home.quickHistory', exampleCopy)}
                   body={t('patient:home.quickHistoryBody', exampleCopy)}
                 />
                 <DestinationCard

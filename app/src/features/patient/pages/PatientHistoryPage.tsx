@@ -14,6 +14,7 @@ import {
   type FamilyHistoryCode,
   type RespiratoryHistoryCode,
 } from '../../../db/codes'
+import { exampleCopyFor, useExampleCopy } from '../components/ExampleCopy'
 import { PatientScreen } from '../components/PatientScreen'
 import type { PatientRepository } from '../data/patientRepository'
 import { notesByCode, splitHistory } from '../data/history'
@@ -48,14 +49,16 @@ export function PatientHistoryPage({ repository }: PatientHistoryPageProps) {
       title={t('patient:history.title')}
       {...(repository !== undefined && { repository })}
     >
-      {({ patient }) => {
+      {(overview) => {
+        const { patient } = overview
+        const exampleCopy = exampleCopyFor(overview.isFictional)
         const age = ageInYears(patient.birthDate)
 
         return (
           <>
-            <Banner tone="info">{t('patient:history.readOnlyNote')}</Banner>
+            <Banner tone="info">{t('patient:history.readOnlyNote', exampleCopy)}</Banner>
 
-            <Section title={t('patient:history.profileHeading')}>
+            <Section title={t('patient:history.profileHeading', exampleCopy)}>
               <Card>
                 <dl className="flex flex-col gap-3">
                   <Fact label={t('patient:history.name')} value={patient.name} />
@@ -78,16 +81,16 @@ export function PatientHistoryPage({ repository }: PatientHistoryPageProps) {
                   <Fact label={t('patient:history.contact')} value={patient.contact} />
                   <Fact
                     label={t('patient:history.language')}
-                    value={patient.preferredLanguage}
+                    value={languageName(patient.preferredLanguage, t)}
                   />
                 </dl>
               </Card>
             </Section>
 
-            <Section title={t('patient:history.consentHeading')}>
+            <Section title={t('patient:history.consentHeading', exampleCopy)}>
               <Card>
                 {patient.consent === null ? (
-                  <p className="text-base text-on-surface">{t('patient:history.consentNone')}</p>
+                  <p className="text-base text-on-surface">{t('patient:history.consentNone', exampleCopy)}</p>
                 ) : (
                   <dl className="flex flex-col gap-3">
                     <Fact
@@ -100,7 +103,7 @@ export function PatientHistoryPage({ repository }: PatientHistoryPageProps) {
                     />
                     <Fact
                       label={t('patient:history.consentLanguage', { language: '' })}
-                      value={patient.consent.language}
+                      value={languageName(patient.consent.language, t)}
                     />
                   </dl>
                 )}
@@ -108,14 +111,14 @@ export function PatientHistoryPage({ repository }: PatientHistoryPageProps) {
             </Section>
 
             <HistorySection
-              title={t('patient:history.respiratoryHeading')}
+              title={t('patient:history.respiratoryHeading', exampleCopy)}
               codes={RESPIRATORY_ORDER}
               entries={patient.respiratoryHistory}
               namespace="respiratoryHistory"
             />
 
             <HistorySection
-              title={t('patient:history.familyHeading')}
+              title={t('patient:history.familyHeading', exampleCopy)}
               codes={FAMILY_ORDER}
               entries={patient.familyHistory}
               namespace="familyHistory"
@@ -161,6 +164,7 @@ function HistorySection<TCode extends string>({
   namespace: 'respiratoryHistory' | 'familyHistory'
 }) {
   const { t } = usePatientTranslation()
+  const exampleCopy = useExampleCopy()
   const split = splitHistory(codes, entries)
   const notes = notesByCode(entries)
 
@@ -194,7 +198,7 @@ function HistorySection<TCode extends string>({
           codes={split.notAsked}
           namespace={namespace}
           notes={notes}
-          note={t('patient:history.notAskedNote')}
+          note={t('patient:history.notAskedNote', exampleCopy)}
         />
       </Card>
     </Section>
@@ -248,4 +252,21 @@ function AnswerGroup<TCode extends string>({
       </ul>
     </section>
   )
+}
+
+/**
+ * A language CODE turned into the language's name.
+ *
+ * The screen was rendering the raw code, so a patient read "Preferred
+ * language: fil". codes.json has no language vocabulary, but common.json
+ * already carries the names, so they are reused rather than duplicated. An
+ * unrecognised code falls back to itself: showing something is better than
+ * showing nothing, and it is visible enough to get reported.
+ */
+function languageName(code: string, t: (key: string) => string): string {
+  const known: Record<string, string> = {
+    en: t('common:languageNameEn'),
+    fil: t('common:languageNameFil'),
+  }
+  return known[code] ?? code
 }

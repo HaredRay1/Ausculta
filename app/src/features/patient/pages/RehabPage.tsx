@@ -46,7 +46,7 @@ export function RehabPage({ repository }: RehabPageProps) {
         <>
           <Section title={t('patient:rehab.heading', exampleCopyFor(overview.isFictional))}>
             <Card>
-              <p className="text-base text-on-surface">{t('patient:rehab.whatItIs')}</p>
+              <p className="text-base text-on-surface">{t('patient:rehab.whatItIs', exampleCopyFor(overview.isFictional))}</p>
             </Card>
           </Section>
 
@@ -68,8 +68,8 @@ export function RehabPage({ repository }: RehabPageProps) {
           </Section>
 
           <EmptyState
-            title={t('patient:rehab.empty.title')}
-            body={t('patient:rehab.empty.body')}
+            title={t('patient:rehab.empty.title', exampleCopyFor(overview.isFictional))}
+            body={t('patient:rehab.empty.body', exampleCopyFor(overview.isFictional))}
             icon={<InboxIcon className="size-10" />}
             action={
               <Button variant="secondary" fullWidth onClick={() => navigate('/rehab')}>
@@ -78,7 +78,7 @@ export function RehabPage({ repository }: RehabPageProps) {
             }
           />
 
-          <Banner tone="info">{t('patient:rehab.askNote')}</Banner>
+          <Banner tone="info">{t('patient:rehab.askNote', exampleCopyFor(overview.isFictional))}</Banner>
 
           <DisclaimerBanner />
         </>

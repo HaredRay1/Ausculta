@@ -74,7 +74,16 @@ export function PatientScreen({
   if (patient === null) {
     // Either nothing is linked, or the user asked for an example and the
     // device has no seeded data. Both are the same honest state.
-    return frame(<NoLinkedRecord onSeeExample={() => chooseExample(true)} />)
+    return frame(
+      <NoLinkedRecord
+        onSeeExample={() => chooseExample(true)}
+        // On the home screen the 'back to my health' button would navigate to
+        // the screen it is already on. That is the first thing a brand-new
+        // account sees, so a control that visibly does nothing is the worst
+        // possible place for one.
+        showBackHome={activeId !== 'home'}
+      />,
+    )
   }
   const loaded: LoadedPatientOverview = { ...overview, patient }
 
@@ -114,7 +123,10 @@ export function PatientScreen({
  * and still offers somewhere to go — the plain-language explanation of what the
  * app is for, which is useful to read while waiting to be registered.
  */
-export function NoLinkedRecord({ onSeeExample }: { onSeeExample?: () => void } = {}) {
+export function NoLinkedRecord({
+  onSeeExample,
+  showBackHome = true,
+}: { onSeeExample?: () => void; showBackHome?: boolean } = {}) {
   const { t } = usePatientTranslation()
   const navigate = useNavigate()
 
@@ -134,9 +146,11 @@ export function NoLinkedRecord({ onSeeExample }: { onSeeExample?: () => void } =
               {t('patient:shared.noRecord.seeExample')}
             </Button>
           )}
-          <Button variant="secondary" fullWidth onClick={() => navigate(PATIENT_PATHS.home)}>
-            {t('patient:shared.backHome')}
-          </Button>
+          {showBackHome && (
+            <Button variant="secondary" fullWidth onClick={() => navigate(PATIENT_PATHS.home)}>
+              {t('patient:shared.backHome')}
+            </Button>
+          )}
         </div>
       }
     />

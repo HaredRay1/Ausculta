@@ -48,11 +48,10 @@ export function RecordingResult({
     />
   ) : null
 
-  const modelLine =
-    view.modelVersion !== undefined
-      ? t('patient:results.modelVersion', { version: view.modelVersion })
-      : t('patient:results.modelVersionUnknown')
-
+  // No model version on a patient's screen. It is engineering exhaust to the
+  // reader, and on an example record it also implies a model ran when none
+  // did. It stays on the clinician and researcher screens, where knowing which
+  // model produced a result genuinely changes how the result is read.
   if (view.verdict === null) {
     const notDecided =
       view.state === 'model-not-connected' ? (
@@ -118,7 +117,6 @@ export function RecordingResult({
               ? t('patient:results.qualityOk')
               : t('patient:results.qualityUnknown')}
         </p>
-        <p className="text-sm opacity-90">{modelLine}</p>
       </ResultCard>
       {audio}
     </div>

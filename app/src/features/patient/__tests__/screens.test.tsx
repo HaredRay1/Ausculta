@@ -556,6 +556,22 @@ describe('empty states teach rather than dead-end', () => {
     renderAt(PATIENT_PATHS.home)
     await screen.findByText(t('shared.noRecord.title'))
     expect(screen.getByText(t('shared.noRecord.body'))).toBeInTheDocument()
+
+    // Still not a dead end -- but ON HOME the way forward is the example, not
+    // "Back to my health", which would navigate to the screen already shown.
+    // This is the first screen a brand-new account meets, so a control that
+    // visibly does nothing is the worst possible one to put on it.
+    expect(
+      screen.getByRole('button', { name: t('shared.noRecord.seeExample') }),
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: t('shared.backHome') }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('still offers the way home from a screen that is not home', async () => {
+    renderAt(PATIENT_PATHS.results)
+    await screen.findByText(t('shared.noRecord.title'))
     expect(screen.getByRole('button', { name: t('shared.backHome') })).toBeInTheDocument()
   })
 
@@ -683,6 +699,34 @@ describe('a real account is never given another identity', () => {
   })
 })
 
+describe('language is shown as a name, not a code', () => {
+  it('renders the language name a patient can read', async () => {
+    // The screen rendered the raw code, so a patient read "Preferred
+    // language: fil". Also proves an explicit `common:` prefix resolves from
+    // the patient hook, which loads patient/codes/design but not common.
+    await db.patients.add({
+      id: 'PT-0002-0002',
+      studyId: 'ST-LANGUAGECHECK01',
+      name: 'Test Account Holder',
+      birthDate: '1990-01-01',
+      sex: SEX_CODES.FEMALE,
+      linkedUserId: userId,
+      assignedPractitionerIds: [],
+      assignedHealthWorkerIds: [],
+      consent: null,
+      respiratoryHistory: [],
+      familyHistory: [],
+      preferredLanguage: 'fil',
+      isDemo: 0,
+      createdAt: '2026-08-01T00:00:00.000Z',
+    })
+
+    renderAt(PATIENT_PATHS.history)
+    expect(await screen.findByText('Filipino')).toBeInTheDocument()
+    expect(screen.queryByText('fil')).not.toBeInTheDocument()
+  })
+})
+
 describe('against demo-seeded data', () => {
   /**
    * The fictional clinic is what a validator navigates. These assertions run
@@ -703,7 +747,7 @@ describe('against demo-seeded data', () => {
 
   it('renders a seeded patient home with a real latest result', async () => {
     renderAt(PATIENT_PATHS.home)
-    await waitFor(() => expect(screen.getByText(t('home.latestHeading'))).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(t('home.latestHeading_example'))).toBeInTheDocument())
 
     // No linked record, so the sample-data path: labelled as invented, twice.
     expect(screen.getByText(t('shared.demoPreview.title'))).toBeInTheDocument()
@@ -735,15 +779,15 @@ describe('against demo-seeded data', () => {
 
   it('renders the seeded history with the three answer groups', async () => {
     renderAt(PATIENT_PATHS.history)
-    await waitFor(() => expect(screen.getByText(t('history.profileHeading'))).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByText(t('history.profileHeading_example'))).toBeInTheDocument())
     expect(
       screen.getByRole('region', {
-        name: `${t('history.respiratoryHeading')}: ${t('history.yesHeading')}`,
+        name: `${t('history.respiratoryHeading_example')}: ${t('history.yesHeading')}`,
       }),
     ).toBeInTheDocument()
     expect(
       screen.getByRole('region', {
-        name: `${t('history.familyHeading')}: ${t('history.yesHeading')}`,
+        name: `${t('history.familyHeading_example')}: ${t('history.yesHeading')}`,
       }),
     ).toBeInTheDocument()
   })

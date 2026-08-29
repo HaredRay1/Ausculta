@@ -32,7 +32,12 @@
     "quickResultsBody_example": "See every check of the breathing sounds in this example.",
     "quickTrendsBody_example": "See how the checks in this example compare from visit to visit.",
     "quickHistoryBody_example": "The details, past illnesses and family history in this example.",
-    "quickRehabBody_example": "Breathing exercises given to the person in this example."
+    "quickRehabBody_example": "Breathing exercises given to the person in this example.",
+    "latestHeading_example": "Latest check in this example",
+    "latestDescription_example": "This is the most recent time breathing sounds were recorded in this example.",
+    "quickResults_example": "Results in this example",
+    "quickRecordings_example": "Recordings in this example",
+    "quickHistory_example": "History in this example"
   },
   "results": {
     "title": "My results",
@@ -168,7 +173,14 @@
     "empty": {
       "title": "Your details are not on this device",
       "body": "Your health worker has not registered your details here yet."
-    }
+    },
+    "profileHeading_example": "Details in this example",
+    "consentHeading_example": "Consent in this example",
+    "respiratoryHeading_example": "Breathing history in this example",
+    "familyHeading_example": "Family's breathing history in this example",
+    "readOnlyNote_example": "This page is read-only. It shows an example record, not your own.",
+    "notAskedNote_example": "These questions were not asked in this example. That is not the same as answering no - they are simply blank.",
+    "consentNone_example": "No consent is recorded in this example."
   },
   "trends": {
     "title": "Over time",
@@ -199,7 +211,8 @@
     "heading_example": "How the checks in this example compare",
     "changeDetected_example": "A change in the recorded breathing sound pattern was noticed between the last two visits in this example.",
     "noChangeDetected_example": "No change in the recorded breathing sound pattern was noticed between the last two visits in this example.",
-    "changeNote_example": "A change in the sound pattern is not the same as health getting better or worse. Only a practitioner can say what it means."
+    "changeNote_example": "A change in the sound pattern is not the same as health getting better or worse. Only a practitioner can say what it means.",
+    "description_example": "Each point is one visit, oldest on the left. This shows what the app heard - it is not a measure of how well or unwell anyone is."
   },
   "rehab": {
     "title": "Breathing plan",
@@ -208,14 +221,18 @@
     "empty": {
       "title": "Your practitioner has not given you a plan yet",
       "body": "When a doctor or health practitioner assigns breathing exercises to you, they will appear on this page with instructions. Ausculta will not invent exercises for you — breathing exercises can be unsafe for the wrong person, so a practitioner has to choose them.",
-      "action": "Back to my health"
+      "action": "Back to my health",
+      "title_example": "No plan in this example",
+      "body_example": "When a doctor or health practitioner assigns breathing exercises, they appear on this page with instructions."
     },
     "askNote": "If you would like a breathing plan, ask your health worker or doctor at your next visit.",
     "openProgramme": "See breathing exercises",
     "safetyTitle": "If your breathing gets worse",
     "safetyBody": "Read this before you need it. It explains the warning signs and what to do during an asthma attack.",
     "safetyAction": "What to do in an attack",
-    "heading_example": "Breathing exercises from the practitioner in this example"
+    "heading_example": "Breathing exercises from the practitioner in this example",
+    "askNote_example": "If you would like a breathing plan of your own, ask your health worker or doctor at your next visit.",
+    "whatItIs_example": "Ausculta can carry a set of breathing exercises that a practitioner chooses for a patient. The exercises come from published guidance."
   },
   "shared": {
     "loading": "Loading your information…",

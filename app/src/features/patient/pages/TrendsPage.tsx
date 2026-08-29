@@ -86,7 +86,7 @@ export function TrendsPage({ repository }: TrendsPageProps) {
           <>
             <Section
               title={t('patient:trends.heading', exampleCopy)}
-              description={t('patient:trends.description')}
+              description={t('patient:trends.description', exampleCopy)}
             >
               <p className="text-base text-muted">
                 {t('patient:trends.visitsCounted', { count: series.points.length })}
