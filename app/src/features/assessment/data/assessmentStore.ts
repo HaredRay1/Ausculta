@@ -3,7 +3,16 @@ import { logAction } from '../../../audit/audit'
 import { AUDIO_SOURCES, REVIEW_STATUSES } from '../../../db/codes'
 import type { AudioSource, LocationCode } from '../../../db/codes'
 import { db as defaultDb, type AuscultaDB } from '../../../db/db'
-import type { Assessment, DemoFlag, Patient, Recording } from '../../../db/types'
+import { createConfigStore } from '../../admin/config'
+import { MEASUREMENT_SOURCES } from '../../../db/codes'
+import type {
+  Assessment,
+  DemoFlag,
+  Measurement,
+  Patient,
+  Recording,
+  SymptomEntry,
+} from '../../../db/types'
 import { ASSESSMENT_AUDIT_ACTIONS } from './auditActions'
 import { toAiOutcome } from './mapping'
 
@@ -21,24 +30,37 @@ import { toAiOutcome } from './mapping'
  */
 
 /**
- * The questionnaire has not been asked at this point in the app's life: the
- * symptom and vitals screens are a later phase. Recording a version string of
- * "not-asked" keeps the field honest rather than claiming a version of a form
- * nobody filled in.
+ * A draft starts before anybody has been asked anything, and the symptom step
+ * can be skipped outright. Recording a version string of "not-asked" keeps the
+ * field honest rather than claiming a version of a form nobody filled in.
  */
 export const NO_QUESTIONNAIRE_VERSION = 'not-asked'
 
 /**
- * Severity scoring is a later phase and no threshold configuration exists yet,
- * so a new assessment carries the empty, explicitly-not-calculated severity
- * rather than a zero that could be read as a score.
+ * The version of the symptom questionnaire this build asks. Stamped onto the
+ * assessment the moment symptoms are recorded, so a later reader knows which
+ * set of questions produced the answers — the wording of a question changes
+ * what its answer means.
+ */
+export const SYMPTOM_QUESTIONNAIRE_VERSION = 'symptoms-v1'
+
+/**
+ * Severity scoring is a later phase, so a new assessment carries the empty,
+ * explicitly-not-calculated severity rather than a zero that could be read as
+ * a score.
+ *
+ * `thresholdConfigVersion` is NOT part of this constant: it is read live from
+ * the clinical configuration at the moment the draft is created (see
+ * `createDraft`). A record whose thresholds cannot be recovered afterwards is
+ * uninterpretable — you cannot tell whether a finding changed because the
+ * patient changed or because an administrator moved a number — so the version
+ * has to be the one that was in force, not a placeholder.
  */
 const UNCALCULATED_SEVERITY = {
   score: null,
   category: null,
   modelVersion: null,
   calculatedAt: null,
-  thresholdConfigVersion: 0,
   status: 'MODEL_NOT_CONNECTED',
 } as const
 
@@ -93,6 +115,17 @@ export interface LoadedAssessment {
 export interface AssessmentStore {
   createDraft(input: CreateDraftInput): Promise<Assessment>
   load(assessmentId: string): Promise<LoadedAssessment | null>
+  /**
+   * Replaces the symptom answers on a draft.
+   *
+   * A whole-array replace, not a merge: the screen owns the complete set of
+   * twelve questions, and a code missing from `symptoms` means the question was
+   * not asked. Merging would make "not asked" impossible to express once
+   * anything had been stored.
+   */
+  saveSymptoms(assessmentId: string, symptoms: SymptomEntry[], actorId: string): Promise<Assessment>
+  /** Replaces the manually entered vitals on a draft. Same whole-array rule. */
+  saveVitals(assessmentId: string, vitals: Measurement[], actorId: string): Promise<Assessment>
   saveRecording(input: SaveRecordingInput): Promise<Recording>
   readAudio(audioBlobId: string): Promise<Blob | null>
   /** The patient this assessment is about, for the confirmation screen. */
@@ -126,7 +159,12 @@ export class AssessmentStoreError extends Error {
 }
 
 export function createAssessmentStore(database: AuscultaDB = defaultDb): AssessmentStore {
+  // Bound to the SAME database as this store, so a test store reads the test
+  // device's configuration rather than the app singleton's.
+  const config = createConfigStore(database)
+
   async function createDraft(input: CreateDraftInput): Promise<Assessment> {
+    const thresholdConfigVersion = await config.currentVersion()
     const assessment: Assessment = {
       id: crypto.randomUUID(),
       patientId: input.patientId,
@@ -138,7 +176,7 @@ export function createAssessmentStore(database: AuscultaDB = defaultDb): Assessm
       interfaceLanguage: input.interfaceLanguage,
       questionnaireLanguage: input.interfaceLanguage,
       questionnaireVersion: NO_QUESTIONNAIRE_VERSION,
-      aiSeverity: { ...UNCALCULATED_SEVERITY },
+      aiSeverity: { ...UNCALCULATED_SEVERITY, thresholdConfigVersion },
       isDemo: input.isDemo,
       createdAt: new Date().toISOString(),
     }
@@ -167,6 +205,85 @@ export function createAssessmentStore(database: AuscultaDB = defaultDb): Assessm
       recordings,
       recordedLocations: recordings.map((recording) => recording.locationCode),
     }
+  }
+
+  async function requireDraft(assessmentId: string): Promise<Assessment> {
+    const assessment = await database.assessments.get(assessmentId)
+    if (assessment === undefined) {
+      throw new AssessmentStoreError('not-found', `No assessment "${assessmentId}" on this device`)
+    }
+    return assessment
+  }
+
+  async function saveSymptoms(
+    assessmentId: string,
+    symptoms: SymptomEntry[],
+    actorId: string,
+  ): Promise<Assessment> {
+    const assessment = await requireDraft(assessmentId)
+    const updated: Assessment = {
+      ...assessment,
+      symptoms,
+      // The answers are only interpretable against the questions that produced
+      // them, so the version is stamped here and nowhere else. An empty set
+      // still counts as asked — the health worker went through the screen.
+      questionnaireVersion: SYMPTOM_QUESTIONNAIRE_VERSION,
+    }
+    await database.assessments.put(updated)
+    await logAction(
+      {
+        userId: actorId,
+        actionCode: ASSESSMENT_AUDIT_ACTIONS.SYMPTOMS_RECORDED,
+        entityType: 'assessment',
+        entityId: assessmentId,
+        patientId: assessment.patientId,
+        // Counts only. The trail records that symptoms were entered, not what
+        // the patient said — the assessment row itself holds that.
+        detail: {
+          answered: symptoms.length,
+          present: symptoms.filter((symptom) => symptom.present).length,
+        },
+      },
+      database,
+    )
+    return updated
+  }
+
+  async function saveVitals(
+    assessmentId: string,
+    vitals: Measurement[],
+    actorId: string,
+  ): Promise<Assessment> {
+    const assessment = await requireDraft(assessmentId)
+
+    /**
+     * Only manually entered values are replaced.
+     *
+     * `RESP_RATE_MANUAL` and `RESP_RATE_AUSC_DERIVED` are two different
+     * measurements that happen to be about the same thing. Anything the device
+     * derived stays exactly as it is, and nothing arriving from the manual form
+     * is allowed in under a derived source — a counted rate and an estimated
+     * one must never be able to overwrite each other, in either direction.
+     */
+    const derived = assessment.vitals.filter(
+      (vital) => vital.source !== MEASUREMENT_SOURCES.MANUAL_ENTRY,
+    )
+    const manual = vitals.filter((vital) => vital.source === MEASUREMENT_SOURCES.MANUAL_ENTRY)
+
+    const updated: Assessment = { ...assessment, vitals: [...derived, ...manual] }
+    await database.assessments.put(updated)
+    await logAction(
+      {
+        userId: actorId,
+        actionCode: ASSESSMENT_AUDIT_ACTIONS.VITALS_RECORDED,
+        entityType: 'assessment',
+        entityId: assessmentId,
+        patientId: assessment.patientId,
+        detail: { codes: manual.map((vital) => vital.code) },
+      },
+      database,
+    )
+    return updated
   }
 
   async function saveRecording(input: SaveRecordingInput): Promise<Recording> {
@@ -287,7 +404,16 @@ export function createAssessmentStore(database: AuscultaDB = defaultDb): Assessm
     return (await database.patients.get(patientId)) ?? null
   }
 
-  return { createDraft, load, saveRecording, readAudio, loadPatient, submit }
+  return {
+    createDraft,
+    load,
+    saveSymptoms,
+    saveVitals,
+    saveRecording,
+    readAudio,
+    loadPatient,
+    submit,
+  }
 }
 
 /** The store bound to the app's real database. */

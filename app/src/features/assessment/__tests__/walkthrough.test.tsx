@@ -81,13 +81,26 @@ async function signIn() {
   await auth.login('maria', PASSWORD)
 }
 
-/** Start, skip the guide, choose position 1, and reach the import screen. */
+/**
+ * Start, skip the questionnaire and the guide, choose position 1, and reach the
+ * import screen.
+ *
+ * Both questionnaire screens are skipped here deliberately: the recording path
+ * has to work for an assessment carrying no symptoms and no vitals, which is
+ * the ordinary case in a clinic with no equipment.
+ */
 async function toImportScreen() {
   await signIn()
   renderWizard()
 
   await waitFor(() => expect(screen.getByText(PATIENT)).toBeInTheDocument())
   fireEvent.click(screen.getByRole('button', { name: /start assessment/i }))
+
+  await waitFor(() => expect(screen.getByText(/^Symptoms$/)).toBeInTheDocument())
+  fireEvent.click(screen.getByRole('button', { name: /skip the symptom questions/i }))
+
+  await waitFor(() => expect(screen.getByText(/^Vital signs$/)).toBeInTheDocument())
+  fireEvent.click(screen.getByRole('button', { name: /skip the vital signs/i }))
 
   await waitFor(() => expect(screen.getByText(/using the recorder/i)).toBeInTheDocument())
   fireEvent.click(screen.getByRole('button', { name: /skip the guide/i }))

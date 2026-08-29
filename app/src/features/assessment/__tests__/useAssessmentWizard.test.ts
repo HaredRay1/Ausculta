@@ -68,14 +68,27 @@ function setup(overrides: Partial<WizardInput> = {}) {
   return { ...hook, audio }
 }
 
+/**
+ * Start, and skip both questionnaire screens.
+ *
+ * Skipping is the default path here on purpose: symptoms and vitals are
+ * optional, and every recording assertion below must hold for an assessment
+ * that has neither.
+ */
+async function toDeviceGuide(hook: ReturnType<typeof setup>) {
+  await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
+  await act(async () => hook.result.current.start())
+  act(() => hook.result.current.skipSymptoms())
+  act(() => hook.result.current.skipVitals())
+}
+
 /** Walk from the opening screen to the recording check for one position. */
 async function toQualityCheck(
   hook: ReturnType<typeof setup>,
   location: LocationCode = LOCATION_CODES.R_UPPER,
   file = wavFile(),
 ) {
-  await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
-  await act(async () => hook.result.current.start())
+  await toDeviceGuide(hook)
   await act(async () => hook.result.current.finishDeviceGuide(false))
   act(() => hook.result.current.chooseLocation(location))
   act(() => hook.result.current.confirmPlacement())
@@ -83,13 +96,20 @@ async function toQualityCheck(
 }
 
 describe('the wizard sequence', () => {
-  it('walks patient -> guide -> position -> placement -> import -> check', async () => {
+  it('walks patient -> symptoms -> vitals -> guide -> position -> placement -> import', async () => {
     const hook = setup()
 
     await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
     await act(async () => hook.result.current.start())
-    expect(hook.result.current.state.step).toBe('deviceGuide')
+    // The interview comes before the stethoscope.
+    expect(hook.result.current.state.step).toBe('symptoms')
     expect(hook.result.current.state.assessmentId).not.toBeNull()
+
+    act(() => hook.result.current.skipSymptoms())
+    expect(hook.result.current.state.step).toBe('vitals')
+
+    act(() => hook.result.current.skipVitals())
+    expect(hook.result.current.state.step).toBe('deviceGuide')
 
     await act(async () => hook.result.current.finishDeviceGuide(false))
     expect(hook.result.current.state.step).toBe('location')
@@ -147,7 +167,6 @@ describe('the wizard sequence', () => {
     await act(async () => hook.result.current.start())
     const first = hook.result.current.state.assessmentId
 
-    await act(async () => hook.result.current.finishDeviceGuide(false))
     act(() => hook.result.current.goBack())
     expect(hook.result.current.state.step).toBe('patient')
     await act(async () => hook.result.current.start())
@@ -170,8 +189,7 @@ describe('the wizard sequence', () => {
 
   it('skips the device guide when the health worker has turned it off', async () => {
     const hook = setup({ readSkipGuide: async () => true })
-    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
-    await act(async () => hook.result.current.start())
+    await toDeviceGuide(hook)
 
     expect(hook.result.current.state.step).toBe('location')
   })
@@ -179,8 +197,7 @@ describe('the wizard sequence', () => {
   it('remembers "don\'t show this again"', async () => {
     const writeSkipGuide = vi.fn(async () => {})
     const hook = setup({ writeSkipGuide })
-    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
-    await act(async () => hook.result.current.start())
+    await toDeviceGuide(hook)
     await act(async () => hook.result.current.finishDeviceGuide(true))
 
     expect(writeSkipGuide).toHaveBeenCalledWith(true)
@@ -205,8 +222,7 @@ describe('importing a recording', () => {
       analyze: vi.fn(async () => suggestiveResult()),
     }
     const hook = setup({ audio })
-    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
-    await act(async () => hook.result.current.start())
+    await toDeviceGuide(hook)
     await act(async () => hook.result.current.finishDeviceGuide(false))
     act(() => hook.result.current.chooseLocation(LOCATION_CODES.R_UPPER))
     act(() => hook.result.current.confirmPlacement())
@@ -225,8 +241,7 @@ describe('importing a recording', () => {
       analyze: vi.fn(async () => suggestiveResult()),
     }
     const hook = setup({ audio })
-    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
-    await act(async () => hook.result.current.start())
+    await toDeviceGuide(hook)
     await act(async () => hook.result.current.finishDeviceGuide(false))
     act(() => hook.result.current.chooseLocation(LOCATION_CODES.R_UPPER))
     act(() => hook.result.current.confirmPlacement())
@@ -345,8 +360,7 @@ describe('submitting', () => {
 
   it('reports a refused submission instead of pretending it worked', async () => {
     const hook = setup()
-    await waitFor(() => expect(hook.result.current.state.step).toBe('patient'))
-    await act(async () => hook.result.current.start())
+    await toDeviceGuide(hook)
     await act(async () => hook.result.current.finishDeviceGuide(false))
     // No recordings at all — the store refuses.
     await act(async () => hook.result.current.submit())

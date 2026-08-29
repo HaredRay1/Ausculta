@@ -22,6 +22,47 @@
     "choosePatient": "Choose a patient",
     "loading": "Opening the patient record…"
   },
+  "symptoms": {
+    "title": "Symptoms",
+    "subtitle": "Ask the patient about each one. Leave a question alone if you did not ask it.",
+    "reportOnly": "This records what the patient tells you, and nothing else. It is never a diagnosis, and nothing here is scored or added up.",
+    "progress": "{{answered}} of {{total}} questions answered",
+    "yes": "Yes",
+    "no": "No",
+    "optional": "optional",
+    "notRecorded": "Not recorded",
+    "addDetail": "Add detail",
+    "hideDetail": "Hide detail",
+    "severityLabel": "How bad is it?",
+    "durationLabel": "How many days has it lasted?",
+    "frequencyLabel": "How often does it happen?",
+    "notesLabel": "Note",
+    "notesHint": "The patient's own words, if they help.",
+    "skip": "Skip the symptom questions",
+    "error": {
+      "durationNumber": "Enter the number of days as a whole number, for example 3.",
+      "durationRange": "That is more than ten years. Check the number of days."
+    }
+  },
+  "vitals": {
+    "title": "Vital signs",
+    "subtitle": "Record whatever you were able to measure. Leave the rest empty.",
+    "allOptional": "Every reading here is optional. If you have no oximeter, no thermometer or no blood pressure cuff, leave those boxes empty and carry on — the assessment is still complete.",
+    "optional": "optional",
+    "range": "{{min}} to {{max}} {{unit}}",
+    "respCountedHint": "The rate you counted yourself. The app does not work a breathing rate out from the recording.",
+    "bloodPressure": "Blood pressure",
+    "bloodPressureHint": "Enter both numbers, or neither.",
+    "skip": "Skip the vital signs",
+    "error": {
+      "number": "Enter a number, for example 37.2.",
+      "wholeNumber": "Enter a whole number, for example 96.",
+      "range": "Enter a reading between {{min}} and {{max}} {{unit}}.",
+      "bpNeedsDiastolic": "Enter the lower number too, or clear the upper one.",
+      "bpNeedsSystolic": "Enter the upper number too, or clear the lower one.",
+      "bpOrder": "The lower number must be smaller than the upper one. Check which is which."
+    }
+  },
   "deviceGuide": {
     "title": "Using the recorder",
     "subtitle": "Nine steps, from switching the recorder on to cleaning it for the next patient.",

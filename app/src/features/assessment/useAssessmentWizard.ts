@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { AnalysisResult } from '../../audio'
 import type { LocationCode } from '../../db/codes'
+import type { Measurement, SymptomEntry } from '../../db/types'
 import { DEVICE_IMPORT_META, defaultAudioPort, type AudioPort } from './analysis/audioPort'
 import { importErrorKey } from './analysis/importErrors'
 import { runAnalysis } from './analysis/runAnalysis'
@@ -28,6 +29,8 @@ import { getSkipDeviceGuide, setSkipDeviceGuide } from './data/preferences'
 export type WizardStep =
   | 'loading'
   | 'patient'
+  | 'symptoms'
+  | 'vitals'
   | 'deviceGuide'
   | 'location'
   | 'placement'
@@ -67,6 +70,14 @@ export interface WizardState {
   /** The analysed result the result screen renders. */
   analysis: AnalysisResult | null
   recordedLocations: LocationCode[]
+  /**
+   * The symptom answers as stored. An empty array means nothing has been
+   * recorded — either the step was skipped or no question was put to the
+   * patient. A code absent from it was never asked; see `../symptoms.ts`.
+   */
+  symptoms: SymptomEntry[]
+  /** The vitals as stored. Empty is normal: the clinic may have no equipment. */
+  vitals: Measurement[]
   /** The patient's name, once read. Null while unknown or not on this device. */
   patientName: string | null
   /** i18n key of the import failure, if the chosen file could not be read. */
@@ -86,6 +97,8 @@ const INITIAL: WizardState = {
   precheck: null,
   analysis: null,
   recordedLocations: [],
+  symptoms: [],
+  vitals: [],
   patientName: null,
   importErrorKey: null,
   errorKey: null,
@@ -103,6 +116,15 @@ export interface WizardApi {
    */
   importedAudio: Blob | null
   start(): Promise<void>
+  /**
+   * Stores the symptom answers and moves on. An empty array is a legitimate
+   * result — nothing about this step is required.
+   */
+  saveSymptoms(entries: SymptomEntry[]): Promise<void>
+  /** Moves on without writing anything: the questions were not asked. */
+  skipSymptoms(): void
+  saveVitals(measurements: Measurement[]): Promise<void>
+  skipVitals(): void
   finishDeviceGuide(dontShowAgain: boolean): Promise<void>
   chooseLocation(code: LocationCode): void
   confirmPlacement(): void
@@ -118,8 +140,13 @@ export interface WizardApi {
 
 /** Where "Back" leads from each step. Null means the step has no way back. */
 const BACK_TO: Partial<Record<WizardStep, WizardStep>> = {
-  deviceGuide: 'patient',
-  location: 'patient',
+  symptoms: 'patient',
+  vitals: 'symptoms',
+  deviceGuide: 'vitals',
+  // Resuming lands straight here, so back leads to the questionnaire rather
+  // than to the patient screen: symptoms and vitals can still be filled in on
+  // a second visit to a half-finished assessment.
+  location: 'vitals',
   placement: 'location',
   capture: 'placement',
   quality: 'capture',
@@ -197,6 +224,10 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
         assessmentId: loaded.assessment.id,
         patientId: loaded.assessment.patientId,
         recordedLocations: loaded.recordedLocations,
+        // Carried through so stepping back into the questionnaire shows what
+        // was already answered rather than a blank form.
+        symptoms: loaded.assessment.symptoms,
+        vitals: loaded.assessment.vitals,
         skipDeviceGuide,
       })
       const patient = await deps.current.store.loadPatient(loaded.assessment.patientId)
@@ -218,7 +249,7 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
     // the wizard pointing at an empty draft that cannot be submitted, while
     // the position picker still showed those positions as recorded.
     if (state.assessmentId !== null) {
-      patch({ step: state.skipDeviceGuide ? 'location' : 'deviceGuide', errorKey: null })
+      patch({ step: 'symptoms', errorKey: null })
       return
     }
 
@@ -230,15 +261,58 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
         interfaceLanguage,
         isDemo,
       })
-      patch({
-        assessmentId: assessment.id,
-        step: state.skipDeviceGuide ? 'location' : 'deviceGuide',
-        busy: false,
-      })
+      // The interview comes before the stethoscope: a health worker asks what
+      // is wrong, then listens. Both questionnaire steps are skippable.
+      patch({ assessmentId: assessment.id, step: 'symptoms', busy: false })
     } catch {
       patch({ busy: false, errorKey: 'error.saveFailed' })
     }
-  }, [actorId, interfaceLanguage, isDemo, patch, patientId, state.assessmentId, state.skipDeviceGuide])
+  }, [actorId, interfaceLanguage, isDemo, patch, patientId, state.assessmentId])
+
+  /** Where the flow goes once the questionnaire is behind it. */
+  const afterQuestionnaire = useCallback(
+    () => (state.skipDeviceGuide ? 'location' : 'deviceGuide'),
+    [state.skipDeviceGuide],
+  )
+
+  const saveSymptoms = useCallback(
+    async (entries: SymptomEntry[]) => {
+      const currentAssessmentId = state.assessmentId
+      if (currentAssessmentId === null) return
+      patch({ busy: true, errorKey: null })
+      try {
+        await deps.current.store.saveSymptoms(currentAssessmentId, entries, actorId)
+        patch({ busy: false, symptoms: entries, step: 'vitals' })
+      } catch {
+        // Stay put with the answers still on screen. Moving on would silently
+        // lose an interview the health worker has just conducted.
+        patch({ busy: false, errorKey: 'error.saveFailed' })
+      }
+    },
+    [actorId, patch, state.assessmentId],
+  )
+
+  const skipSymptoms = useCallback(() => patch({ step: 'vitals', errorKey: null }), [patch])
+
+  const saveVitals = useCallback(
+    async (measurements: Measurement[]) => {
+      const currentAssessmentId = state.assessmentId
+      if (currentAssessmentId === null) return
+      patch({ busy: true, errorKey: null })
+      try {
+        await deps.current.store.saveVitals(currentAssessmentId, measurements, actorId)
+        patch({ busy: false, vitals: measurements, step: afterQuestionnaire() })
+      } catch {
+        patch({ busy: false, errorKey: 'error.saveFailed' })
+      }
+    },
+    [actorId, afterQuestionnaire, patch, state.assessmentId],
+  )
+
+  const skipVitals = useCallback(
+    () => patch({ step: afterQuestionnaire(), errorKey: null }),
+    [afterQuestionnaire, patch],
+  )
 
   const finishDeviceGuide = useCallback(
     async (dontShowAgain: boolean) => {
@@ -373,6 +447,10 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
       state,
       importedAudio: importedFile.current,
       start,
+      saveSymptoms,
+      skipSymptoms,
+      saveVitals,
+      skipVitals,
       finishDeviceGuide,
       chooseLocation,
       confirmPlacement,
@@ -396,6 +474,10 @@ export function useAssessmentWizard(input: WizardInput): WizardApi {
       goBack,
       recordAgain,
       recordAnother,
+      saveSymptoms,
+      saveVitals,
+      skipSymptoms,
+      skipVitals,
       start,
       state,
       submit,

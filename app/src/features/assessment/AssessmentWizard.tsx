@@ -11,6 +11,8 @@ import { PatientContextStep } from './steps/PatientContextStep'
 import { PlacementGuideStep } from './steps/PlacementGuideStep'
 import { QualityCheckStep } from './steps/QualityCheckStep'
 import { ResultStep } from './steps/ResultStep'
+import { SymptomsStep } from './steps/SymptomsStep'
+import { VitalsStep } from './steps/VitalsStep'
 import { useAssessmentWizard, type WizardDeps } from './useAssessmentWizard'
 
 /**
@@ -54,9 +56,16 @@ export function AssessmentWizard(props: AssessmentWizardProps = {}) {
   })
 
   const { state } = wizard
-  const canGoBack = ['deviceGuide', 'location', 'placement', 'capture', 'quality', 'next'].includes(
-    state.step,
-  )
+  const canGoBack = [
+    'symptoms',
+    'vitals',
+    'deviceGuide',
+    'location',
+    'placement',
+    'capture',
+    'quality',
+    'next',
+  ].includes(state.step)
 
   return (
     <>
@@ -75,6 +84,30 @@ export function AssessmentWizard(props: AssessmentWizardProps = {}) {
             errorKey={state.errorKey}
             onStart={() => void wizard.start()}
             onChoosePatient={() => navigate('/patients')}
+          />
+        )}
+
+        {/* The interview, before anything is listened to. Both screens are
+            skippable: an assessment with no symptoms and no vitals is a valid
+            assessment and still submits. */}
+        {state.step === 'symptoms' && (
+          <SymptomsStep
+            value={state.symptoms}
+            busy={state.busy}
+            errorKey={state.errorKey}
+            onContinue={(entries) => void wizard.saveSymptoms(entries)}
+            onSkip={wizard.skipSymptoms}
+          />
+        )}
+
+        {state.step === 'vitals' && (
+          <VitalsStep
+            value={state.vitals}
+            enteredBy={user?.id ?? ''}
+            busy={state.busy}
+            errorKey={state.errorKey}
+            onContinue={(vitals) => void wizard.saveVitals(vitals)}
+            onSkip={wizard.skipVitals}
           />
         )}
 
