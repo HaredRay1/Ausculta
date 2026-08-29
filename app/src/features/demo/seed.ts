@@ -1,3 +1,4 @@
+import { logAction } from '../../audit/audit'
 import { db as defaultDb, type AuscultaDB } from '../../db/db'
 import {
   AI_STATUS,
@@ -35,6 +36,7 @@ import {
   type DemoPatientSpec,
   type DemoVisitSpec,
 } from './dataset'
+import { DEMO_AUDIT_ACTIONS, DEMO_SYSTEM_ACTOR } from './audit'
 import { clearDemoMode } from './demoMode'
 import { DEMO, demoRowsOnly } from './visibility'
 
@@ -414,6 +416,8 @@ export interface SeedOptions {
   now?: number
   /** Re-write the rows even if an up-to-date marker is present. */
   force?: boolean
+  /** Who asked for this. Defaults to the system actor (first-run setup). */
+  actor?: string
 }
 
 /**
@@ -429,7 +433,7 @@ export async function seedDemoData(
   db: AuscultaDB = defaultDb,
   options: SeedOptions = {},
 ): Promise<SeedResult> {
-  const { now = Date.now(), force = false } = options
+  const { now = Date.now(), force = false, actor = DEMO_SYSTEM_ACTOR } = options
 
   if (!force) {
     const marker = await readDemoSeedMarker(db)
@@ -459,6 +463,19 @@ export async function seedDemoData(
     },
   )
 
+  // After the transaction, never inside it: `auditLogs` is not in its scope,
+  // and `logAction` swallows its own errors, so an in-transaction write would
+  // fail silently and leave exactly the gap this entry exists to close.
+  await logAction(
+    {
+      userId: actor,
+      actionCode: DEMO_AUDIT_ACTIONS.DEMO_DATA_SEEDED,
+      entityType: 'demoDataset',
+      detail: { datasetVersion: DEMO_DATASET_VERSION, written: counts },
+    },
+    db,
+  )
+
   return { seeded: true, counts }
 }
 
@@ -483,7 +500,10 @@ export interface ResetResult {
  * recording refers to it, so a real recording can never be silently muted by
  * a demo reset.
  */
-export async function resetDemoData(db: AuscultaDB = defaultDb): Promise<ResetResult> {
+export async function resetDemoData(
+  db: AuscultaDB = defaultDb,
+  actor: string = DEMO_SYSTEM_ACTOR,
+): Promise<ResetResult> {
   const deleted: DemoCounts = { ...EMPTY_COUNTS }
 
   await db.transaction(
@@ -534,6 +554,22 @@ export async function resetDemoData(db: AuscultaDB = defaultDb): Promise<ResetRe
       await db.appMeta.delete(DEMO_SEED_META_KEY)
       await clearDemoMode(db)
     },
+  )
+
+  // An unlogged deletion is the one thing an audit trail should never miss,
+  // even when everything it removed was fictional — that it was all fictional
+  // is precisely the claim the entry needs to be able to support. Logged after
+  // the transaction for the same scoping reason as the seed above.
+  await logAction(
+    {
+      userId: actor,
+      actionCode: DEMO_AUDIT_ACTIONS.DEMO_DATA_RESET,
+      entityType: 'demoDataset',
+      // `demoModeCleared` records the side effect, so the absence of a separate
+      // "demo mode disabled" entry beside this one is not read as a gap.
+      detail: { removed: deleted, demoModeCleared: true },
+    },
+    db,
   )
 
   return { deleted }

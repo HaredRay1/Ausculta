@@ -38,5 +38,11 @@
     "title": "Something went wrong",
     "load": "Could not load the demonstration data.",
     "remove": "Could not remove the demonstration data."
+  },
+  "auditAction": {
+    "DEMO_MODE_ENABLED": "Demonstration data shown",
+    "DEMO_MODE_DISABLED": "Demonstration data hidden",
+    "DEMO_DATA_SEEDED": "Demonstration data loaded",
+    "DEMO_DATA_RESET": "Demonstration data removed"
   }
 }

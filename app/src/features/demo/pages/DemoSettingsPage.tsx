@@ -13,6 +13,7 @@ import {
   Section,
   Switch,
 } from '../../../components'
+import { useAuth } from '../../../auth/AuthContext'
 import { db } from '../../../db/db'
 import { syncDemoAssignments } from '../assignments'
 import { walkthroughPatientSpec } from '../dataset'
@@ -29,6 +30,8 @@ import { useDemoMode, useDemoSeedStatus } from '../useDemoMode'
  */
 export function DemoSettingsPage({ onBack }: { onBack?: () => void }) {
   const { t } = useDemoTranslation()
+  const { user } = useAuth()
+  const actor = user?.id
   const { enabled, ready, setEnabled } = useDemoMode(db)
   const { marker, ready: statusReady } = useDemoSeedStatus(db)
 
@@ -43,10 +46,10 @@ export function DemoSettingsPage({ onBack }: { onBack?: () => void }) {
     setBusy('seed')
     setError(null)
     try {
-      await seedDemoData(db, { force: true })
+      await seedDemoData(db, { force: true, ...(actor !== undefined && { actor }) })
       // Without this the rows exist but every non-admin patient list is empty.
       await syncDemoAssignments(db)
-      await setEnabled(true)
+      await setEnabled(true, actor)
     } catch {
       setError(t('errors.load'))
     } finally {
@@ -58,7 +61,7 @@ export function DemoSettingsPage({ onBack }: { onBack?: () => void }) {
     setBusy('reset')
     setError(null)
     try {
-      await resetDemoData(db)
+      await resetDemoData(db, actor)
       setConfirmingReset(false)
     } catch {
       setError(t('errors.remove'))
@@ -135,7 +138,7 @@ export function DemoSettingsPage({ onBack }: { onBack?: () => void }) {
             <Switch
               label={t('toggle.label')}
               checked={enabled}
-              onChange={(next) => void setEnabled(next)}
+              onChange={(next) => void setEnabled(next, actor)}
               hint={enabled ? t('toggle.hintOn') : t('toggle.hintOff')}
               disabled={!ready || busy !== null}
             />

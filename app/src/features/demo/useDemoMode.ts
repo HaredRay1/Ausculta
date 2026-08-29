@@ -21,7 +21,12 @@ export interface DemoModeState {
   enabled: boolean
   /** `false` while the initial read is in flight — render skeletons, not "no data". */
   ready: boolean
-  setEnabled: (next: boolean) => Promise<void>
+  /**
+   * Flips the switch. Pass the signed-in user's id: the change is audited, and
+   * an entry attributed to the system when a person did it is worse than no
+   * entry, because it is wrong rather than merely absent.
+   */
+  setEnabled: (next: boolean, actor?: string) => Promise<void>
 }
 
 export function useDemoMode(database: AuscultaDB = defaultDb): DemoModeState {
@@ -44,8 +49,8 @@ export function useDemoMode(database: AuscultaDB = defaultDb): DemoModeState {
   }, [database])
 
   const setEnabled = useCallback(
-    async (next: boolean) => {
-      await setDemoMode(next, database)
+    async (next: boolean, actor?: string) => {
+      await setDemoMode(next, database, actor)
     },
     [database],
   )
