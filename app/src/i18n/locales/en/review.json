@@ -148,7 +148,9 @@
     "perLocation": "Notes on specific locations",
     "noNotes": "No notes were recorded.",
     "signature": "Referring practitioner's signature",
-    "printHint": "Use your browser's print option to produce a paper copy."
+    "printHint": "Use your browser's print option to produce a paper copy.",
+    "loading": "Loading the summary…",
+    "loadFailed": "This summary could not be read. Nothing about the assessment has changed."
   },
   "error": {
     "REVIEW_NOT_FOUND": "That case is not available to you.",

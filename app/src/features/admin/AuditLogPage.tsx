@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Button, Card, EmptyState, Select, Spinner } from '../../components'
+import { Banner, Button, Card, EmptyState, Select, Spinner } from '../../components'
 import { ANONYMOUS_ACTOR } from '../../audit/audit'
 import { db as defaultDb, type AuscultaDB } from '../../db/db'
 import type { AuditLog, Patient, User } from '../../db/types'
@@ -42,6 +42,7 @@ export function AuditLogPage({ database }: AuditLogPageProps = {}) {
   const { t } = useAdminTranslation()
 
   const [rows, setRows] = useState<AuditLog[] | null>(null)
+  const [failed, setFailed] = useState(false)
   const [users, setUsers] = useState<User[]>([])
   const [patients, setPatients] = useState<Patient[]>([])
   const [filters, setFilters] = useState<Filters>({
@@ -67,7 +68,11 @@ export function AuditLogPage({ database }: AuditLogPageProps = {}) {
         setPatients(allPatients)
       })
       .catch(() => {
-        if (!cancelled) setRows([])
+        // "Could not be read" and "nothing was recorded" are different facts,
+        // and on the accountability record the difference matters most.
+        if (cancelled) return
+        setFailed(true)
+        setRows([])
       })
 
     return () => {
@@ -138,6 +143,7 @@ export function AuditLogPage({ database }: AuditLogPageProps = {}) {
       )
     }
 
+    if (failed) return <Banner tone="danger">{t('admin:audit.loadFailed')}</Banner>
     if (rows.length === 0) return <EmptyState title={t('admin:audit.empty')} />
 
     return (

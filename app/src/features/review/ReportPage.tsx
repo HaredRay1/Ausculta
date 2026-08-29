@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { AppBar, Button, EmptyState, Page, Spinner, verdictTitleKey } from '../../components'
+import {
+  AppBar,
+  Banner,
+  Button,
+  EmptyState,
+  Page,
+  Spinner,
+  verdictTitleKey,
+} from '../../components'
 import { useAuth } from '../../auth/AuthContext'
 import { LOCATION_CODES, type LocationCode } from '../../db/codes'
 import type { Measurement, SymptomEntry } from '../../db/types'
@@ -35,7 +43,7 @@ import {
  *   heading that reads as a clean result.
  */
 
-type LoadState = 'loading' | 'found' | 'missing'
+type LoadState = 'loading' | 'found' | 'missing' | 'failed'
 
 const ALL_LOCATIONS = Object.values(LOCATION_CODES) as LocationCode[]
 
@@ -96,11 +104,18 @@ export function ReportPage({ repository }: ReportPageProps = {}) {
     if (actor === null) return
     let cancelled = false
 
-    void repo.getCase(assessmentId, actor).then((found) => {
-      if (cancelled) return
-      setClinicalCase(found ?? null)
-      setState(found === undefined ? 'missing' : 'found')
-    })
+    void repo
+      .getCase(assessmentId, actor)
+      .then((found) => {
+        if (cancelled) return
+        setClinicalCase(found ?? null)
+        setState(found === undefined ? 'missing' : 'found')
+      })
+      .catch(() => {
+        // Previously unhandled, which left the page spinning forever on a
+        // read failure — indistinguishable from a slow device.
+        if (!cancelled) setState('failed')
+      })
 
     return () => {
       cancelled = true
@@ -112,9 +127,20 @@ export function ReportPage({ repository }: ReportPageProps = {}) {
       <Page>
         <div className="flex items-center gap-3 py-10" aria-busy="true">
           <Spinner />
-          <p className="text-base text-muted">{t('review:case.title')}</p>
+          <p className="text-base text-muted">{t('review:report.loading')}</p>
         </div>
       </Page>
+    )
+  }
+
+  if (state === 'failed') {
+    return (
+      <>
+        <AppBar title={t('review:report.title')} onBack={() => navigate('/review')} />
+        <Page>
+          <Banner tone="danger">{t('review:report.loadFailed')}</Banner>
+        </Page>
+      </>
     )
   }
 

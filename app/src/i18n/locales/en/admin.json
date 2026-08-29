@@ -6,7 +6,6 @@
     "audit": "Activity log",
     "translations": "Translations"
   },
-
   "config": {
     "title": "Clinical settings",
     "subtitle": "Settings an administrator may change. Every change is recorded.",
@@ -15,28 +14,26 @@
     "versionExplain": "Records created from now on are stamped with this version, so a result can always be traced back to the settings that produced it.",
     "lastChanged": "Last changed {{date}} by {{who}}",
     "neverChanged": "Never changed since this device was set up.",
-
     "sessionHeading": "Automatic sign-out",
     "idleLabel": "Sign out after this many minutes of no activity",
     "idleHint": "Between {{min}} and {{max}} minutes. A shared clinic phone left signed in is how one person's account ends up recording someone else's assessment.",
-
     "severityHeading": "Severity bands",
     "severityIntro": "The score at which each severity band begins. Each band must start higher than the one before it.",
     "bandLabel": "{{name}} starts at",
     "bandUnit": "score",
-
     "thresholdsHeading": "Analysis thresholds",
     "thresholdsReadOnlyTitle": "Fixed in this build",
     "thresholdsReadOnlyBody": "The thresholds that decide whether a recording is called a possible finding are built into the analysis software and cannot be changed from this screen. Changing them is a code change and a new release. They are shown here so you can see what this build is using.",
     "thresholdsVersion": "Analysis threshold version {{version}}",
-
     "save": "Save changes",
     "saving": "Saving…",
     "saved": "Saved. Configuration is now version {{version}}.",
     "noChanges": "Nothing has been changed yet.",
-    "reset": "Undo changes"
+    "reset": "Undo changes",
+    "loadFailed": "The settings could not be read, so they are not shown. They have not been changed.",
+    "severityNotConnectedTitle": "Severity score",
+    "severityNotConnectedBody": "No severity model exists yet, so nothing reads these bands. They are saved and given a version so that the first scored record has a version to point back at."
   },
-
   "audit": {
     "title": "Activity log",
     "subtitle": "Everything the app has recorded about who did what, newest first.",
@@ -57,9 +54,9 @@
     "byWhom": "By {{name}}",
     "aboutPatient": "About {{name}}",
     "detail": "Details",
-    "loading": "Loading activity…"
+    "loading": "Loading activity…",
+    "loadFailed": "The activity log could not be read. This does not mean nothing has been recorded."
   },
-
   "translations": {
     "title": "Translation worklist",
     "subtitle": "Every text the app looked for and could not find in the chosen language. These fell back to English.",
@@ -73,13 +70,12 @@
     "total_other": "{{count}} missing texts",
     "sortedNote": "Most needed first — translating the top of this list helps the most people.",
     "copyHint": "The key is where the text lives in the translation files.",
-    "loading": "Loading…"
+    "loading": "Loading…",
+    "loadFailed": "The list could not be read. This does not mean nothing is missing."
   },
-
   "action": {
     "CONFIG_UPDATED": "Settings changed"
   },
-
   "error": {
     "CONFIG_NOT_AUTHORISED": "Only an administrator can change these settings.",
     "CONFIG_IDLE_TIMEOUT_OUT_OF_RANGE": "Choose a number of minutes between 1 and 480.",

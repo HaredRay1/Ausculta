@@ -175,6 +175,58 @@ describe('theme completeness', () => {
   })
 })
 
+/**
+ * The printed sheet is the one artefact that leaves the app on paper and goes
+ * to a hospital, and it is the only surface where the colour tokens cannot
+ * help — so the print palette has to beat every other palette in the cascade.
+ */
+describe('print palette', () => {
+  const printCss = readFileSync(path.join(DESIGN_DIR, 'print.css'), 'utf8')
+
+  /** Crude but sufficient: count id, class/attribute/pseudo-class, and type. */
+  function specificity(selector: string): number {
+    const ids = (selector.match(/#/g) ?? []).length
+    const classes =
+      (selector.match(/\.[a-zA-Z]/g) ?? []).length +
+      (selector.match(/\[/g) ?? []).length +
+      (selector.match(/:(?!not\()[a-zA-Z-]+/g) ?? []).length
+    return ids * 100 + classes * 10
+  }
+
+  it('overrides the dark theme rather than losing to it', () => {
+    // tokens.css darkens with `:root:not([data-theme='light'])`, which is more
+    // specific than a bare `:root`. A print block written as `:root` would lose
+    // on a phone whose system theme is dark, and print white text on black.
+    const darkSelector = ":root:not([data-theme='light'])"
+    const printSelector = printCss
+      .split('\n')
+      .map((line) => line.trim().replace(/,$/, ''))
+      .find((line) => line.startsWith(':root') && line.includes('root:root'))
+
+    expect(printSelector, 'print.css must raise its own specificity').toBeDefined()
+    expect(specificity(printSelector as string)).toBeGreaterThan(specificity(darkSelector))
+  })
+
+  it('forces ink to black and every surface to white', () => {
+    const block = printCss.slice(printCss.indexOf('@media print'))
+    for (const token of [
+      '--color-surface: #ffffff',
+      '--color-surface-raised: #ffffff',
+      '--color-on-surface: #000000',
+      '--color-muted: #000000',
+      '--color-border: #000000',
+    ]) {
+      expect(block).toContain(token)
+    }
+  })
+
+  it('prints A4 and hides the screen-only furniture', () => {
+    expect(printCss).toContain('size: A4')
+    expect(printCss).toContain('.no-print')
+    expect(printCss).toContain('break-inside: avoid')
+  })
+})
+
 describe('compiled stylesheet', () => {
   /** Compiles src/index.css exactly as the Vite plugin would. */
   async function build(candidates: string[]): Promise<string> {

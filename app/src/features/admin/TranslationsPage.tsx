@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Card, EmptyState, Spinner } from '../../components'
+import { Banner, Card, EmptyState, Spinner } from '../../components'
 import { db as defaultDb, type AuscultaDB } from '../../db/db'
 import type { MissingTranslationEntry } from '../../db/types'
 import { AdminShell } from './AdminShell'
@@ -26,6 +26,7 @@ export interface TranslationsPageProps {
 export function TranslationsPage({ database }: TranslationsPageProps = {}) {
   const { t } = useAdminTranslation()
   const [rows, setRows] = useState<MissingTranslationEntry[] | null>(null)
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     const db = database ?? defaultDb
@@ -42,7 +43,11 @@ export function TranslationsPage({ database }: TranslationsPageProps = {}) {
         )
       })
       .catch(() => {
-        if (!cancelled) setRows([])
+        // Reporting "nothing is missing" because the read failed would be
+        // actively reassuring about the opposite of what happened.
+        if (cancelled) return
+        setFailed(true)
+        setRows([])
       })
 
     return () => {
@@ -58,6 +63,10 @@ export function TranslationsPage({ database }: TranslationsPageProps = {}) {
           <p className="text-base text-muted">{t('admin:translations.loading')}</p>
         </div>
       )
+    }
+
+    if (failed) {
+      return <Banner tone="danger">{t('admin:translations.loadFailed')}</Banner>
     }
 
     if (rows.length === 0) {

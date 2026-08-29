@@ -189,11 +189,28 @@ describe('ConfigPage', () => {
     expect(screen.getByText(t('config.thresholdsReadOnlyTitle'))).toBeInTheDocument()
   })
 
-  it('says the severity bands drive nothing yet', async () => {
+  it('says the severity bands drive nothing yet, rather than repeating how to edit them', async () => {
     renderAdmin(<ConfigPage store={store} />)
     await screen.findByLabelText(t('config.idleLabel'))
 
-    expect(screen.getByRole('note')).toBeInTheDocument()
+    // The not-connected panel first carried `severityIntro`, which is the
+    // field help — it explained how to edit the bands instead of saying that
+    // nothing reads them.
+    const note = screen.getByRole('note')
+    expect(note).toHaveTextContent(/no severity model exists yet/i)
+    expect(note).not.toHaveTextContent(t('config.severityIntro'))
+  })
+
+  it('reports a failed read instead of spinning forever', async () => {
+    const broken = {
+      read: () => Promise.reject(new Error('io')),
+      update: () => Promise.reject(new Error('io')),
+      currentVersion: () => Promise.reject(new Error('io')),
+    } as unknown as ConfigStore
+
+    renderAdmin(<ConfigPage store={broken} />)
+
+    expect(await screen.findByText(t('config.loadFailed'))).toBeInTheDocument()
   })
 })
 
@@ -273,6 +290,21 @@ describe('AuditLogPage', () => {
     ).toBeInTheDocument()
   })
 
+  it('says the log could not be read, rather than that nothing happened', async () => {
+    const broken = {
+      auditLogs: { orderBy: () => ({ reverse: () => ({ toArray: () => Promise.reject(new Error('io')) }) }) },
+      users: { toArray: () => Promise.resolve([]) },
+      patients: { toArray: () => Promise.resolve([]) },
+    } as unknown as AuscultaDB
+
+    renderAdmin(<AuditLogPage database={broken} />)
+
+    // "Could not be read" and "nothing was recorded" are different facts, and
+    // on the accountability record the difference is the whole point.
+    expect(await screen.findByText(t('audit.loadFailed'))).toBeInTheDocument()
+    expect(screen.queryByText(t('audit.empty'))).not.toBeInTheDocument()
+  })
+
   it('returns to the first page when a filter changes', async () => {
     await seedEntries(AUDIT_PAGE_SIZE + 5)
     renderAdmin(<AuditLogPage database={db} />)
@@ -320,6 +352,19 @@ describe('TranslationsPage', () => {
     await screen.findByText('common:greeting')
     expect(screen.getByText(`${t('translations.count')}: 7`)).toBeInTheDocument()
     expect(screen.getByText(`${t('translations.language')}: fil`)).toBeInTheDocument()
+  })
+
+  it('does not claim nothing is missing when the read failed', async () => {
+    const broken = {
+      missingTranslations: { toArray: () => Promise.reject(new Error('io')) },
+    } as unknown as AuscultaDB
+
+    renderAdmin(<TranslationsPage database={broken} />)
+
+    // Reporting "nothing is missing" on a failure would be actively
+    // reassuring about the opposite of what happened.
+    expect(await screen.findByText(t('translations.loadFailed'))).toBeInTheDocument()
+    expect(screen.queryByText(t('translations.empty'))).not.toBeInTheDocument()
   })
 
   it('says plainly when nothing is missing', async () => {

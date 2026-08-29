@@ -17,9 +17,20 @@
  */
 
 @media print {
-  :root,
-  :root[data-theme='dark'],
-  :root[data-theme='light'] {
+  /*
+   * `:root:root:root` rather than `:root`, and it is not a typo.
+   *
+   * The dark override in tokens.css is `:root:not([data-theme='light'])`,
+   * which has specificity (0,2,0). A plain `:root` here is (0,1,0) and LOSES
+   * to it — so printing from a phone whose system theme is dark would have
+   * kept the dark tokens and put white text on a black page, which is both
+   * illegible and a wasted cartridge. Repeating the pseudo-class raises this
+   * to (0,3,0) so the print palette wins outright, whatever the device theme
+   * and whether or not `data-theme` is set.
+   */
+  :root:root:root,
+  :root:root:root[data-theme='dark'],
+  :root:root:root[data-theme='light'] {
     color-scheme: light;
 
     --color-surface: #ffffff;

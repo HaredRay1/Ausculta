@@ -63,6 +63,7 @@ export function ConfigPage({ store }: ConfigPageProps = {}) {
   const [errorKey, setErrorKey] = useState<string | null>(null)
   const [savedVersion, setSavedVersion] = useState<number | null>(null)
   const [busy, setBusy] = useState(false)
+  const [loadFailed, setLoadFailed] = useState(false)
 
   function applyToForm(loaded: ClinicalConfig) {
     setConfig(loaded)
@@ -78,7 +79,9 @@ export function ConfigPage({ store }: ConfigPageProps = {}) {
         if (!cancelled) applyToForm(loaded)
       })
       .catch(() => {
-        if (!cancelled) setErrorKey('admin:error.UNEXPECTED')
+        // Without this the screen kept spinning: `config` stayed null, so the
+        // early return below rendered the loader and the error was never seen.
+        if (!cancelled) setLoadFailed(true)
       })
     return () => {
       cancelled = true
@@ -108,6 +111,14 @@ export function ConfigPage({ store }: ConfigPageProps = {}) {
     } finally {
       setBusy(false)
     }
+  }
+
+  if (loadFailed) {
+    return (
+      <AdminShell activeId="config" title={t('admin:config.title')}>
+        <Banner tone="danger">{t('admin:config.loadFailed')}</Banner>
+      </AdminShell>
+    )
   }
 
   if (config === null) {
@@ -181,8 +192,8 @@ export function ConfigPage({ store }: ConfigPageProps = {}) {
             the same lie as an editable threshold.
           */}
           <NotConnectedPanel
-            title={t('admin:config.severityHeading')}
-            body={t('admin:config.severityIntro')}
+            title={t('admin:config.severityNotConnectedTitle')}
+            body={t('admin:config.severityNotConnectedBody')}
           />
 
           {bands.map((band, index) => (
