@@ -3,7 +3,6 @@ import { AuscultaDB } from '../../../db/db'
 import { ROLES } from '../../../db/codes'
 import type { Patient, User } from '../../../db/types'
 import { syncDemoAssignments } from '../assignments'
-import { walkthroughPatientSpec } from '../dataset'
 import { ensureFirstRunDemo } from '../firstRun'
 import { demoPatientId, seedDemoData } from '../seed'
 import { visibleRows } from '../visibility'
@@ -135,18 +134,61 @@ describe('syncDemoAssignments', () => {
     expect(result.patientsUpdated).toBe(0)
   })
 
-  it('links a patient-role account to the walkthrough case', async () => {
+  it('NEVER links a demo patient to a real account', async () => {
+    // The defect this replaces: a patient-role account was pointed at the
+    // walkthrough case so validators would not meet an empty screen, and the
+    // app then greeted a real person by the fictional patient's name, because
+    // patientRepository resolves "my record" through linkedUserId.
     await db.users.put(user('patient-1', ROLES.PATIENT))
     await seedDemoData(db, { now: NOW })
 
+    await syncDemoAssignments(db)
+
+    const linked = (await db.patients.toArray()).filter(
+      (patient) => patient.linkedUserId !== undefined,
+    )
+    expect(linked).toEqual([])
+  })
+
+  it('repairs a device that already carries the bad link', async () => {
+    await db.users.put(user('patient-1', ROLES.PATIENT))
+    await seedDemoData(db, { now: NOW })
+    // Exactly the state an earlier build left behind.
+    const target = (await db.patients.toArray())[0]
+    await db.patients.put({ ...target, linkedUserId: 'patient-1' })
+
     const result = await syncDemoAssignments(db)
 
-    expect(result.linkedPatientAccount).toBe(true)
-    const walkthrough = await db.patients.get(demoPatientId(walkthroughPatientSpec().seq))
-    expect(walkthrough?.linkedUserId).toBe('patient-1')
+    expect(result.unlinkedFromRealAccounts).toBe(1)
+    const repaired = await db.patients.get(target.id)
+    expect(repaired?.linkedUserId).toBeUndefined()
+    expect(Object.hasOwn(repaired!, 'linkedUserId')).toBe(false)
+  })
 
-    // Linking is once-only, not re-applied on every launch.
-    expect((await syncDemoAssignments(db)).linkedPatientAccount).toBe(false)
+  it('leaves a REAL patient linked to their own account', async () => {
+    await db.users.put(user('patient-1', ROLES.PATIENT))
+    await db.patients.put({
+      id: 'PT-REAL-0001',
+      studyId: 'ST-REAL000000000001',
+      name: 'Real Patient',
+      birthDate: '1990-01-01',
+      sex: 'FEMALE',
+      linkedUserId: 'patient-1',
+      assignedPractitionerIds: [],
+      assignedHealthWorkerIds: [],
+      consent: null,
+      respiratoryHistory: [],
+      familyHistory: [],
+      preferredLanguage: 'en',
+      isDemo: 0,
+      createdAt: '2026-08-01T00:00:00.000Z',
+    })
+    await seedDemoData(db, { now: NOW })
+
+    await syncDemoAssignments(db)
+
+    const real = await db.patients.get('PT-REAL-0001')
+    expect(real?.linkedUserId).toBe('patient-1')
   })
 
   it('does not give a patient account somebody else’s caseload', async () => {

@@ -1,7 +1,5 @@
 import { db as defaultDb, type AuscultaDB } from '../../db/db'
 import { ROLES } from '../../db/codes'
-import { walkthroughPatientSpec } from './dataset'
-import { demoPatientId } from './seed'
 import { demoRowsOnly } from './visibility'
 
 /**
@@ -38,8 +36,8 @@ function union(existing: readonly string[], ids: readonly string[]): string[] {
 export interface AssignmentSyncResult {
   /** Demo patients whose assignment arrays changed. */
   patientsUpdated: number
-  /** True when a demo patient was linked to a patient-role account. */
-  linkedPatientAccount: boolean
+  /** Demo patients detached from a real account (repairing an earlier build). */
+  unlinkedFromRealAccounts: number
 }
 
 /**
@@ -48,9 +46,8 @@ export interface AssignmentSyncResult {
  * Assignment follows role rather than spraying every id into both arrays:
  * health workers land in `assignedHealthWorkerIds`, practitioners in
  * `assignedPractitionerIds`, and admins and researchers in both since they may
- * legitimately arrive from either screen. Patient-role accounts are handled
- * separately below — a patient does not get a caseload, they get their own
- * record.
+ * legitimately arrive from either screen. Patient-role accounts get NOTHING
+ * here: a caseload is not theirs, and their own record must be a real one.
  *
  * Safe and cheap to call on every launch: seven patients, and a write only
  * when something is genuinely missing.
@@ -58,8 +55,12 @@ export interface AssignmentSyncResult {
 export async function syncDemoAssignments(
   db: AuscultaDB = defaultDb,
 ): Promise<AssignmentSyncResult> {
+  const result: AssignmentSyncResult = { patientsUpdated: 0, unlinkedFromRealAccounts: 0 }
+  // Runs before the early return: a device that still carries a bad link from
+  // an earlier build must be repaired even if it has no accounts right now.
+  result.unlinkedFromRealAccounts = await unlinkDemoPatientsFromAccounts(db)
+
   const users = await db.users.toArray()
-  const result: AssignmentSyncResult = { patientsUpdated: 0, linkedPatientAccount: false }
   if (users.length === 0) return result
 
   const healthWorkerIds = users
@@ -83,34 +84,39 @@ export async function syncDemoAssignments(
     }
   }
 
-  result.linkedPatientAccount = await linkWalkthroughToPatientAccount(db)
   return result
 }
 
 /**
- * Points a patient-role account at the walkthrough case.
+ * Detaches any seeded patient from a real account.
  *
- * The largest group of validators are asthma patients signing in to a
- * patient-facing app, and their own record is the first thing they will look
- * for. Without a link they meet an empty screen and score it as a navigation
- * failure. The walkthrough patient is the right one to attach: she has asthma
- * and four visits, so the screens that matter have a trend to draw.
+ * An earlier version of this file did the opposite: it pointed a patient-role
+ * account at the walkthrough case so that patient validators would not meet an
+ * empty screen. That was wrong, and it caused a real defect — the owner
+ * registered an account on the installed build and the app greeted him by the
+ * fictional patient's name, because `patientRepository` resolves "my record"
+ * through `linkedUserId` and the link was genuinely there.
  *
- * Only ever fills an empty `linkedUserId`, and only for a demo patient, so it
- * cannot detach a real linkage or claim an account that is already spoken for.
+ * The reasoning that produced it was that validators need content. That does
+ * not justify the app telling a real person they are someone else. An identity
+ * is data, and the rule the rest of this feature keeps — never present invented
+ * data as real — does not stop applying because the alternative is an empty
+ * screen. A patient validator who needs content needs a demo ACCOUNT, not a
+ * real account wearing a fictional person's record.
+ *
+ * This runs on every launch rather than once, so a device already carrying the
+ * bad link repairs itself on next start instead of needing a reinstall. It only
+ * ever touches rows flagged `isDemo`, so a real patient's link is never removed.
  */
-async function linkWalkthroughToPatientAccount(db: AuscultaDB): Promise<boolean> {
-  const patientUser = await db.users.filter((user) => user.role === ROLES.PATIENT).first()
-  if (patientUser === undefined) return false
+async function unlinkDemoPatientsFromAccounts(db: AuscultaDB): Promise<number> {
+  const linked = await demoRowsOnly(db.patients)
+    .filter((patient) => patient.linkedUserId !== undefined)
+    .toArray()
 
-  const alreadyLinked = await demoRowsOnly(db.patients)
-    .filter((patient) => patient.linkedUserId === patientUser.id)
-    .count()
-  if (alreadyLinked > 0) return false
-
-  const target = await db.patients.get(demoPatientId(walkthroughPatientSpec().seq))
-  if (target === undefined || target.linkedUserId !== undefined) return false
-
-  await db.patients.put({ ...target, linkedUserId: patientUser.id })
-  return true
+  for (const patient of linked) {
+    const repaired = { ...patient }
+    delete repaired.linkedUserId
+    await db.patients.put(repaired)
+  }
+  return linked.length
 }
