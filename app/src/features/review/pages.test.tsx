@@ -257,6 +257,52 @@ describe('clinical view: telling the machine from the clinician', () => {
   })
 })
 
+describe('clinical view: heading order', () => {
+  /** Every heading in DOM order, as levels. */
+  function headingLevels(): number[] {
+    return Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6')).map((h) =>
+      Number(h.tagName.slice(1)),
+    )
+  }
+
+  it('never skips a heading level', async () => {
+    // A screen-reader user navigates this page by heading rather than reading
+    // it linearly -- it is the longest and densest in the app. A skipped level
+    // makes a section sound missing, and there is no way to tell whether you
+    // jumped over something.
+    await seedCase({ withPrevious: true })
+    renderCase()
+    await screen.findByText(t('label.ai'))
+
+    const levels = headingLevels()
+    expect(levels.length).toBeGreaterThan(4)
+    expect(levels[0]).toBe(1)
+
+    for (let i = 1; i < levels.length; i++) {
+      const previous = levels[i - 1] ?? 1
+      const current = levels[i] ?? 1
+      // Going deeper may only ever go one level at a time. Coming back out
+      // can jump any distance, which is normal and fine.
+      if (current > previous) {
+        expect(current - previous).toBeLessThanOrEqual(1)
+      }
+    }
+  })
+
+  it('opens at the patient name and puts the section headings at level 2', async () => {
+    await seedCase()
+    renderCase()
+    await screen.findByText(t('label.ai'))
+
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Maria Dela Cruz')
+    const level2 = screen
+      .getAllByRole('heading', { level: 2 })
+      .map((h) => h.textContent ?? '')
+    expect(level2).toContain(t('label.practitioner'))
+    expect(level2).toContain(t('case.patientContext'))
+  })
+})
+
 describe('clinical view: longitudinal comparison', () => {
   it('renders no comparison at all when there is no earlier recording', async () => {
     await seedCase()

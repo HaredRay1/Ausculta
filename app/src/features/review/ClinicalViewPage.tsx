@@ -411,8 +411,16 @@ function Comparison({ location }: { location: LocationCase }) {
   )
 }
 
+/**
+ * A heading inside a Section.
+ *
+ * h3, not h4. Section renders an h2, so an h4 here skips a level and a screen
+ * reader navigating by heading hears one vanish -- on the longest, densest page
+ * in the app, which is exactly where heading navigation is how someone copes
+ * instead of reading linearly. The size is set by the class, not the tag.
+ */
 function SubHeading({ children }: { children: React.ReactNode }) {
-  return <h4 className="mt-4 mb-1 text-sm font-bold uppercase tracking-wide text-muted">{children}</h4>
+  return <h3 className="mt-4 mb-1 text-sm font-bold uppercase tracking-wide text-muted">{children}</h3>
 }
 
 function Muted({ children }: { children: React.ReactNode }) {

@@ -131,9 +131,11 @@ function AlertCard({
 
   return (
     <Card as="article" aria-label={t(`alertType.${alert.typeCode}`)}>
-      <h3 className="text-lg font-semibold text-on-surface">
+      {/* h2: these cards are top-level items under the page's h1, with no
+          Section between them, so an h3 would skip a level. */}
+      <h2 className="text-lg font-semibold text-on-surface">
         {t(`alertType.${alert.typeCode}`)}
-      </h3>
+      </h2>
       <p className="mt-1 text-base text-on-surface">{patient.name}</p>
 
       {/* The observation, in the reader's language, built from stored evidence
