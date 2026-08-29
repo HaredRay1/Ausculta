@@ -69,6 +69,12 @@ export function PrimaryButton({
  * carry no app bar or bottom nav, so they centre a narrow column instead of
  * reserving space for chrome that is not there.
  *
+ * The page sits on `surface-well` rather than the ordinary page colour, so its
+ * one white card has a 1.13 tint step under it instead of 1.06. Everywhere else
+ * a card has neighbours and chrome to establish that it is a card; here it is
+ * the only object on the screen, and if the step is lost in daylight on a cheap
+ * LCD the form is just fields floating on a background. See tokens.css.
+ *
  * The mark and the card were added after looking at the screens rather than the
  * code. Sign-in was a bare title on an empty canvas, which is a jarring drop
  * from a landing page that opens with a large mark and a wordmark — it reads as
@@ -90,7 +96,7 @@ export function AuthScreen({
 }) {
   return (
     <main
-      className="min-h-dvh bg-surface px-5 py-8 text-on-surface"
+      className="min-h-dvh bg-surface-well px-5 py-8 text-on-surface"
       style={{
         paddingTop: 'calc(env(safe-area-inset-top) + 2rem)',
         paddingBottom: 'calc(env(safe-area-inset-bottom) + 2rem)',

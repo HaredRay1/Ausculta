@@ -213,6 +213,45 @@ describe('theme completeness', () => {
  * to a hospital, and it is the only surface where the colour tokens cannot
  * help — so the print palette has to beat every other palette in the cascade.
  */
+describe('the single-card well', () => {
+  /**
+   * Sign-in, registration and first-run setup are the only screens whose entire
+   * content is ONE card, so they are the only ones where losing the card edge
+   * leaves nothing behind — everywhere else neighbouring cards and chrome say
+   * what a card is. `--color-surface-well` is the ground under those screens.
+   *
+   * The rule is a floor on separation, not a fixed colour, so a later palette
+   * change is free to move both values as long as the card still stands off the
+   * ground at least as well as it does on the ordinary page. Measured off the
+   * real capture that prompted it: a white card on the light page was 1.063,
+   * which reads at 1x and is the first thing a cheap LCD in daylight loses.
+   */
+  const MIN_SEPARATION = 1.12
+
+  it.each([
+    ['light', lightTokens],
+    ['dark', darkTokens],
+  ])('separates the card from the well by at least %s in %s', (_theme, tokens) => {
+    const card = resolve(tokens, '--color-surface-raised')
+    const well = resolve(tokens, '--color-surface-well')
+    expect(contrastRatio(card, well)).toBeGreaterThanOrEqual(MIN_SEPARATION)
+  })
+
+  it.each([
+    ['light', lightTokens],
+    ['dark', darkTokens],
+  ])('never separates a card less well than the ordinary page does, in %s', (_theme, tokens) => {
+    // The whole point is that this ground is at least as good as the page it
+    // replaces. Dark satisfies it by BEING the page, which is deliberate: its
+    // card sits at 1.13 on the page and only 1.05 on the sunken well, so
+    // deepening the well there would flatten exactly what it fixes in light.
+    const card = resolve(tokens, '--color-surface-raised')
+    const page = resolve(tokens, '--color-surface')
+    const well = resolve(tokens, '--color-surface-well')
+    expect(contrastRatio(card, well)).toBeGreaterThanOrEqual(contrastRatio(card, page))
+  })
+})
+
 describe('print palette', () => {
   const printCss = readFileSync(path.join(DESIGN_DIR, 'print.css'), 'utf8')
 

@@ -33,6 +33,21 @@
   --color-surface: #f7f8fa;
   --color-surface-raised: #ffffff;
   --color-surface-sunken: #eef1f4;
+  /* The ground under a screen whose whole content is ONE card — sign-in,
+   * registration, first-run setup.
+   *
+   * A white card on the ordinary page is a 1.06 tint step, which reads fine on
+   * this display and is the first thing a cheap LCD loses in daylight. Anywhere
+   * else that hardly matters: there are neighbouring cards, chrome and content
+   * establishing the language. On sign-in the card is the only object on the
+   * screen, so if the step is lost the form is just fields floating on a page.
+   * Deepening the well takes it to 1.13, which is what dark already has.
+   *
+   * Per-theme rather than reusing surface-sunken, because dark needs the
+   * opposite: its card sits at 1.13 on the page and only 1.05 on the sunken
+   * well, so deepening it there would flatten exactly what it fixes in light.
+   * Dark keeps the page. */
+  --color-surface-well: #eef1f4;
   /* The app bar and bottom nav. Distinct from both the page and its cards, so
    * the chrome reads as chrome rather than as more page. */
   --color-chrome: #ffffff;
@@ -218,6 +233,8 @@
     --color-surface: #0e1013;
     --color-surface-raised: #1a1d21;
     --color-surface-sunken: #16181c;
+    /* Deliberately the page colour. See the light definition. */
+    --color-surface-well: #0e1013;
     --color-chrome: #141719;
     --color-on-chrome: #f1f5f9;
     --color-on-surface: #f1f5f9;
@@ -278,6 +295,8 @@
   --color-surface: #0e1013;
   --color-surface-raised: #1a1d21;
   --color-surface-sunken: #16181c;
+  /* Deliberately the page colour. See the light definition. */
+  --color-surface-well: #0e1013;
   --color-chrome: #141719;
   --color-on-chrome: #f1f5f9;
   --color-on-surface: #f1f5f9;

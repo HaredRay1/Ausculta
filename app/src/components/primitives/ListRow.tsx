@@ -19,7 +19,10 @@ export interface ListRowProps {
   subtitle?: string
   /** Chips or a status pill, below the subtitle. */
   detail?: ReactNode
-  /** Status or a count, right-aligned against the title. */
+  /**
+   * Status or a count. Sits with the chips below the title rather than beside
+   * it — see the note on `body` for the 360px name-shattering this prevents.
+   */
   trailing?: ReactNode
   onClick?: () => void
   /** Shown under everything — the sample-data pill lives here. */
@@ -35,20 +38,39 @@ export function ListRow({
   onClick,
   footer,
 }: ListRowProps) {
+  /*
+   * The title gets a line to itself, and `trailing` sits with the chips below.
+   *
+   * It used to share the title's line as a shrink-0 element, which is fine
+   * until the name is long and the phone is 360px. Measured on a real capture:
+   * "Waiting 11 days" took its natural width and left 78px for the name, so
+   * "Corazon Villaflor" broke across two lines and "Rosalinda Mangubat" on the
+   * admin screen shattered into "Rosalind / a / Manguba / t" — single
+   * characters orphaned on their own lines. Filipino names are long and this is
+   * the row a practitioner identifies a patient by, so that is not a rare case,
+   * it is the common one.
+   *
+   * `break-words` was not the culprit and forbidding it would only trade a
+   * shattered name for one that overflows its card. The bug was giving the
+   * primary identifier whatever width a secondary label left over. Nothing
+   * shares its line now, at any width, so no future label can take it away.
+   */
   const body = (
     <div className="flex w-full items-start gap-3">
       {leading !== undefined && <span className="mt-0.5 shrink-0">{leading}</span>}
 
       <span className="min-w-0 flex-1 text-left">
-        <span className="flex items-start justify-between gap-3">
-          <span className="font-heading text-base font-bold text-on-surface">{title}</span>
-          {trailing !== undefined && <span className="shrink-0">{trailing}</span>}
-        </span>
+        <span className="block font-heading text-base font-bold text-on-surface">{title}</span>
 
         {subtitle !== undefined && (
           <span className="mt-0.5 block text-sm text-muted">{subtitle}</span>
         )}
-        {detail !== undefined && <span className="mt-2 flex flex-wrap gap-1.5">{detail}</span>}
+        {(detail !== undefined || trailing !== undefined) && (
+          <span className="mt-2 flex flex-wrap items-center gap-1.5">
+            {trailing}
+            {detail}
+          </span>
+        )}
         {footer !== undefined && <span className="mt-2 block">{footer}</span>}
       </span>
 

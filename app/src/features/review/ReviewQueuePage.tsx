@@ -165,6 +165,14 @@ function QueueRow({ item, onOpen }: { item: QueueItem; onOpen: () => void }) {
    * `unusable` is the exception and is warning-toned, because it is a
    * data-quality fact with an unambiguous action — those recordings need
    * taking again — and it makes no claim about the patient at all.
+   *
+   * The chip wording was shortened after a 360px capture showed every chip
+   * taking a full line of its own, which is the stacked-sentences layout again
+   * with rounded corners on it. "3 locations flagged by the app" became "App
+   * flagged 3 places" — the attribution is the part that had to survive, since
+   * a count with no actor reads as the app's clinical opinion rather than as a
+   * record of what it marked, and it is now the first thing in the sentence
+   * rather than a trailing qualifier.
    */
   return (
     <ListRow
@@ -176,7 +184,7 @@ function QueueRow({ item, onOpen }: { item: QueueItem; onOpen: () => void }) {
         t('case.recordedOn', { date: new Date(item.assessment.date).toLocaleDateString() }),
       ].join(' · ')}
       trailing={
-        <span className="text-sm text-muted">
+        <span className="text-sm font-semibold text-on-surface">
           {item.waitingDays === 0
             ? t('queue.waitingToday')
             : t('queue.waiting', { count: item.waitingDays })}
