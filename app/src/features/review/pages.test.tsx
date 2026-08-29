@@ -320,6 +320,28 @@ describe('review form', () => {
     expect(assessment?.reviewStatus).toBe(REVIEW_STATUSES.APPROVED)
   })
 
+  it('says what is missing instead of doing nothing, when no conclusion is chosen', async () => {
+    // The button is deliberately not disabled. A greyed control with no stated
+    // reason is the most frustrating thing on a form, and a disabled attribute
+    // announces nothing to a screen reader either.
+    await seedCase()
+    renderWithAuth(
+      <ReviewFormPage repository={repo} />,
+      '/review/asm-1/decide',
+      '/review/:assessmentId/decide',
+    )
+
+    const submit = await screen.findByRole('button', { name: t('form.submit') })
+    expect(submit).not.toBeDisabled()
+
+    fireEvent.click(submit)
+
+    expect(
+      await screen.findByText(t('error.REVIEW_INVALID_INTERPRETATION')),
+    ).toBeInTheDocument()
+    expect(await db.clinicalReviews.count()).toBe(0)
+  })
+
   it('tells the practitioner their conclusion does not change the automatic result', async () => {
     await seedCase()
     renderWithAuth(

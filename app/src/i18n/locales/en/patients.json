@@ -100,7 +100,9 @@
     "notFound": "Patient not found",
     "notFoundHint": "It may belong to another health worker, or the ID may be wrong.",
     "backToList": "Back to patients",
-    "loading": "Loading patient record"
+    "loading": "Loading patient record",
+    "startAssessment": "Record an assessment",
+    "startAssessmentHint": "Take lung sound recordings for this patient."
   },
   "care": {
     "practitioners": "Practitioners",

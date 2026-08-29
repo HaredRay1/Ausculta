@@ -363,6 +363,27 @@ describe('patient detail', () => {
     expect(screen.queryByText(/not a real/i)).not.toBeInTheDocument()
   })
 
+  it('offers the health worker a way to record, which is why they opened it', async () => {
+    // Finding a patient then recording them is the core journey, and nothing
+    // in the app linked to /assessment/new before this.
+    const actor = await signIn()
+    const patient = await repo.create({ demographics, preferredLanguage: 'en' }, actor)
+
+    renderWithAuth(
+      <PatientDetailPage repository={repo} />,
+      `/patients/${patient.id}`,
+      '/patients/:patientId',
+    )
+
+    const start = await screen.findByRole('button', { name: t('detail.startAssessment') })
+    expect(start).toBeInTheDocument()
+    // Above the clinical detail, so it needs no scrolling on a 360px phone.
+    const demographics_heading = screen.getByText(t('detail.demographics'))
+    expect(start.compareDocumentPosition(demographics_heading)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    )
+  })
+
   it('labels the study number as carrying no personal details', async () => {
     const actor = await signIn()
     const patient = await repo.create({ demographics, preferredLanguage: 'en' }, actor)

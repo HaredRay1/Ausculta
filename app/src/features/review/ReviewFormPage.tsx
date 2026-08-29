@@ -136,7 +136,15 @@ export function ReviewFormPage({ repository }: ReviewFormPageProps = {}) {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault()
-    if (actor === null || saving || outcome === '') return
+    if (actor === null || saving) return
+
+    // Say why nothing happened. Returning silently here made the button look
+    // broken: the practitioner presses it, the screen does not move, and there
+    // is nothing on the page explaining what is missing.
+    if (outcome === '') {
+      setError(t('error.REVIEW_INVALID_INTERPRETATION'))
+      return
+    }
 
     setSaving(true)
     setError(null)
@@ -248,7 +256,11 @@ export function ReviewFormPage({ repository }: ReviewFormPageProps = {}) {
         </Card>
 
         <div className="flex flex-col gap-3 pb-4">
-          <Button type="submit" size="lg" fullWidth loading={saving} disabled={outcome === ''}>
+          {/* Deliberately NOT disabled when no conclusion is chosen. A greyed
+              button with no stated reason is the most frustrating thing on a
+              form; pressing it and being told what is missing is kinder and
+              reaches a screen reader, which a disabled attribute does not. */}
+          <Button type="submit" size="lg" fullWidth loading={saving}>
             {saving ? t('form.submitting') : t('form.submit')}
           </Button>
           <Button

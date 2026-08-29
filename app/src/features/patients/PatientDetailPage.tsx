@@ -17,7 +17,12 @@ import { useAuth } from '../../auth/AuthContext'
 import type { HistoryEntry, Patient } from '../../db/types'
 import { usePatientsTranslation } from './i18n'
 import { formatPatientIdForDisplay } from './ids'
-import { createPatientRepository, type Actor, type PatientRepository } from './repository'
+import {
+  ROLES_THAT_CAN_REGISTER,
+  createPatientRepository,
+  type Actor,
+  type PatientRepository,
+} from './repository'
 import { ageInYears } from './validation'
 
 type LoadState = 'loading' | 'found' | 'missing'
@@ -35,6 +40,7 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
 
   const repo = useMemo(() => repository ?? createPatientRepository(), [repository])
   const actor: Actor | null = user === null ? null : { id: user.id, role: user.role }
+  const canAssess = actor !== null && ROLES_THAT_CAN_REGISTER.includes(actor.role)
 
   const [patient, setPatient] = useState<Patient | null>(null)
   const [state, setState] = useState<LoadState>('loading')
@@ -98,6 +104,29 @@ export function PatientDetailPage({ repository }: PatientDetailPageProps = {}) {
           project cannot allow, so the label goes above the record rather than
           somewhere it can be scrolled past. */}
       {patient.isDemo === 1 && <FictionalDataBanner />}
+
+      {/*
+        The primary action, above the record rather than below it.
+
+        Finding a patient and then recording them is THE journey this product
+        exists for, and until now nothing in the app linked to
+        /assessment/new -- a health worker could register a patient, open the
+        record, and have no way to start. It sits above the details because on
+        a 360px phone anything below them is a scroll away, and it is shown
+        only to the roles that actually operate the device.
+      */}
+      {canAssess && (
+        <div className="pb-1">
+          <Button
+            size="lg"
+            fullWidth
+            onClick={() => navigate(`/assessment/new?patientId=${encodeURIComponent(patient.id)}`)}
+          >
+            {t('detail.startAssessment')}
+          </Button>
+          <p className="mt-2 text-sm text-muted">{t('detail.startAssessmentHint')}</p>
+        </div>
+      )}
 
       <Section title={t('detail.demographics')}>
         <Card>
