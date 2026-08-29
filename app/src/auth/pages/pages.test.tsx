@@ -4,6 +4,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { AuscultaDB } from '../../db/db'
 import { ROLES, USER_STATUSES } from '../../db/codes'
+import { initialStatusForRole } from '../authService'
 import { i18n as appI18n } from '../../i18n'
 import { AuthProvider } from '../AuthContext'
 import type { AuthService } from '../authService'
@@ -77,6 +78,35 @@ describe('SetupAdminPage', () => {
     expect(admin).toMatchObject({ role: ROLES.ADMIN, status: USER_STATUSES.ACTIVE })
     await expect(auth.isAdminBootstrapped()).resolves.toBe(true)
     await expect(auth.getCurrentUser()).resolves.toMatchObject({ username: 'admin' })
+  })
+
+  it('does not claim approval is needed by people who do not need it', () => {
+    // A truth check, not a render check. The screen said "nobody else can sign
+    // in until you approve them", which is false: PATIENT registers ACTIVE and
+    // signs in with no approval at all. Tying the sentence to the behaviour
+    // means the claim cannot drift away from what the code does.
+    expect(initialStatusForRole(ROLES.PATIENT)).toBe(USER_STATUSES.ACTIVE)
+    expect(initialStatusForRole(ROLES.HEALTH_WORKER)).toBe(
+      USER_STATUSES.PENDING_VERIFICATION,
+    )
+
+    const explanation = appI18n.t('auth:setupAdmin.whatIsAdmin')
+    expect(explanation).toMatch(/patients do not need your approval/i)
+    expect(explanation).toMatch(/health worker or a doctor/i)
+  })
+
+  it('calls the person in charge the same thing on every screen', () => {
+    // The setup screen calls them "the account in charge of this phone" and
+    // these called the same person "an administrator". One concept, two names,
+    // across the screens a new user meets in sequence.
+    for (const key of [
+      'auth:register.pendingBody',
+      'auth:error.ACCOUNT_PENDING_VERIFICATION',
+      'auth:error.ACCOUNT_DISABLED',
+    ]) {
+      expect(appI18n.t(key), key).not.toMatch(/administrator/i)
+      expect(appI18n.t(key), key).toMatch(/this phone/i)
+    }
   })
 
   it('says what the account is for before asking for anything', async () => {

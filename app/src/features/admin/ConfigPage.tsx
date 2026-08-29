@@ -184,17 +184,17 @@ export function ConfigPage({ store }: ConfigPageProps = {}) {
           <h3 className="font-heading text-base font-bold text-on-surface">
             {t('admin:config.severityHeading')}
           </h3>
-          <p className="text-sm text-muted">{t('admin:config.severityIntro')}</p>
-
           {/*
-            Editable and versioned, but honest about being inert: nothing reads
-            these yet, so a screen implying they are shaping results would be
-            the same lie as an editable threshold.
+            The not-connected panel comes FIRST. Explaining how to set the
+            bands and only then admitting nothing reads them left a reader
+            asking why they had just been taught to fill in something inert.
           */}
           <NotConnectedPanel
             title={t('admin:config.severityNotConnectedTitle')}
             body={t('admin:config.severityNotConnectedBody')}
           />
+
+          <p className="text-sm text-muted">{t('admin:config.severityIntro')}</p>
 
           {bands.map((band, index) => (
             <TextField
@@ -239,6 +239,7 @@ export function ConfigPage({ store }: ConfigPageProps = {}) {
           <p className="text-sm font-semibold text-on-surface">
             {t('admin:config.thresholdsVersion', { version: TUNABLES.tunablesVersion })}
           </p>
+          <p className="mt-1 text-sm text-muted">{t('admin:config.thresholdsTechnicalNote')}</p>
           <dl className="mt-2 flex flex-col gap-1 text-sm">
             {SHOWN_THRESHOLDS.map(([name, value]) => (
               <div key={name} className="flex justify-between gap-3">

@@ -32,7 +32,8 @@
     "reset": "Undo changes",
     "loadFailed": "The settings could not be read, so they are not shown. They have not been changed.",
     "severityNotConnectedTitle": "Severity score",
-    "severityNotConnectedBody": "No severity model exists yet, so nothing reads these bands. They are saved and given a version so that the first scored record has a version to point back at."
+    "severityNotConnectedBody": "No severity model exists yet, so nothing reads these bands. They are saved and given a version so that the first scored record has a version to point back at.",
+    "thresholdsTechnicalNote": "These are technical values for the research team. They are shown so a result can be traced back to the exact settings that produced it. There is nothing for you to do with them."
   },
   "audit": {
     "title": "Activity log",
