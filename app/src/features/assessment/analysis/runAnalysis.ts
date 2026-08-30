@@ -24,7 +24,13 @@ export async function runAnalysis(
 ): Promise<AnalysisResult> {
   try {
     return await port.analyze(precheck.audio.pcm16k, precheck.meta)
-  } catch {
+  } catch (error) {
+    // The verdict handed back says "model not connected" and nothing more,
+    // which is what the clinician should see and useless to whoever has to work
+    // out WHY the impulse did not run. The real reason — a worker that 404s, a
+    // WASM fetch that timed out, a load that threw — exists only here, so say it
+    // out loud before dropping it.
+    console.warn('Analysis fell back to the precheck result: the model did not run.', error)
     return precheck
   }
 }
