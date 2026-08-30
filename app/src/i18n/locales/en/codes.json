@@ -15,10 +15,10 @@
     "L_LOWER": "Left lower lung"
   },
   "classification": {
-    "ASTHMA": "Asthma",
-    "BRONCHIOLITIS": "Bronchiolitis",
-    "HEALTHY": "Healthy",
-    "PNEUMONIA": "Pneumonia"
+    "ASTHMA": "High-Pitched Wheezing",
+    "BRONCHIOLITIS": "Wheezing With Crackles",
+    "HEALTHY": "Healthy (soft)",
+    "PNEUMONIA": "Crackles"
   },
   "aiStatus": {
     "PENDING": "Pending",

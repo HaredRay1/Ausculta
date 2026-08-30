@@ -43,10 +43,12 @@ function clinicalDigits(): string[] {
 }
 
 describe('the result screen', () => {
-  it('names the condition and shows the confidence as a number for a finding', () => {
+  // 'Pneumonia' is the raw model label; the screen must show the acoustic
+  // pattern it maps to, never the disease name the class was trained under.
+  it('names the sound pattern and shows the confidence as a number for a finding', () => {
     renderResult(suggestiveResult('Pneumonia', 0.82))
 
-    expect(screen.getByText(/Sound pattern suggestive of Pneumonia/)).toBeInTheDocument()
+    expect(screen.getByText(/Sound pattern suggestive of Crackles/)).toBeInTheDocument()
     expect(screen.getByText(/please consult a physician/)).toBeInTheDocument()
     expect(screen.getByText('82%')).toBeInTheDocument()
   })

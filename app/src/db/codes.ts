@@ -25,6 +25,24 @@ export const LOCATION_CODES = {
   L_LOWER: 'L_LOWER',
 } as const
 
+/**
+ * The impulse's four output classes.
+ *
+ * These codes carry the disease names the model was trained under, because
+ * they must keep round-tripping to the raw WASM labels in MODEL_REGISTRY
+ * (`audio/constants.ts`) and to every assessment already stored on a device.
+ * They are NOT what a user sees: the app presents each class as the acoustic
+ * pattern it corresponds to, because a lung-sound classifier hears a sound, it
+ * does not make a diagnosis. The display strings in `locales/en/codes.json`
+ * are therefore deliberately not translations of these names —
+ *
+ *   ASTHMA        -> "High-Pitched Wheezing"
+ *   BRONCHIOLITIS -> "Wheezing With Crackles"
+ *   HEALTHY       -> "Healthy (soft)"
+ *   PNEUMONIA     -> "Crackles"
+ *
+ * Do not "fix" that mismatch by renaming either side alone.
+ */
 export const CLASSIFICATION_CODES = {
   ASTHMA: 'ASTHMA',
   BRONCHIOLITIS: 'BRONCHIOLITIS',
