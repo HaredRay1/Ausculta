@@ -12,7 +12,7 @@ import { analyzeBuffer, notConnectedAnalyze, type AnalysisResult, type CaptureMe
  * 2. `analyze` runs the full pipeline over the audio `precheck` already
  *    decoded, so the file is decoded once rather than twice.
  *
- * Injectable so the wizard can be tested without an 8 MB WASM download.
+ * Injectable so the wizard can be tested without a 2.8 MB WASM download.
  */
 export interface AudioPort {
   precheck(file: File, meta: CaptureMeta): Promise<AnalysisResult>

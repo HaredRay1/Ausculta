@@ -16,7 +16,7 @@ import { sineWave } from './signals'
  * global scope, with `importScripts` wired to evaluate scripts in that same
  * context. That is precisely how a real classic worker behaves, so the thing
  * this exercises is the thing the brief warns about: `Module.locateFile` has to
- * be assigned BEFORE importScripts, or the glue resolves the 8 MB .wasm against
+ * be assigned BEFORE importScripts, or the glue resolves the 2.8 MB .wasm against
  * the worker's own URL and the load fails. Here `baseUrl` is a filesystem
  * directory that shares no prefix with the worker's location, so a broken
  * locateFile cannot accidentally succeed.

@@ -181,7 +181,7 @@ describe('ClassifierClient', () => {
   })
 
   it('respawns after a worker-level failure instead of posting into a corpse', async () => {
-    // The failure that matters: a 404 on the worker asset or a failed 8 MB
+    // The failure that matters: a 404 on the worker asset or a failed 2.8 MB
     // WASM fetch. analyze.ts clears its cached init promise so the next call
     // retries — that retry has to get a LIVE worker, or the user waits on a
     // promise that never settles.

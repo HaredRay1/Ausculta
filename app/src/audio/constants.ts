@@ -66,12 +66,12 @@ export const CLASSIFIER_WORKER_URL = '/audio/classifier.worker.js'
  * TUNABLES and do not move `tunablesVersion`.
  *
  * Every request needs a deadline: without one, a 404 on the worker asset or a
- * stalled 8 MB WASM fetch on a clinic connection leaves the caller awaiting a
+ * stalled 2.8 MB WASM fetch on a clinic connection leaves the caller awaiting a
  * promise that never settles — a health worker sees a spinner forever instead
  * of an error they can act on.
  */
 export const CLASSIFIER_TIMEOUTS = {
-  /** Fetching, compiling and initialising the ~8 MB impulse, cold, on a slow
+  /** Fetching, compiling and initialising the ~2.8 MB impulse, cold, on a slow
    *  mobile connection. Generous on purpose — an over-eager deadline here
    *  would fail loads that would have succeeded. */
   loadMs: 90_000,

@@ -34,7 +34,7 @@ function wavFile(name = 'REC0001.WAV'): File {
 /**
  * A stand-in for the audio module.
  *
- * The impulse is an 8 MB WASM download and nothing in the wizard's sequencing
+ * The impulse is a 2.8 MB WASM download and nothing in the wizard's sequencing
  * depends on what it says, only on the shape of the verdict — so the real
  * module is exercised in analysis/pipeline.test.ts against the sample files,
  * and the flow is exercised here against fixed results.

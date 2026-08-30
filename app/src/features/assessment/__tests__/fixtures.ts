@@ -4,7 +4,7 @@
  * Not a test file — vitest only collects *.test.ts.
  *
  * These construct `AnalysisResult` values by hand rather than by running the
- * real classifier: the impulse is an 8 MB WASM download and none of the logic
+ * real classifier: the impulse is a 2.8 MB WASM download and none of the logic
  * under test here depends on what the model actually says, only on the shape
  * of the verdict it produced. The one place the real module IS exercised is
  * `mapping.test.ts`, which pins the model-not-connected message key against

@@ -89,7 +89,7 @@ describe('THE FLAGSHIP SAFETY TEST', () => {
     const result = await analyzeFile(wavBlob(sine), META)
 
     expect(port.classified).toEqual([])
-    expect(port.initCalls).toBe(0) // the 8 MB model is not even loaded
+    expect(port.initCalls).toBe(0) // the 2.8 MB model is not even loaded
     expect(result.verdict).toEqual({
       kind: 'insufficient-quality',
       messageKey: 'verdict.insufficientQuality',
