@@ -1,0 +1,35 @@
+{
+ "model_version": "resondi-lung-fusion-v2",
+ "file": "resondi-lung-fusion-v2.onnx",
+ "labels": [
+  "Crackles",
+  "Healthy",
+  "Wheezing",
+  "Wheezing with Crackles"
+ ],
+ "inputs": {
+  "mfcc": [
+   50,
+   13
+  ],
+  "spec": [
+   50,
+   129
+  ],
+  "chroma": [
+   47,
+   12
+  ]
+ },
+ "ensemble": [
+  "fdc3_seed11.pt",
+  "fdc3_seed22.pt",
+  "fdc3_seed33.pt"
+ ],
+ "training_data": "ICBHI 2017 (65 train patients) + SPRSound (rebalanced)",
+ "normalisation": "ICBHI (source 0) statistics, built into the graph",
+ "preprocessing": "1 s windows at 16 kHz, int16 scale; exact 100-3900 Hz band cut and -20 dBFS RMS levelling per window; features as in scripts/fusion.py, rounded to float16",
+ "evaluation": "5-fold patient CV on all 126 ICBHI patients: 40.0% balanced accuracy (95% CI 35.9-43.5), children 56.3% (results/cv-results.md). Not tested on Resondi device audio.",
+ "onnx_vs_pytorch_max_abs_diff": 2.682209014892578e-07,
+ "bytes": 2303566
+}
