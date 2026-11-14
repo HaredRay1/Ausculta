@@ -1,0 +1,23 @@
+﻿{
+    "model_version":  "resondi-heart-v1",
+    "files":  {
+                  "segmentation":  "resondi-heart-seg-v1.onnx",
+                  "murmur":  "resondi-heart-murmur-v1.onnx"
+              },
+    "bytes":  {
+                  "segmentation":  465987,
+                  "murmur":  1616226
+              },
+    "constants":  {
+                      "ADVANCE":  0.3,
+                      "MURMUR_THRESHOLD":  0.7095834612846375,
+                      "PADLEN":  27
+                  },
+    "training_data":  "CirCor DigiScope 1.0.3 (ODC-By), patient-wise split, 564 training patients",
+    "evaluation":  "189 CirCor test patients: heart rate MAE 3.0 BPM (95% CI 2.5-3.6); S1/S2 found within 100 ms 96.8%/97.3%; murmur sensitivity 66.7% (50.0-81.8) against a pre-specified 80%, specificity 97.1%, AUROC 0.96. Not tested on Resondi device audio.",
+    "onnx_vs_pytorch_max_abs_diff":  {
+                                         "segmentation":  1.0132789611816406E-06,
+                                         "murmur":  1.7881393432617188E-07
+                                     },
+    "attribution":  "Trained on the CirCor DigiScope Phonocardiogram Dataset 1.0.3 (Oliveira et al., 2022, IEEE JBHI 26(6):2524-2535; PhysioNet), licensed ODC-By 1.0."
+}
